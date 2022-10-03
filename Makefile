@@ -8,18 +8,18 @@ PKG_FONTCONFIG:=$(ROOTPATH)/morphoswb/libs/fontconfig/MorphOS/
 PKG:=$(PKG_ICU):$(PKG_SQLITE)
 
 DEBIAN_PKG:=libicu-dev ruby-dev clang-7
-NATIVE_GCC:=/home/jaca/gcc7/inst/bin/x86_64-pc-linux-gnu-
+NATIVE_GCC:=/usr/bin/
 
 OBJC:=$(ROOTPATH)/morphoswb/classes/frameworks/includes/
 
-CMAKE = $(abspath cmake-3.16.2/bin)
+CMAKE = cmake
 
 all:
 
 configure-native:
 	rm -rf build
 	mkdir build
-	(cd build && PATH=~/cmake-3.10.3-Linux-x86_64/bin/:${PATH} \
+	(cd build && \
 		cmake -DCMAKE_MODULE_PATH=$(realpath Source/cmake) \
 		-DCMAKE_BUILD_TYPE=Release -DPORT=JSCOnly -DUSE_SYSTEM_MALLOC=YES -DCMAKE_CXX_FLAGS="-O2 -fPIC" -DCMAKE_C_FLAGS="-O2 -fPIC" \
 		-DCMAKE_C_COMPILER=$(NATIVE_GCC)gcc -DCMAKE_CXX_COMPILER=$(NATIVE_GCC)g++ \
@@ -28,12 +28,13 @@ configure-native:
 jscore-native:
 	rm -rf WebKitBuild build
 	mkdir build
-	(cd build && PATH=$(CMAKE):${PATH} \
-		$(realpath Tools/Scripts/run-javascriptcore-tests) --jsc-only --no-flt-jit \
+	(cd build && \
+		$(realpath Tools/Scripts/run-javascriptcore-tests) --jsc-only \
 		--cmakeargs='-DCMAKE_MODULE_PATH=$(realpath Source/cmake) -DJAVASCRIPTCORE_DIR=$(realpath Source/JavaScriptCore) \
                 -DCMAKE_BUILD_TYPE=Release -DPORT=JSCOnly -DUSE_SYSTEM_MALLOC=YES -DCMAKE_CXX_FLAGS="-O2 -fPIC" -DCMAKE_C_FLAGS="-O2 -fPIC" \
                 -DCMAKE_C_COMPILER=$(NATIVE_GCC)gcc -DCMAKE_CXX_COMPILER=$(NATIVE_GCC)g++')
-	cp -a Source/JavaScriptCore/API/tests/testapiScripts ~/morphos/morphoswb/apps/webkitty/WebKitBuild/Release/Source/JavaScriptCore/shell/
+	mkdir -p /opt/apps/webkitty/WebKitBuild/Release/Source/JavaScriptCore/shell/
+	cp -a Source/JavaScriptCore/API/tests/testapiScripts /opt/apps/webkitty/WebKitBuild/Release/Source/JavaScriptCore/shell/
 	Tools/Scripts/run-javascriptcore-tests --root WebKitBuild/Release/Source/JavaScriptCore/shell/ --no-jsc-stress --no-jit-stress-test
 
 jscore-morphos: morphos.cmake

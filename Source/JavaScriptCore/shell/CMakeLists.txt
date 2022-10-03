@@ -1,6 +1,6 @@
 set(jsc_SOURCES ../jsc.cpp)
 if (NOT "${PORT}" STREQUAL "MorphOS")
-    set(jsc_LIBRARIES $(jsc_LIBRARIES)
+    set(jsc_LIBRARIES ${jsc_LIBRARIES}
         ${CMAKE_DL_LIBS}
     )
 endif ()

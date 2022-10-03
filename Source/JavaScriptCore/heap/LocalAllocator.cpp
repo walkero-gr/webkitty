@@ -149,7 +149,11 @@ void* LocalAllocator::allocateSlowCase(Heap& heap, GCDeferralContext* deferralCo
     MarkedBlock::Handle* block = m_directory->tryAllocateBlock(heap);
     if (!block) {
         if (failureMode == AllocationFailureMode::Assert)
+            #if OS(MORPHOS)
             oomCrash();
+            #else
+            RELEASE_ASSERT_NOT_REACHED();
+            #endif
         else
             return nullptr;
     }

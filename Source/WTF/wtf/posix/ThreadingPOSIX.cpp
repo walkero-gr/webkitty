@@ -586,7 +586,9 @@ Thread& Thread::initializeTLS(Ref<Thread>&& thread)
 #if !HAVE(FAST_TLS)
     ASSERT(s_key != InvalidThreadSpecificKey);
     threadSpecificSet(s_key, &threadInTLS);
+    #if OS(MORPHOS)
     FindTask(NULL)->tc_UserData = &threadInTLS;
+    #endif
 #else
     _pthread_setspecific_direct(WTF_THREAD_DATA_KEY, &threadInTLS);
     pthread_key_init_np(WTF_THREAD_DATA_KEY, &destructTLS);
