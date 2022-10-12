@@ -13,6 +13,7 @@ NATIVE_GCC:=/usr/bin/
 OBJC:=$(ROOTPATH)/morphoswb/classes/frameworks/includes/
 
 CMAKE = cmake
+STRIP = ppc-amigaos-strip
 
 all:
 
@@ -37,12 +38,12 @@ jscore-native:
 	cp -a Source/JavaScriptCore/API/tests/testapiScripts /opt/apps/webkitty/WebKitBuild/Release/Source/JavaScriptCore/shell/
 	Tools/Scripts/run-javascriptcore-tests --root WebKitBuild/Release/Source/JavaScriptCore/shell/ --no-jsc-stress --no-jit-stress-test
 
-jscore-morphos: morphos.cmake
+jscore-amigaos: amigaos.cmake
 	rm -rf WebKitBuild cross-build
 	mkdir -p cross-build WebKitBuild/Release/bin
-	(cd cross-build && PKG_CONFIG_PATH=$(PKG) PATH=$(CMAKE):${PATH} \
-		$(realpath Tools/Scripts/run-javascriptcore-tests) --jsc-only --no-flt-jit \
-		--cmakeargs='-DCMAKE_CROSSCOMPILING=ON -DCMAKE_TOOLCHAIN_FILE=$(realpath morphos.cmake) -DCMAKE_MODULE_PATH=$(realpath Source/cmake) \
+	(cd cross-build && \
+		$(realpath Tools/Scripts/run-javascriptcore-tests) --jsc-only \
+		--cmakeargs='-DCMAKE_CROSSCOMPILING=ON -DCMAKE_TOOLCHAIN_FILE=$(realpath amigaos.cmake) -DCMAKE_MODULE_PATH=$(realpath Source/cmake) \
 		-DJAVASCRIPTCORE_DIR=$(realpath Source/JavaScriptCore) -DBUILD_SHARED_LIBS=NO \
 		-DJPEG_LIBRARY=$(LIB)/libjpeg -DJPEG_INCLUDE_DIR=$(LIB)/libjpeg \
 		-DLIBXML2_LIBRARY=$(LIB)/libxml2/instdir/lib -DLIBXML2_INCLUDE_DIR=$(LIB)/libxml2/instdir/include/libxml2 \
@@ -55,13 +56,13 @@ jscore-morphos: morphos.cmake
 #	Tools/Scripts/run-javascriptcore-tests --root WebKitBuild/Release/Source/JavaScriptCore/shell/ --no-jsc-stress --no-jit-stress-test
 
 jscore-pack:
-	ppc-morphos-strip ./WebKitBuild/Release/Source/JavaScriptCore/shell/jsc
-	ppc-morphos-strip ./WebKitBuild/Release/Source/JavaScriptCore/shell/testRegExp
-	ppc-morphos-strip ./WebKitBuild/Release/Source/JavaScriptCore/shell/testair
-	ppc-morphos-strip ./WebKitBuild/Release/Source/JavaScriptCore/shell/testapi
-	ppc-morphos-strip ./WebKitBuild/Release/Source/JavaScriptCore/shell/testb3
-	ppc-morphos-strip ./WebKitBuild/Release/Source/JavaScriptCore/shell/testdfg
-	ppc-morphos-strip ./WebKitBuild/Release/Source/JavaScriptCore/shell/testmasm
+	$(STRIP) ./WebKitBuild/Release/Source/JavaScriptCore/shell/jsc
+	$(STRIP) ./WebKitBuild/Release/Source/JavaScriptCore/shell/testRegExp
+	$(STRIP) ./WebKitBuild/Release/Source/JavaScriptCore/shell/testair
+	$(STRIP) ./WebKitBuild/Release/Source/JavaScriptCore/shell/testapi
+	$(STRIP) ./WebKitBuild/Release/Source/JavaScriptCore/shell/testb3
+	$(STRIP) ./WebKitBuild/Release/Source/JavaScriptCore/shell/testdfg
+	$(STRIP) ./WebKitBuild/Release/Source/JavaScriptCore/shell/testmasm
 	tar cJf testsuite.tar.xz Tools ./WebKitBuild/Release/Source/JavaScriptCore/shell/jsc \
 		./WebKitBuild/Release/Source/JavaScriptCore/shell/testRegExp \
 		./WebKitBuild/Release/Source/JavaScriptCore/shell/testair \
@@ -161,7 +162,7 @@ configure-mini: morphos.cmake link.sh CMakeLists.txt Dummy/libdummy.a ffmpeg/.bu
 build:
 	(cd cross-build && make -j$(shell nproc))
 	echo "Link done"
-	ppc-morphos-strip cross-build/Tools/morphos/MiniBrowser.db -o cross-build/Tools/morphos/MiniBrowser
+	$(STRIP) cross-build/Tools/morphos/MiniBrowser.db -o cross-build/Tools/morphos/MiniBrowser
 	echo "Stripped binary in cross-build/Tools/morphos/MiniBrowser"
 
 #		-Wdev --debug-output --trace --trace-expand \
@@ -179,7 +180,7 @@ cross-build-mini:
 
 .build-mini: cross-build-mini build-mini
 
-morphos.cmake: morphos.cmake.in
+amigaos.cmake: amigaos.cmake.in
 	gcc -xc -E -P -C -o$@ -nostdinc $@.in -D_IN_ROOTPATH=$(ROOTPATH) -D_IN_DUMMYPATH=$(realpath Dummy)
 
 link.sh: link.sh.in
@@ -272,7 +273,7 @@ linkpackage:
 	@rm -rf linkpackage
 	@mkdir linkpackage
 	@for i in $(LINKFILES); \
-	do echo -n "ppc-morphos-strip --strip-debug $$i -o linkpackage/">.run.sh; \
+	do echo -n "$(STRIP) --strip-debug $$i -o linkpackage/">.run.sh; \
 	echo $$i | rev | cut -d'/' -f-1 | rev >>.run.sh ; \
 	echo "Copying and stripping $$i"; \
 	bash ./.run.sh; \
