@@ -48,7 +48,7 @@
 #include <wtf/glib/GUniquePtr.h>
 #endif
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 #define __WANT_PNG_1_6__
 #include <png.h>
 #include <proto/dos.h>
@@ -59,7 +59,7 @@
 namespace WebCore {
 
 #if !PLATFORM(GTK)
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 
 struct pngWriteStruct
 {

@@ -82,7 +82,7 @@ static ASCIILiteral recordsTableSchemaAlternate()
 
 static inline String databaseFilenameFromVersion(uint64_t version)
 {
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
     return makeString("PROGDIR:Cache/ServiceWorkerRegistrations-", version, ".sqlite3");
 #else
     return makeString("ServiceWorkerRegistrations-", version, ".sqlite3");

@@ -111,7 +111,7 @@ public:
     WEBCORE_EXPORT void registerServiceWorkerClients();
     bool isClosed() const { return m_isClosed; }
 
-#ifndef __MORPHOS__
+#if !defined(__MORPHOS__) && !defined(__amigaos4__)
 protected:
 #endif
     WEBCORE_EXPORT SWClientConnection();
