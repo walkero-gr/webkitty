@@ -244,7 +244,7 @@ void FEColorMatrixSoftwareApplier::applyPlatformUnaccelerated(PixelBuffer& pixel
     }
 }
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 static inline uint32_t matrixOnePixel(const int32_t *values, const uint32_t pixel)
 {
        int32_t alpha, a;
@@ -391,7 +391,7 @@ void FEColorMatrixSoftwareApplier::applyPlatform(PixelBuffer& pixelBuffer) const
         applyPlatformAccelerated(pixelBuffer);
         return;
     }
-#elif OS(MORPHOS)
+#elif OS(MORPHOS) || OS(AMIGAOS)
     auto& pixelArray = pixelBuffer.data();
     switch (m_effect.type()) {
     case FECOLORMATRIX_TYPE_MATRIX:

@@ -34,7 +34,7 @@
 
 #if !ENABLE(OPENTYPE_MATH) && USE(HARFBUZZ)
 #include "HbUniquePtr.h"
-#if !OS(MORPHOS)
+#if !OS(MORPHOS) && !OS(AMIGAOS)
 #include <hb-ot.h>
 #endif
 #endif

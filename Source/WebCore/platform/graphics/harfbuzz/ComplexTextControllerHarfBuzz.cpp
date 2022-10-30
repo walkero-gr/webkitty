@@ -32,7 +32,7 @@
 #include "HbUniquePtr.h"
 #include "SurrogatePairAwareTextIterator.h"
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 #define _NO_PPCINLINE
 #include <proto/harfbuzz.h>
 #include <libraries/harfbuzz.h>
@@ -496,7 +496,7 @@ static hb_script_t findScriptForVerticalGlyphSubstitution(hb_face_t* face)
     return HB_SCRIPT_INVALID;
 }
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 
 #define HB_UNUSED  __attribute__((unused))
 #define ARRAY_LENGTH(array) (sizeof((array))/sizeof((array)[0]))
@@ -668,7 +668,7 @@ protected:
 
 morphosHBICUBinding morphosHBICUBinding::_instance;
 
-#endif
+#endif // OS(MORPHOS) || OS(AMIGAOS)
 
 void ComplexTextController::collectComplexTextRunsForCharacters(const UChar* characters, unsigned length, unsigned stringLocation, const Font* font)
 {
@@ -745,7 +745,7 @@ void ComplexTextController::collectComplexTextRunsForCharacters(const UChar* cha
             hb_buffer_guess_segment_properties(buffer.get());
         }
         
-        #if OS(MORPHOS)
+        #if OS(MORPHOS) || OS(AMIGAOS)
         // NOTE: re-bind ICU functions, must be done after each hb_buffer_reset
         morphosHBICUBinding::bind(buffer);
         #endif

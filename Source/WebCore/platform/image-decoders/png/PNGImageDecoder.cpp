@@ -40,7 +40,7 @@
 
 #include "config.h"
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 #define __WANT_PNG_1_6__
 #endif
 
@@ -56,7 +56,7 @@
 #define JMPBUF(png_ptr) png_jmpbuf(png_ptr)
 #else
 #define JMPBUF(png_ptr) png_ptr->jmpbuf
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 #error "Fail"
 #endif
 #endif

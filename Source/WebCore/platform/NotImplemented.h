@@ -35,7 +35,7 @@
 #endif
 
 #if LOG_DISABLED
-	#if OS(MORPHOS)
+	#if OS(MORPHOS) || OS(AMIGAOS)
 	extern "C" { void dprintf(const char *fmt, ...); };
 	#if 1
 		#define notImplemented() ((void)0)
@@ -57,7 +57,7 @@ namespace WebCore {
 WEBCORE_EXPORT WTFLogChannel* notImplementedLoggingChannel();
 }
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 extern "C" { void dprintf(const char *fmt, ...); };
 #define notImplemented() do { \
         static bool havePrinted = false; \

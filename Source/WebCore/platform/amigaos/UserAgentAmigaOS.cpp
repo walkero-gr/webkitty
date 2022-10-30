@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Apple Inc. All rights reserved.
+ * Copyright (C) 2022 Jacek Piszczek
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -23,46 +23,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#pragma once
+#include "config.h"
+#include "UserAgent.h"
 
-#include <wtf/EnumTraits.h>
+#include <wtf/text/StringConcatenate.h>
 
 namespace WebCore {
 
-enum class StorageType : uint8_t {
-    Session,
-    Local,
-    TransientLocal,
-};
-
-inline bool isLocalStorage(StorageType storageType)
+String standardUserAgent(const String& applicationName, const String& applicationVersion)
 {
-    return storageType == StorageType::Local || storageType == StorageType::TransientLocal;
+    auto version = applicationName.isEmpty() ? emptyString() : applicationVersion;
+    return makeString("Mozilla/5.0 (AmigaOS 4) AppleWebKit/605.1.15 (KHTML, like Gecko)",
+        applicationName.isEmpty() ? "" : " ", applicationName, version.isEmpty() ? "" : "/", version);
 }
 
-#if (OS(MORPHOS) && MORPHOS_MINIMAL) || (OS(AMIGAOS) && AMIGAOS_MINIMAL)
-inline bool isPersistentLocalStorage(StorageType storageType)
-{
-	(void)storageType;
-	return false;
-}
-#else
-inline bool isPersistentLocalStorage(StorageType storageType)
-{
-    return storageType == StorageType::Local || storageType == StorageType::TransientLocal;
-}
-#endif
 } // namespace WebCore
-
-namespace WTF {
-
-template<> struct EnumTraits<WebCore::StorageType> {
-    using values = EnumValues<
-        WebCore::StorageType,
-        WebCore::StorageType::Session,
-        WebCore::StorageType::Local,
-        WebCore::StorageType::TransientLocal
-    >;
-};
-
-} // namespace WTF

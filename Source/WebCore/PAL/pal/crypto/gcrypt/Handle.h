@@ -26,7 +26,7 @@
 
 #pragma once
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 #define _NO_PPCINLINE
 typedef uint32_t socklen_t;
 #include <gcrypt.h>

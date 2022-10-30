@@ -24,7 +24,9 @@
  */
 
 #include "config.h"
+#if OS(MORPHOS) || OS(AMIGAOS)
 #include "RenderThemeMorphOS.h"
+#endif
 
 #include "NotImplemented.h"
 #if ENABLE(VIDEO)
@@ -41,7 +43,7 @@ RenderTheme& RenderTheme::singleton()
     return theme;
 }
 
-#if 0
+#if 0 // TODO: This block is disabled
 void RenderThemeMorphOS::updateCachedSystemFontDescription(CSSValueID, FontCascadeDescription&) const
 {
     notImplemented();

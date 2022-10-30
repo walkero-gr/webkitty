@@ -173,7 +173,7 @@ void ResourceLoader::init(ResourceRequest&& clientRequest, CompletionHandler<voi
 
     willSendRequestInternal(WTFMove(clientRequest), ResourceResponse(), [this, protectedThis = Ref { *this }, completionHandler = WTFMove(completionHandler)](ResourceRequest&& request) mutable {
 
-#if PLATFORM(IOS_FAMILY) || OS(MORPHOS)
+#if PLATFORM(IOS_FAMILY) || OS(MORPHOS) || OS(AMIGAOS)
         // If this ResourceLoader was stopped as a result of willSendRequest, bail out.
         if (m_reachedTerminalState) {
             RESOURCELOADER_RELEASE_LOG("init: Cancelling load because it was stopped as a result of willSendRequest.");

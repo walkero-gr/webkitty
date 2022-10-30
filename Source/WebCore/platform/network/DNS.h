@@ -36,7 +36,7 @@
 #include <netinet/in.h>
 #endif
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 extern "C" {
 #define AF_INET  2
 #define AF_INET6 10

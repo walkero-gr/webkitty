@@ -80,7 +80,7 @@ String formatLocalizedString(const char* format, ...)
     GUniquePtr<gchar> result(g_strdup_vprintf(format, arguments));
     va_end(arguments);
     return String::fromUTF8(result.get());
-#elif OS(MORPHOS)
+#elif OS(MORPHOS) || OS(AMIGAOS)
 	char buffer[8 * 1024];
     va_list arguments;
     va_start(arguments, format);

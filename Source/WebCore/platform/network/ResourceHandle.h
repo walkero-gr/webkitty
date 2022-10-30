@@ -142,7 +142,7 @@ public:
     static void setClientCertificate(const String& host, CFDataRef);
 #endif
 
-#if (OS(WINDOWS) || OS(MORPHOS)) && USE(CURL)
+#if (OS(WINDOWS) || OS(MORPHOS) || OS(AMIGAOS)) && USE(CURL)
     static void setHostAllowsAnyHTTPSCertificate(const String&);
     static void setClientCertificateInfo(const String&, const String&, const String&);
     static void clearClientCertificateInfo(const String&);

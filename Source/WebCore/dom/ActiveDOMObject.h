@@ -103,7 +103,7 @@ public:
     bool isContextStopped() const;
     bool isAllowedToRunScript() const;
 
-#ifndef __MORPHOS_DISABLE
+#if !defined(__MORPHOS_DISABLE) && !defined(__AMIGAOS_DISABLE)
 
     template<typename T>
     static void queueTaskKeepingObjectAlive(T& object, TaskSource source, Function<void ()>&& task)

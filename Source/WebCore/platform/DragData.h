@@ -53,7 +53,7 @@ namespace WebCore {
 class SelectionData;
 }
 typedef WebCore::SelectionData* DragDataRef;
-#elif OS(MORPHOS)
+#elif OS(MORPHOS) || OS(AMIGAOS)
 namespace WebCore {
 class SelectionData;
 }

@@ -40,7 +40,7 @@
 #include "DisplayRefreshMonitorGtk.h"
 #elif PLATFORM(WIN)
 #include "DisplayRefreshMonitorWin.h"
-#elif OS(MORPHOS)
+#elif OS(MORPHOS) || OS(AMIGAOS)
 #include "DisplayRefreshMonitorMorphOS.h"
 #endif
 
@@ -62,7 +62,7 @@ RefPtr<DisplayRefreshMonitor> DisplayRefreshMonitor::createDefaultDisplayRefresh
 #if PLATFORM(WIN)
     return DisplayRefreshMonitorWin::create(displayID);
 #endif
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
     return DisplayRefreshMonitorMorphOS::create(displayID);
 #endif
     UNUSED_PARAM(displayID);

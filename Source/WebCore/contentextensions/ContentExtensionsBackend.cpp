@@ -50,7 +50,7 @@
 #include <wtf/NeverDestroyed.h>
 #include <wtf/text/CString.h>
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 extern "C" { void dprintf(const char *,...); }
 bool shouldLoadResource(const WebCore::ContentExtensions::ResourceLoadInfo& info, WebCore::DocumentLoader& loader);
 #endif
@@ -225,6 +225,20 @@ ContentRuleListResults ContentExtensionsBackend::processContentRuleListsForLoad(
         results.summary.blockedLoad = true;
         result.blockedLoad = true;
         results.results.append({ "x-morphos-blocker", WTFMove(result) });
+    }
+    else
+    {
+        if (page.httpsUpgradeEnabled())
+            makeSecureIfNecessary(results, url, redirectFrom);
+    }
+#elif OS(AMIGAOS)
+    ContentRuleListResults results;
+    if (!shouldLoadResource(resourceLoadInfo, initiatingDocumentLoader))
+    {
+        ContentRuleListResults::Result result;
+        results.summary.blockedLoad = true;
+        result.blockedLoad = true;
+        results.results.append({ "x-amigaos-blocker", WTFMove(result) });
     }
     else
     {

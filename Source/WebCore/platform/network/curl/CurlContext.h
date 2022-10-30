@@ -26,7 +26,7 @@
 
 #pragma once
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 #define PROTO_SOCKET_H
 #endif
 
@@ -110,7 +110,7 @@ public:
     CurlRequestScheduler& scheduler() { return *m_scheduler; }
     CurlStreamScheduler& streamScheduler();
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
     void stopThread();
 #endif
 

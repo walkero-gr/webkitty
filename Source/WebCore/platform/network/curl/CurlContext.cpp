@@ -46,7 +46,7 @@
 #include <shlwapi.h>
 #endif
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 #include <exec/libraries.h>
 #include <proto/exec.h>
 #include <ppcinline/macros.h>
@@ -150,7 +150,7 @@ CurlContext::~CurlContext()
 #endif
 }
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 void CurlContext::stopThread()
 {
 	m_scheduler->stopCurlThread();
@@ -403,7 +403,7 @@ CurlHandle::CurlHandle()
     enableStdErrIfUsed();
 #endif
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
     curl_easy_setopt(m_handle, CURLOPT_BUFFERSIZE, 64 * 1024);
 #endif
 
@@ -426,12 +426,12 @@ const String CurlHandle::errorDescription(CURLcode errorCode)
 
 void CurlHandle::enableSSLForHost(const String& host)
 {
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 	bool caCertOverride = false;
 #endif
     auto& sslHandle = CurlContext::singleton().sslHandle();
     if (auto sslClientCertificate = sslHandle.getSSLClientCertificate(host)) {
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
         setCACertPath(sslClientCertificate->first.utf8().data());
         caCertOverride = true;
 #else
@@ -455,7 +455,7 @@ void CurlHandle::enableSSLForHost(const String& host)
 
     setSslCtxCallbackFunction(willSetupSslCtxCallback, this);
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 	if (caCertOverride)
 		setSslVerifyHost(CurlHandle::VerifyHost::LooseNameCheck);
 	else
@@ -534,7 +534,7 @@ void CurlHandle::setUrl(const URL& url)
 
     if (url.protocolIs("https"))
         enableSSLForHost(m_url.host().toString());
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
     else
         curl_easy_setopt(m_handle, CURLOPT_HTTP09_ALLOWED, 1L);  // HTTP only
 #endif

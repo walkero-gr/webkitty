@@ -44,6 +44,8 @@ namespace WebCore {
 
 #if OS(MORPHOS)
 String CurlRequest::m_downloadPath = "SYS:Downloads";
+#elif OS(AMIGAOS)
+String CurlRequest::m_downloadPath = "ram:";
 #else
 String CurlRequest::m_downloadPath = "/tmp";
 #endif
@@ -834,7 +836,7 @@ void CurlRequest::writeDataToDownloadFileIfEnabled(const FragmentedSharedBuffer&
         }
     }
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
     if (m_downloadFileHandle == FileSystem::invalidPlatformFileHandle)
     {
         auto resourceError = ResourceError::httpError(507, m_request.url(), ResourceError::Type::General);
@@ -849,7 +851,7 @@ void CurlRequest::writeDataToDownloadFileIfEnabled(const FragmentedSharedBuffer&
 
     if (m_downloadFileHandle != FileSystem::invalidPlatformFileHandle)
     {
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
         if (-1 == FileSystem::writeToFile(m_downloadFileHandle, buffer.makeContiguous()->data(), buffer.size()))
         {
             auto resourceError = ResourceError::httpError(507, m_request.url(), ResourceError::Type::General);

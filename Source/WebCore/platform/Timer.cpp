@@ -253,7 +253,7 @@ static bool shouldSuppressThreadSafetyCheck()
     return WebThreadIsEnabled() || !linkedOnOrAfter(SDKVersion::FirstWithTimerThreadSafetyChecks);
 #elif PLATFORM(MAC)
     return !isInWebProcess() && !linkedOnOrAfter(SDKVersion::FirstWithTimerThreadSafetyChecks);
-#elif OS(MORPHOS)
+#elif OS(MORPHOS) || OS(AMIGAOS)
     return true; // wut?
  #else
     return false;

@@ -108,7 +108,7 @@ private:
 class Timer : public TimerBase {
     WTF_MAKE_FAST_ALLOCATED;
 public:
-#ifndef __MORPHOS_DISABLE
+#if !defined(__MORPHOS_DISABLE) && !defined(__AMIGAOS_DISABLE)
     static void schedule(Seconds delay, Function<void()>&& function)
     {
         auto* timer = new Timer([] { });

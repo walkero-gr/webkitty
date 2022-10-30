@@ -351,7 +351,7 @@ public:
     WEBCORE_EXPORT void advanceToNextMisspelling(bool startBeforeSelection = false);
 #endif
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 	void checkEntireDocument();
 #endif
 

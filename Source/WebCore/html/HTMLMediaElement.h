@@ -296,7 +296,7 @@ public:
 
     bool elementIsHidden() const { return m_elementIsHidden; }
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
     Page* mediaPlayerPage() final;
 #endif
 

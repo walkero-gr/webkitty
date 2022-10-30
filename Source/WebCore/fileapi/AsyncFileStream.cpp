@@ -83,7 +83,7 @@ static void callOnFileThread(Function<void ()>&& function)
 
                 if (auto function = queue.get().waitForMessage()) {
 
-#if !OS(MORPHOS)
+#if !OS(MORPHOS) && !OS(AMIGAOS)
                     // This can never be null because we never kill the MessageQueue.
                     ASSERT(function);
 

@@ -32,8 +32,8 @@ jscore-native:
 	(cd build && \
 		$(realpath Tools/Scripts/run-javascriptcore-tests) --jsc-only \
 		--cmakeargs='-DCMAKE_MODULE_PATH=$(realpath Source/cmake) -DJAVASCRIPTCORE_DIR=$(realpath Source/JavaScriptCore) \
-                -DCMAKE_BUILD_TYPE=Release -DPORT=JSCOnly -DUSE_SYSTEM_MALLOC=YES -DCMAKE_CXX_FLAGS="-O2 -fPIC" -DCMAKE_C_FLAGS="-O2 -fPIC" \
-                -DCMAKE_C_COMPILER=$(NATIVE_GCC)gcc -DCMAKE_CXX_COMPILER=$(NATIVE_GCC)g++')
+			-DCMAKE_BUILD_TYPE=Release -DPORT=JSCOnly -DUSE_SYSTEM_MALLOC=YES -DCMAKE_CXX_FLAGS="-O2 -fPIC" -DCMAKE_C_FLAGS="-O2 -fPIC" \
+			-DCMAKE_C_COMPILER=$(NATIVE_GCC)gcc -DCMAKE_CXX_COMPILER=$(NATIVE_GCC)g++')
 	mkdir -p /opt/apps/webkitty/WebKitBuild/Release/Source/JavaScriptCore/shell/
 	cp -a Source/JavaScriptCore/API/tests/testapiScripts /opt/apps/webkitty/WebKitBuild/Release/Source/JavaScriptCore/shell/
 	Tools/Scripts/run-javascriptcore-tests --root WebKitBuild/Release/Source/JavaScriptCore/shell/ --no-jsc-stress --no-jit-stress-test

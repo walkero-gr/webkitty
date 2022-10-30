@@ -298,7 +298,7 @@ public:
     virtual const Logger& mediaPlayerLogger() = 0;
 #endif
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
     virtual Page* mediaPlayerPage() { return nullptr; }
 #endif
 };
@@ -616,7 +616,7 @@ public:
     void simulateAudioInterruption();
 #endif
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 	void selectHLSStream(const String& url);
 #endif
 

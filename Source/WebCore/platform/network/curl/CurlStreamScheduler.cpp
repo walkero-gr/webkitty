@@ -28,7 +28,7 @@
 
 #if USE(CURL)
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 extern "C" {
 LONG WaitSelect(LONG nfds, fd_set *readfds, fd_set *writefds, fd_set *exeptfds,
                 struct timeval *timeout, ULONG *maskp);
@@ -161,7 +161,7 @@ void CurlStreamScheduler::executeTasks()
 void CurlStreamScheduler::workerThread()
 {
     ASSERT(!isMainThread());
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
     static const int selectTimeoutMS = 200;
 #else
     static const int selectTimeoutMS = 20;
@@ -171,7 +171,7 @@ void CurlStreamScheduler::workerThread()
     while (m_runThread) {
         executeTasks();
 
-#if !OS(MORPHOS)
+#if !OS(MORPHOS) && !OS(AMIGAOS)
         int rc = 0;
 #endif
         fd_set readfds;
@@ -190,14 +190,14 @@ void CurlStreamScheduler::workerThread()
 
             if (maxfd >= 0)
             {
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
                 ULONG maskp = 0;
                 WaitSelect(maxfd + 1, &readfds, &writefds, &exceptfds, &timeout, &maskp);
 #else
                 rc = ::select(maxfd + 1, &readfds, &writefds, &exceptfds, &timeout);
 #endif
             }
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
         } while (0);
 #else
         } while (rc == -1 && errno == EINTR);

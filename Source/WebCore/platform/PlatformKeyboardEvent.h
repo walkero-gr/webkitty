@@ -41,7 +41,7 @@ OBJC_CLASS NSEvent;
 OBJC_CLASS WebEvent;
 #endif
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 struct IntuiMessage;
 #endif
 
@@ -132,8 +132,8 @@ namespace WebCore {
         PlatformKeyboardEvent(HWND, WPARAM, LPARAM, Type, bool);
 #endif
 
-#if OS(MORPHOS)
-		PlatformKeyboardEvent(struct IntuiMessage *imsg);
+#if OS(MORPHOS) || OS(AMIGAOS)
+        PlatformKeyboardEvent(struct IntuiMessage *imsg);
 #endif
 
 #if PLATFORM(GTK)
@@ -181,8 +181,8 @@ namespace WebCore {
         Vector<String> m_commands;
 #endif
 
-#if OS(MORPHOS)
-	struct IntuiMessage *m_intuiMessage;
+#if OS(MORPHOS) || OS(AMIGAOS)
+        struct IntuiMessage *m_intuiMessage;
 #endif
 
 #if PLATFORM(COCOA)

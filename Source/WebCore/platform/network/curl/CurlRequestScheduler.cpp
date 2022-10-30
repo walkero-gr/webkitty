@@ -32,7 +32,7 @@
 
 #include "CurlRequestSchedulerClient.h"
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 #include <proto/exec.h>
 #endif
 
@@ -90,9 +90,9 @@ void CurlRequestScheduler::startOrWakeUpThread()
         }
     }
 
-#if OS(MORPHOS)
-	if (m_stopped)
-		return;
+#if OS(MORPHOS) || OS(AMIGAOS)
+    if (m_stopped)
+        return;
 #endif
 
     if (m_thread)
@@ -104,7 +104,7 @@ void CurlRequestScheduler::startOrWakeUpThread()
     }
 
     m_thread = Thread::create("curlThread", [this] {
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
         // Run curlThread with lower priority vs the main app.
         // Without this the curlThread would starve the application
         // since it's rescheduled like mad all the time. - Piru
@@ -127,7 +127,7 @@ void CurlRequestScheduler::wakeUpThreadIfPossible()
 void CurlRequestScheduler::stopThreadIfNoMoreJobRunning()
 {
     ASSERT(!isMainThread());
-#if !OS(MORPHOS)
+#if !OS(MORPHOS) && !OS(AMIGAOS)
     Locker locker { m_mutex };
     if (m_activeJobs.size() || m_taskQueue.size())
         return;
@@ -136,7 +136,7 @@ void CurlRequestScheduler::stopThreadIfNoMoreJobRunning()
 #endif
 }
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 void CurlRequestScheduler::stopCurlThread()
 {
 	m_stopped = true;

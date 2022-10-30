@@ -2381,7 +2381,7 @@ void Editor::advanceToNextMisspelling(bool startBeforeSelection)
 
 #endif // !PLATFORM(IOS_FAMILY)
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 void Editor::checkEntireDocument()
 {
     Ref<Document> protectedDocument(m_document);
@@ -2748,7 +2748,7 @@ std::optional<SimpleRange> Editor::markMisspellingsOrBadGrammar(const VisibleSel
     if (!client())
         return std::nullopt;
     
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
        // w/o this, "that's" would leave "that'" hilighted on coursor move
     OptionSet<DocumentMarker::MarkerType> markerTypesToRemove {
         DocumentMarker::CorrectionIndicator,

@@ -223,7 +223,7 @@ public:
     };
 
     virtual void postTask(Task&&) = 0; // Executes the task on context's thread asynchronously.
-#ifndef __MORPHOS_DISABLE
+#if !defined(__MORPHOS_DISABLE) && !defined(__AMIGAOS_DISABLE)
     template<typename... Arguments>
     void postCrossThreadTask(Arguments&&... arguments)
     {
@@ -295,7 +295,7 @@ public:
     ScriptExecutionContextIdentifier identifier() const { return m_identifier; }
 
 protected:
-#ifndef __MORPHOS_DISABLE
+#if !defined(__MORPHOS_DISABLE) && !defined(__AMIGAOS_DISABLE)
     class AddConsoleMessageTask : public Task {
     public:
         AddConsoleMessageTask(std::unique_ptr<Inspector::ConsoleMessage>&& consoleMessage)
