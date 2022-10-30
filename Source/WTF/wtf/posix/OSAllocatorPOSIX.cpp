@@ -52,7 +52,7 @@ namespace WTF {
 
 void* OSAllocator::tryReserveAndCommit(size_t bytes, Usage usage, bool writable, bool executable, bool jitCageEnabled, bool includesGuardPages)
 {
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
     return malloc(bytes);
 #else
     // All POSIX reservations start out logically committed.
@@ -222,7 +222,7 @@ void* OSAllocator::tryReserveUncommittedAligned(size_t bytes, size_t alignment, 
 
 void* OSAllocator::reserveAndCommit(size_t bytes, Usage usage, bool writable, bool executable, bool jitCageEnabled, bool includesGuardPages)
 {
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
     return malloc(bytes);
 #else
     void* result = tryReserveAndCommit(bytes, usage, writable, executable, jitCageEnabled, includesGuardPages);
@@ -285,7 +285,7 @@ void OSAllocator::hintMemoryNotNeededSoon(void* address, size_t bytes)
 
 void OSAllocator::releaseDecommitted(void* address, size_t bytes)
 {
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
     free(address);
 #else
     int result = munmap(address, bytes);

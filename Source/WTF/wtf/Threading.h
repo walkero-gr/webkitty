@@ -268,7 +268,7 @@ public:
     struct NewThreadContext;
     static void entryPoint(NewThreadContext*);
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
     // Final clean up for this class as a while.
     // Must method must be called after last sub-thread has terminated.
     static void deleteTLSKey();
@@ -288,7 +288,7 @@ protected:
     void establishPlatformSpecificHandle(PlatformThreadHandle, ThreadIdentifier);
 #endif
 
-#if USE(PTHREADS) && !OS(DARWIN) && !OS(MORPHOS)
+#if USE(PTHREADS) && !OS(DARWIN) && !OS(MORPHOS) && !OS(AMIGAOS)
     static void signalHandlerSuspendResume(int, siginfo_t*, void* ucontext);
 #endif
 
@@ -349,7 +349,7 @@ protected:
     static Thread* currentMayBeNull();
 #endif
 
-#ifdef __MORPHOS__
+#if defined(__MORPHOS__) || defined(__amigaos4__)
     static Thread* getUserDataThreadPointer();
 #endif
 
@@ -421,7 +421,7 @@ inline Thread* Thread::currentMayBeNull()
 }
 #endif
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 extern "C" { void *get_thread_pointer(void); }
 #endif
 
@@ -437,7 +437,7 @@ inline Thread& Thread::current()
     if (UNLIKELY(Thread::s_key == InvalidThreadSpecificKey))
         WTF::initialize();
 #endif
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
     Thread* thread = getUserDataThreadPointer();
     if (!thread)
         thread = currentMayBeNull();

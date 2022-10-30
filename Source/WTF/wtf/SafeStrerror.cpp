@@ -40,7 +40,7 @@ CString safeStrerror(int errnum)
     auto result = CString::newUninitialized(bufferLength, cstringBuffer);
 #if OS(WINDOWS)
     strerror_s(cstringBuffer, bufferLength, errnum);
-#elif OS(MORPHOS)
+#elif OS(MORPHOS) || OS(AMIGAOS)
     const char *message = strerror(errnum);
     if (message)
         strncpy(cstringBuffer, message, bufferLength);

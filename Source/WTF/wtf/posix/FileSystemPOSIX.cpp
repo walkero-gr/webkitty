@@ -36,7 +36,7 @@
 #include <libgen.h>
 #include <stdio.h>
 #include <sys/stat.h>
-#if !OS(MORPHOS)
+#if !OS(MORPHOS) && !OS(AMIGAOS)
 #include <sys/statvfs.h>
 #endif
 #include <sys/types.h>
@@ -49,7 +49,7 @@
 #include <wtf/text/StringHash.h>
 #include <wtf/HashMap.h>
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 #include <libraries/charsets.h>
 #include <proto/dos.h>
 #endif
@@ -130,7 +130,7 @@ bool truncateFile(PlatformFileHandle handle, long long offset)
 
 bool flushFile(PlatformFileHandle handle)
 {
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
     return true;
 #else
     return !fsync(handle);
@@ -205,7 +205,7 @@ std::optional<WallTime> fileCreationTime(const String& path)
 
 std::optional<uint32_t> volumeFileBlockSize(const String& path)
 {
-#if !OS(MORPHOS)
+#if !OS(MORPHOS) && !OS(AMIGAOS)
     struct statvfs fileStat;
     if (!statvfs(fileSystemRepresentation(path).data(), &fileStat))
         return fileStat.f_frsize;
@@ -218,7 +218,7 @@ String stringFromFileSystemRepresentation(const char* path)
 {
     if (!path)
         return String();
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 	return String(path, strlen(path), MIBENUM_SYSTEM);
 #else
     return String::fromUTF8(path);
@@ -227,7 +227,7 @@ String stringFromFileSystemRepresentation(const char* path)
 
 CString fileSystemRepresentation(const String& path)
 {
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 	// some fixes for unix style path fuckups here...
 	// file:///progdir:foo will give us /progdir:foo, so let's account for that
 	if (path.contains(':') && path.startsWith('/'))
@@ -249,7 +249,7 @@ String openTemporaryFile(const String& tmpPath, const String& prefix, PlatformFi
     ASSERT_UNUSED(suffix, suffix.isEmpty());
 
     char buffer[PATH_MAX];
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 	stccpy(buffer, fileSystemRepresentation(tmpPath).data(), sizeof(buffer));
 	auto prefixadd = fileSystemRepresentation(prefix);
 	if (0 == AddPart(buffer, prefixadd.data(), sizeof(buffer)))
@@ -271,7 +271,7 @@ String openTemporaryFile(const String& tmpPath, const String& prefix, PlatformFi
     if (handle < 0)
         goto end;
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 	return String(buffer, strlen(buffer), MIBENUM_SYSTEM);
 #else
     return String::fromUTF8(buffer);
@@ -293,14 +293,14 @@ String temporaryFilePathForPrefix(const String& prefix)
 
 void setTemporaryFilePathForPrefix(const char * tmpPath, const String& prefix)
 {
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 	tmpPathPrefixes.set(prefix, String(tmpPath, strlen(tmpPath), MIBENUM_SYSTEM));
 #endif
 }
 
 String openTemporaryFile(const String& prefix, PlatformFileHandle& handle, const String& suffix)
 {
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 	const char* tmpDir = "PROGDIR:Tmp";
 	if (tmpPathPrefixes.contains(prefix))
 	{
@@ -374,7 +374,7 @@ bool makeAllDirectories(const String& path)
 
 String pathByAppendingComponent(const String& path, const String& component)
 {
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
     if (path.endsWith('/') || path.endsWith(':'))
 #else
       if (path.endsWith('/'))

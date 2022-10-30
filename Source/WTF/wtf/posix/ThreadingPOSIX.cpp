@@ -76,7 +76,7 @@
 #include <mach/thread_switch.h>
 #endif
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 #include <semaphore.h>
 #include <sys/mman.h>
 #include <unistd.h>
@@ -129,7 +129,7 @@ static LazyNeverDestroyed<Semaphore> globalSemaphoreForSuspendResume;
 
 static std::atomic<Thread*> targetThread { nullptr };
 
-#if !OS(MORPHOS)
+#if !OS(MORPHOS) && !OS(AMIGAOS)
 void Thread::signalHandlerSuspendResume(int, siginfo_t*, void* ucontext)
 {
     // Touching a global variable atomic types from signal handlers is allowed.
@@ -205,7 +205,7 @@ void Thread::initializePlatformThreading()
 #if !OS(DARWIN)
     globalSemaphoreForSuspendResume.construct(0);
 
-#if !OS(MORPHOS)
+#if !OS(MORPHOS) && !OS(AMIGAOS)
     // Signal handlers are process global configuration.
     // Intentionally block sigThreadSuspendResume in the handler.
     // sigThreadSuspendResume will be allowed in the handler by sigsuspend.
@@ -245,7 +245,7 @@ ThreadIdentifier Thread::currentID()
 
 void Thread::initializeCurrentThreadEvenIfNonWTFCreated()
 {
-#if !OS(DARWIN) && !OS(MORPHOS)
+#if !OS(DARWIN) && !OS(MORPHOS) && !OS(AMIGAOS)
     RELEASE_ASSERT(g_wtfConfig.isThreadSuspendResumeSignalConfigured);
     sigset_t mask;
     sigemptyset(&mask);
@@ -337,12 +337,14 @@ void Thread::initializeCurrentThreadInternal(const char* threadName)
     pthread_setname_np(normalizeThreadName(threadName));
 #elif OS(LINUX)
     prctl(PR_SET_NAME, normalizeThreadName(threadName));
-#elif OS(MORPHOS)
+#elif OS(MORPHOS) || OS(AMIGAOS)
 	char nameBuffer[256];
 	strcpy(nameBuffer, "WkWebView:");
 	stccpy(nameBuffer + 10, threadName, sizeof(nameBuffer) - 10);
 	pthread_setname_np(pthread_self(), nameBuffer);
 	// Enable priority changes with MorphOS libpthread
+
+// TODO: Need to check if the following needs to be applied on AmigaOS 4 as well
 #ifdef SCHED_MORPHOS
 	// The priority changes are only necessary with the old scheduler
 	ULONG flag;
@@ -429,7 +431,7 @@ Thread& Thread::initializeCurrentTLS()
     return initializeTLS(WTFMove(thread));
 }
 
-#ifdef __MORPHOS__
+#if defined(__MORPHOS__) || defined(__amigaos4__)
 Thread* Thread::getUserDataThreadPointer()
 {
     return (Thread *)FindTask(NULL)->tc_UserData;
@@ -453,7 +455,7 @@ auto Thread::suspend(const ThreadSuspendLocker&) -> Expected<void, PlatformSuspe
     if (result != KERN_SUCCESS)
         return makeUnexpected(result);
     return { };
-#elif !OS(MORPHOS)
+#elif !OS(MORPHOS) && !OS(AMIGAOS)
     if (!m_suspendCount) {
         targetThread.store(this);
 
@@ -480,7 +482,7 @@ void Thread::resume(const ThreadSuspendLocker&)
 {
 #if OS(DARWIN)
     thread_resume(m_platformThread);
-#elif !OS(MORPHOS)
+#elif !OS(MORPHOS) && !OS(AMIGAOS)
     if (m_suspendCount == 1) {
         // When allowing sigThreadSuspendResume interrupt in the signal handler by sigsuspend and SigThreadSuspendResume is actually issued,
         // the signal handler itself will be called once again.
@@ -560,7 +562,7 @@ void Thread::establishPlatformSpecificHandle(pthread_t handle)
 #endif
 }
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 void Thread::deleteTLSKey()
 {
 #if !HAVE(FAST_TLS)
@@ -586,7 +588,7 @@ Thread& Thread::initializeTLS(Ref<Thread>&& thread)
 #if !HAVE(FAST_TLS)
     ASSERT(s_key != InvalidThreadSpecificKey);
     threadSpecificSet(s_key, &threadInTLS);
-    #if OS(MORPHOS)
+    #if OS(MORPHOS) || OS(AMIGAOS)
     FindTask(NULL)->tc_UserData = &threadInTLS;
     #endif
 #else

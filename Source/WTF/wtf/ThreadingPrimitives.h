@@ -48,7 +48,7 @@
 #endif
 #endif
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 #undef IMPORT
 #endif
 
@@ -79,7 +79,7 @@ class Mutex final {
     WTF_MAKE_FAST_ALLOCATED;
 public:
     constexpr Mutex() = default;
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
     WTF_EXPORT_PRIVATE Mutex(int type);
 #endif
     WTF_EXPORT_PRIVATE ~Mutex();

@@ -33,7 +33,7 @@
 #include <windows.h>
 #endif
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 #include <exec/tasks.h>
 #include <proto/exec.h>
 #endif
@@ -42,7 +42,7 @@ namespace WTF {
 
 #if OS(WINDOWS)
 using ProcessID = int;
-#elif OS(MORPHOS)
+#elif OS(MORPHOS) || OS(AMIGAOS)
 using ProcessID = ULONG;
 #else
 using ProcessID = pid_t;
@@ -52,7 +52,7 @@ inline ProcessID getCurrentProcessID()
 {
 #if OS(WINDOWS)
     return GetCurrentProcessId();
-#elif OS(MORPHOS)
+#elif OS(MORPHOS) || OS(AMIGAOS)
 	return FindTask(0)->tc_ETask->UniqueID;
 #else
     return getpid();

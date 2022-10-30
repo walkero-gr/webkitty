@@ -69,7 +69,7 @@ extern "C" void _ReadWriteBarrier(void);
 #endif
 #endif
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 extern "C" { void dprintf(const char *, ...); }
 #endif
 
@@ -652,7 +652,7 @@ constexpr bool assertionFailureDueToUnreachableCode = false;
 
 #if !ASSERT_ENABLED
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 #define RELEASE_ASSERT(assertion, ...) do { \
     if (UNLIKELY(!(assertion))) { \
         dprintf("WTFReleaseAssert in %s/%d\n", __FILE__, __LINE__); CRASH(); \

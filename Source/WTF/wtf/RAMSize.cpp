@@ -35,7 +35,7 @@
 #include <sys/sysinfo.h>
 #elif OS(UNIX)
 #include <unistd.h>
-#elif OS(MORPHOS)
+#elif OS(MORPHOS) || OS(AMIGAOS)
 #include <proto/exec.h>
 #include <exec/memory.h>
 #endif // OS(LINUX) || OS(UNIX)
@@ -67,7 +67,7 @@ static size_t computeRAMSize()
     long pages = sysconf(_SC_PHYS_PAGES);
     long pageSize = sysconf(_SC_PAGE_SIZE);
     return pages * pageSize;
-#elif OS(MORPHOS)
+#elif OS(MORPHOS) || OS(AMIGAOS)
     return AvailMem(MEMF_TOTAL);
 #else
 #error "Missing a platform specific way of determining the available RAM"

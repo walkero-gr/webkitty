@@ -52,6 +52,10 @@
 #define WTF_OS_MORPHOS 1
 #endif
 
+#ifdef __amigaos4__
+#define WTF_OS_AMIGAOS 1
+#endif
+
 /* HAVE() - specific system features (headers, functions or similar) that are present or not */
 #include <wtf/PlatformHave.h>
 
@@ -126,7 +130,7 @@
 #define U_DISABLE_RENAMING 1
 #endif
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 #define USE_PTHREADS 1
 #endif
 

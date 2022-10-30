@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 #define _GNU_SOURCE
 #endif
 
@@ -78,7 +78,7 @@ StackBounds StackBounds::currentThreadStackBoundsInternal()
     return newThreadStackBounds(pthread_self());
 }
 
-#elif OS(UNIX) || OS(MORPHOS)
+#elif OS(UNIX) || OS(MORPHOS) || OS(AMIGAOS)
 
 #if OS(OPENBSD)
 

@@ -52,7 +52,7 @@ public:
     WTF_EXPORT_PRIVATE virtual void dispatchAfter(Seconds, Function<void()>&&);
     WTF_EXPORT_PRIVATE virtual void dispatchSync(Function<void()>&&);
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
     void shutdown() { platformInvalidate(); }
 #endif
 

@@ -58,7 +58,7 @@ inline size_t systemPageSize()
     return size;
 }
 
-#elif OS(MORPHOS)
+#elif OS(MORPHOS) || OS(AMIGAOS)
 
 inline size_t systemPageSize()
 {

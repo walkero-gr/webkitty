@@ -36,7 +36,7 @@
 #include <windows.h>
 #elif OS(OPENBSD)
 typedef ucontext_t mcontext_t;
-#elif OS(MORPHOS)
+#elif OS(MORPHOS) || OS(AMIGAOS)
 #else
 #include <sys/ucontext.h>
 #endif

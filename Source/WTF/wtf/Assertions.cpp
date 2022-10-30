@@ -67,7 +67,7 @@
 #import <wtf/spi/cocoa/OSLogSPI.h>
 #endif
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 extern "C" { void vdprintf(const char *, va_list); }
 #endif
 
@@ -184,7 +184,7 @@ static void vprintf_stderr_common(const char* format, va_list args)
         } while (size > 1024);
     }
 #endif
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 	vdprintf(format, args);
 	return;
 #endif

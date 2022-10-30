@@ -35,7 +35,7 @@
 #include <wtf/unicode/CharacterNames.h>
 #include <wtf/unicode/UTF8Conversion.h>
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 #include <proto/charsets.h>
 #include <libraries/charsets.h>
 #endif
@@ -680,7 +680,7 @@ CString String::latin1() const
     return result;
 }
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 String::String(const char * characters, unsigned inlength, unsigned mib)
 {
 	if (characters)

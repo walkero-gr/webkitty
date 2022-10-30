@@ -555,7 +555,7 @@ set(WTF_PRIVATE_INCLUDE_DIRECTORIES
     "${WTF_DIR}/wtf/unicode"
 )
 
-if (NOT "${PORT}" STREQUAL "MorphOS")
+if (NOT ("${PORT}" STREQUAL "MorphOS" OR "${PORT}" STREQUAL "AmigaOS"))
     set(WTF_LIBRARIES
          ${CMAKE_DL_LIBS}
     )
@@ -571,7 +571,7 @@ if (NOT USE_SYSTEM_MALLOC)
     set(WTF_FRAMEWORKS bmalloc)
 endif ()
 
-if (NOT "${PORT}" STREQUAL "MorphOS")
+if (NOT ("${PORT}" STREQUAL "MorphOS" OR "${PORT}" STREQUAL "AmigaOS"))
 if (ATOMICS_REQUIRE_LIBATOMIC)
     list(APPEND WTF_LIBRARIES atomic)
 endif ()
@@ -588,6 +588,10 @@ set(WTF_INTERFACE_INCLUDE_DIRECTORIES ${WTF_FRAMEWORK_HEADERS_DIR})
 set(WTF_INTERFACE_DEPENDENCIES WTF_CopyHeaders)
 
 if (CMAKE_CXX_COMPILER MATCHES ".*ppc-morphos.*")
+  list(APPEND WTF_LIBRARIES "-lsyscall -laboxstubs")
+endif ()
+
+if (CMAKE_CXX_COMPILER MATCHES ".*ppc-amigaos.*")
   list(APPEND WTF_LIBRARIES "-lsyscall -laboxstubs")
 endif ()
 

@@ -50,7 +50,7 @@
 #include <notify.h>
 #endif
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 #include <cstdint>
 extern "C" { void dprintf(const char *,... ); }
 #undef CRASH
@@ -200,7 +200,7 @@ void fastAlignedFree(void* p)
     _aligned_free(p);
 }
 
-#elif OS(MORPHOS)
+#elif OS(MORPHOS) || OS(AMIGAOS)
 
 void* fastAlignedMalloc(size_t alignment, size_t size)
 {
