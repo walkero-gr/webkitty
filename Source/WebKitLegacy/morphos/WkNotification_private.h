@@ -2,6 +2,7 @@
 
 #undef __OBJC__
 #define __MORPHOS_DISABLE
+#define __AMIGAOS_DISABLE
 #import "WebKit.h"
 #import <wtf/CompletionHandler.h>
 #import <WebCore/Notification.h>

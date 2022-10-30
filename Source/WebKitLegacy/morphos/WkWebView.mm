@@ -2,6 +2,7 @@
 
 // These will spew out some warnings, but it is not possible to disable them :(
 #define __MORPHOS_DISABLE
+#define __AMIGAOS_DISABLE
 #undef __OBJC__
 #import "WebKit.h"
 #import "WebPage.h"

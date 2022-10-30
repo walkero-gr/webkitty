@@ -60,7 +60,7 @@
 #include <WebCore/PageConsoleClient.h>
 #include <WebCore/RuntimeEnabledFeatures.h>
 #include "Gamepad.h"
-#if !MORPHOS_MINIMAL
+#if !MORPHOS_MINIMAL && !AMIGAOS_MINIMAL
 #include "WebDatabaseManager.h"
 #endif
 
@@ -70,12 +70,12 @@ LONG WaitSelect(LONG nfds, fd_set *readfds, fd_set *writefds, fd_set *exeptfds,
                 struct timeval *timeout, ULONG *maskp);
 }
 typedef uint32_t socklen_t;
-#if (!MORPHOS_MINIMAL)
+#if (!MORPHOS_MINIMAL) && !AMIGAOS_MINIMAL
 #include <pal/crypto/gcrypt/Initialization.h>
 #endif
 #include <proto/dos.h>
 
-#if (MORPHOS_MINIMAL)
+#if (MORPHOS_MINIMAL) || AMIGAOS_MINIMAL
 #define USE_ADFILTER 0
 #else
 #define USE_ADFILTER 1
@@ -203,7 +203,7 @@ void WebProcess::initialize(int sigbit)
 
 	GCController::singleton().setJavaScriptGarbageCollectorTimerEnabled(true);
 
-#if (!MORPHOS_MINIMAL)
+#if (!MORPHOS_MINIMAL) && !AMIGAOS_MINIMAL
 	PAL::GCrypt::initialize();
 #endif
 
@@ -215,7 +215,7 @@ void WebProcess::initialize(int sigbit)
 #endif
 
 	WebPlatformStrategies::initialize();
-#if !MORPHOS_MINIMAL
+#if !MORPHOS_MINIMAL && !AMIGAOS_MINIMAL
 	WebKitInitializeWebDatabasesIfNecessary();
 #endif
 

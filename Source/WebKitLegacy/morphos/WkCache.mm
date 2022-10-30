@@ -1,6 +1,7 @@
 #import "WkCache.h"
 #import <ob/OBString.h>
 #define __MORPHOS_DISABLE
+#define __AMIGAOS_DISABLE
 #undef __OBJC__
 #import "WebKit.h"
 #import <WebCore/CurlCacheManager.h>

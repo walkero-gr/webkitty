@@ -3,6 +3,7 @@
 
 #undef __OBJC__
 #define __MORPHOS_DISABLE
+#define __AMIGAOS_DISABLE
 #import "BackForwardClient.h"
 #import <WebCore/HistoryItem.h>
 #import <wtf/URL.h>

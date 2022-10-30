@@ -1242,7 +1242,7 @@ WebPage::WebPage(WebCore::PageIdentifier pageID, WebPageCreationParameters&& par
 
 //     settings.setStorageBlockingPolicy(SecurityOrigin::StorageBlockingPolicy::BlockAllStorage);
 	settings.setLocalStorageDatabasePath(String("PROGDIR:Cache/LocalStorage"));
-#if (!MORPHOS_MINIMAL)
+#if (!MORPHOS_MINIMAL) && !AMIGAOS_MINIMAL
 	settings.setWebAudioEnabled(true);
 //	settings.setAudioWorkletEnabled(true);
 //	settings.setModernUnprefixedWebAudioEnabled(true);
