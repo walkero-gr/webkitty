@@ -32,7 +32,7 @@
 #include <wtf/Vector.h>
 #include <limits.h>
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 #undef bind
 #endif
 

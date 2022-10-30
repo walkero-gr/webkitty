@@ -69,7 +69,7 @@
 #include "PingPongStackOverflowTest.h"
 #include "TypedArrayCTest.h"
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 unsigned long __stack = 2 * 1024 * 1024;
 #endif
 
@@ -1396,11 +1396,11 @@ int main(int argc, char* argv[])
 
     configureJSCForTesting();
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
     chdir("PROGDIR:");
 #endif
 
-#if !OS(WINDOWS) && !OS(MORPHOS)
+#if !OS(WINDOWS) && !OS(MORPHOS) && !OS(AMIGAOS)
     char resolvedPath[PATH_MAX];
     if (!realpath(argv[0], resolvedPath))
         fprintf(stdout, "Could not get the absolute pathname for: %s\n", argv[0]);
@@ -2021,7 +2021,7 @@ int main(int argc, char* argv[])
     JSObjectMakeConstructor(context, nullClass, 0);
     JSClassRelease(nullClass);
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
     const char* scriptPath = "PROGDIR:testapiScripts/testapi.js";
 #else
     const char* scriptPath = "./testapiScripts/testapi.js";

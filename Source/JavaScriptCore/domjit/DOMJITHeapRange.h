@@ -28,7 +28,7 @@
 #include <wtf/MathExtras.h>
 #include <wtf/PrintStream.h>
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 #ifndef UINT16_MAX
 #define UINT16_MAX 0xffff
 #endif

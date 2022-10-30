@@ -33,7 +33,7 @@
 #include "Options.h"
 #include "SuperSampler.h"
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 extern "C" { void oomCrash(); }
 #endif
 
@@ -149,7 +149,7 @@ void* LocalAllocator::allocateSlowCase(Heap& heap, GCDeferralContext* deferralCo
     MarkedBlock::Handle* block = m_directory->tryAllocateBlock(heap);
     if (!block) {
         if (failureMode == AllocationFailureMode::Assert)
-            #if OS(MORPHOS)
+            #if OS(MORPHOS) || OS(AMIGAOS)
             oomCrash();
             #else
             RELEASE_ASSERT_NOT_REACHED();

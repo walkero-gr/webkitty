@@ -32,7 +32,7 @@
 #include <wtf/DataLog.h>
 #include <wtf/text/StringCommon.h>
 
-#if OS(MORPHOS)
+#if OS(MORPHOS) || OS(AMIGAOS)
 unsigned long __stack = 2 * 1024 * 1024;
 #endif
 
