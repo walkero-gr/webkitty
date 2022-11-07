@@ -85,7 +85,9 @@ extern "C" {
 int pthread_setname_np(pthread_t thread, const char *name);
 #include <exec/tasks.h>
 #include <exec/libraries.h>
+#if OS(MORPHOS)
 #include <exec/system.h>
+#endif
 #include <proto/exec.h>
 }
 #endif

@@ -48,8 +48,12 @@
 #include <zircon/syscalls.h>
 #endif
 
-#if OS(MORPHOS) || OS(AMIGAOS)
+#if OS(MORPHOS)
 #include <proto/random.h>
+#endif
+
+#if OS(AMIGAOS)
+#include <utility/random.h>
 #endif
 
 namespace WTF {
@@ -71,7 +75,11 @@ RandomDevice::RandomDevice()
 {
     int ret = 0;
     do {
+// #if OS(AMIGAOS)
+//         ret = open("RANDOM:", O_RDONLY, 0);
+// #else
         ret = open("/dev/urandom", O_RDONLY, 0);
+// #endif
     } while (ret == -1 && errno == EINTR);
     m_fd = ret;
     if (m_fd < 0)
@@ -94,8 +102,15 @@ void RandomDevice::cryptographicallyRandomValues(unsigned char* buffer, size_t l
     RELEASE_ASSERT(!CCRandomGenerateBytes(buffer, length));
 #elif OS(FUCHSIA)
     zx_cprng_draw(buffer, length);
-#elif OS(MORPHOS) || OS(AMIGAOS)
-	RandomBytes((APTR)buffer, length);
+#elif OS(MORPHOS)
+    RandomBytes((APTR)buffer, length);
+#elif OS(AMIGAOS)
+    FILE *fd = fopen("RANDOM:", "r");
+    if(fd)
+    {
+        fread(buffer, length, 1, fd);
+        fclose(fd);
+    }
 #elif OS(UNIX)
     ssize_t amountRead = 0;
     while (static_cast<size_t>(amountRead) < length) {

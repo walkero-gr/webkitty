@@ -25,7 +25,7 @@
 
 #pragma once
 
-#if OS(UNIX)
+#if OS(UNIX) || OS(AMIGAOS)
 #include <unistd.h>
 #endif
 
@@ -52,7 +52,7 @@ inline ProcessID getCurrentProcessID()
 {
 #if OS(WINDOWS)
     return GetCurrentProcessId();
-#elif OS(MORPHOS) || OS(AMIGAOS)
+#elif OS(MORPHOS)
 	return FindTask(0)->tc_ETask->UniqueID;
 #else
     return getpid();

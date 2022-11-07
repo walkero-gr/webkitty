@@ -336,7 +336,7 @@ MappedFileData::MappedFileData(const String& filePath, MappedFileMode mapMode, b
     closeFile(fd);
 }
 
-#if HAVE(MMAP)
+#if HAVE(MMAP) && !OS(AMIGAOS)
 
 MappedFileData::~MappedFileData()
 {
