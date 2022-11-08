@@ -52,10 +52,6 @@
 #include <proto/random.h>
 #endif
 
-#if OS(AMIGAOS)
-#include <utility/random.h>
-#endif
-
 namespace WTF {
 
 #if !OS(DARWIN) && !OS(FUCHSIA) && OS(UNIX)
@@ -75,11 +71,7 @@ RandomDevice::RandomDevice()
 {
     int ret = 0;
     do {
-// #if OS(AMIGAOS)
-//         ret = open("RANDOM:", O_RDONLY, 0);
-// #else
         ret = open("/dev/urandom", O_RDONLY, 0);
-// #endif
     } while (ret == -1 && errno == EINTR);
     m_fd = ret;
     if (m_fd < 0)
