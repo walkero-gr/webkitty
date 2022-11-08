@@ -49,9 +49,23 @@
 #include <wtf/text/StringHash.h>
 #include <wtf/HashMap.h>
 
-#if OS(MORPHOS) || OS(AMIGAOS)
+#if OS(MORPHOS)
 #include <libraries/charsets.h>
 #include <proto/dos.h>
+#endif
+
+// TODO: This gives a conflict with struct WTF::Lock. 
+// Maybe this needs to be used but with skipping the dosextens.h
+// or use AmigaOS 4 locking overriding the one from WebKit
+#if OS(AMIGAOS)
+#define DOS_DOSEXTENS_H
+#define __USE_INLINE__
+#include <proto/dos.h>
+#undef __USE_INLINE__
+#undef DOS_DOSEXTENS_H
+#ifndef MIBENUM_SYSTEM
+#define MIBENUM_SYSTEM 0xFFFFFFFF
+#endif
 #endif
 
 namespace WTF {

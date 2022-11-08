@@ -88,7 +88,9 @@ int pthread_setname_np(pthread_t thread, const char *name);
 #if OS(MORPHOS)
 #include <exec/system.h>
 #endif
+#define __USE_INLINE__
 #include <proto/exec.h>
+#undef __USE_INLINE__
 }
 #endif
 

@@ -35,9 +35,18 @@
 #include <wtf/unicode/CharacterNames.h>
 #include <wtf/unicode/UTF8Conversion.h>
 
-#if OS(MORPHOS) || OS(AMIGAOS)
+#if OS(MORPHOS)
 #include <proto/charsets.h>
 #include <libraries/charsets.h>
+#endif
+
+#if OS(AMIGAOS)
+#include <proto/codesets.h>
+#define MIBENUM_ISO_8859_1 CS_MIBENUM_ISO_8859_1
+#define MIBENUM_UTF_16 CS_MIBENUM_UTF_16
+#ifndef MIBENUM_SYSTEM
+#define MIBENUM_SYSTEM 0xFFFFFFFF
+#endif
 #endif
 
 namespace WTF {
