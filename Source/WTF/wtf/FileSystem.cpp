@@ -336,7 +336,13 @@ MappedFileData::MappedFileData(const String& filePath, MappedFileMode mapMode, b
     closeFile(fd);
 }
 
-#if HAVE(MMAP) && !OS(AMIGAOS)
+#if HAVE(MMAP)
+// TODO: This is temporary as it is missing from the new clib2
+#if OS(AMIGAOS)
+#ifndef MAP_FILE
+#define MAP_FILE 0
+#endif
+#endif
 
 MappedFileData::~MappedFileData()
 {
