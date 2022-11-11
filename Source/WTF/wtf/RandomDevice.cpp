@@ -48,7 +48,7 @@
 #include <zircon/syscalls.h>
 #endif
 
-#if OS(MORPHOS) || OS(AMIGAOS)
+#if OS(MORPHOS)
 #include <proto/random.h>
 #endif
 
@@ -94,8 +94,15 @@ void RandomDevice::cryptographicallyRandomValues(unsigned char* buffer, size_t l
     RELEASE_ASSERT(!CCRandomGenerateBytes(buffer, length));
 #elif OS(FUCHSIA)
     zx_cprng_draw(buffer, length);
-#elif OS(MORPHOS) || OS(AMIGAOS)
-	RandomBytes((APTR)buffer, length);
+#elif OS(MORPHOS)
+    RandomBytes((APTR)buffer, length);
+#elif OS(AMIGAOS)
+    FILE *fd = fopen("RANDOM:", "r");
+    if(fd)
+    {
+        fread(buffer, length, 1, fd);
+        fclose(fd);
+    }
 #elif OS(UNIX)
     ssize_t amountRead = 0;
     while (static_cast<size_t>(amountRead) < length) {

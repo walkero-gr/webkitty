@@ -65,8 +65,12 @@
 #include <glib.h>
 #endif
 
-#if OS(MORPHOS) || OS(AMIGAOS)
+#if OS(MORPHOS)
 #include <exec/system.h>
+#include <proto/exec.h>
+#endif
+
+#if OS(AMIGAOS)
 #include <proto/exec.h>
 #endif
 
@@ -276,7 +280,7 @@ MonotonicTime MonotonicTime::now()
     return fromMachAbsoluteTime(mach_absolute_time());
 #elif OS(FUCHSIA)
     return fromRawSeconds(zx_clock_get_monotonic() / static_cast<double>(ZX_SEC(1)));
-#elif OS(MORPHOS) || OS(AMIGAOS)
+#elif OS(MORPHOS)
     class tbClock {
     public:
         tbClock() {
@@ -291,7 +295,7 @@ MonotonicTime MonotonicTime::now()
     };
     static const tbClock tb;
     return fromRawSeconds(static_cast<double>(__builtin_ppc_get_timebase()) / tb.clockFrequency());
-#elif OS(LINUX) || OS(FREEBSD) || OS(OPENBSD) || OS(NETBSD)
+#elif OS(LINUX) || OS(FREEBSD) || OS(OPENBSD) || OS(NETBSD) || OS(AMIGAOS)
     struct timespec ts { };
     clock_gettime(CLOCK_MONOTONIC, &ts);
     return fromRawSeconds(static_cast<double>(ts.tv_sec) + ts.tv_nsec / 1.0e9);

@@ -30,3 +30,4 @@ WebKitty.xcodeproj/project.xcworkspace/xcuserdata
 .vscode
 *_notes.md
 __cmake_systeminformation
+amigaos.cmake

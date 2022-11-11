@@ -21,7 +21,7 @@ ADD . /opt/code/webkitty
 WORKDIR /opt/code/webkitty
 
 # The following steps can be changed to get the final build binaries
-RUN make jscore-native
+RUN make jscore-amigaos
 
 FROM scratch AS export-stage
 COPY --from=build-stage /opt/code/webkitty /

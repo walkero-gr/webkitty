@@ -337,6 +337,12 @@ MappedFileData::MappedFileData(const String& filePath, MappedFileMode mapMode, b
 }
 
 #if HAVE(MMAP)
+// TODO: This is temporary as it is missing from the new clib2
+#if OS(AMIGAOS)
+#ifndef MAP_FILE
+#define MAP_FILE 0
+#endif
+#endif
 
 MappedFileData::~MappedFileData()
 {

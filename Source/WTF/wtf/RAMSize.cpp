@@ -35,8 +35,13 @@
 #include <sys/sysinfo.h>
 #elif OS(UNIX)
 #include <unistd.h>
-#elif OS(MORPHOS) || OS(AMIGAOS)
+#elif OS(MORPHOS)
 #include <proto/exec.h>
+#include <exec/memory.h>
+#elif OS(AMIGAOS)
+#define __USE_INLINE__
+#include <proto/exec.h>
+#undef __USE_INLINE__
 #include <exec/memory.h>
 #endif // OS(LINUX) || OS(UNIX)
 #else
