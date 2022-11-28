@@ -1,4 +1,4 @@
-ROOTPATH:=$(abspath ../../../)
+ROOTPATH:=$(abspath ../../sdk/)
 LIB:=$(ROOTPATH)/lib
 GEN:=$(ROOTPATH)/gen/host/libnix
 
@@ -14,6 +14,13 @@ OBJC:=$(ROOTPATH)/morphoswb/classes/frameworks/includes/
 
 CMAKE = cmake
 STRIP = ppc-amigaos-strip
+
+USE_CLIB2=YES
+ifeq ($(USE_CLIB2), YES)
+LIBC_PATH=$(SDK_PATH)/ppc-amigaos/local/clib2
+else
+LIBC_PATH=$(SDK_PATH)/ppc-amigaos/local/newlib
+endif
 
 all:
 
@@ -39,20 +46,23 @@ jscore-native:
 	Tools/Scripts/run-javascriptcore-tests --root WebKitBuild/Release/Source/JavaScriptCore/shell/ --no-jsc-stress --no-jit-stress-test
 
 jscore-amigaos: amigaos.cmake
-	rm -rf WebKitBuild cross-build
+#rm -rf WebKitBuild cross-build
 	mkdir -p cross-build WebKitBuild/Release/bin
 	(cd cross-build && \
 		$(realpath Tools/Scripts/run-javascriptcore-tests) --jsc-only \
-		--cmakeargs='-DUSE_CLIB2=YES \
+		--cmakeargs='-DUSE_CLIB2=$(USE_CLIB2) \
 		-DCMAKE_CROSSCOMPILING=ON -DCMAKE_TOOLCHAIN_FILE=$(realpath amigaos.cmake) -DCMAKE_MODULE_PATH=$(realpath Source/cmake) \
 		-DJAVASCRIPTCORE_DIR=$(realpath Source/JavaScriptCore) -DBUILD_SHARED_LIBS=NO \
-		-DICU_LIBRARY=$(SDK_PATH)/ppc-amigaos/local/clib2/lib -DICU_INCLUDE_DIR=$(SDK_PATH)/ppc-amigaos/local/clib2/include \
+		-DICU_INCLUDE_DIR=$(LIBC_PATH)/include -DICU_LIBRARIES=$(LIBC_PATH)/lib \
+		-DICU_DATA_LIBRARY_RELEASE=$(LIBC_PATH)/lib/libicudata.a \
+		-DICU_I18N_LIBRARY_RELEASE=$(LIBC_PATH)/lib/libicui18n.a \
+		-DICU_UC_LIBRARY_RELEASE=$(LIBC_PATH)/lib/libicuuc.a \
 		-DJPEG_LIBRARY=$(LIB)/libjpeg -DJPEG_INCLUDE_DIR=$(LIB)/libjpeg \
 		-DLIBXML2_LIBRARY=$(LIB)/libxml2/instdir/lib -DLIBXML2_INCLUDE_DIR=$(LIB)/libxml2/instdir/include/libxml2 \
 		-DPNG_LIBRARY=$(GEN)/libpng16/lib/ -DPNG_INCLUDE_DIR=$(GEN)/libpng16/include \
 		-DLIBXSLT_LIBRARIES=$(LIB)/libxslt/instdir/lib -DLIBXSLT_INCLUDE_DIR=$(LIB)/libxslt/instdir/include \
 		-DSQLITE_LIBRARIES=$(LIB)/sqlite/instdir/lib -DSQLITE_INCLUDE_DIR=$(LIB)/sqlite/instdir/include \
-			-DCMAKE_BUILD_TYPE=Release -DPORT=JSCOnly -DUSE_SYSTEM_MALLOC=YES \
+		-DCMAKE_BUILD_TYPE=Release -DPORT=JSCOnly -DUSE_SYSTEM_MALLOC=YES \
 		-DCMAKE_FIND_LIBRARY_SUFFIXES=".a" ')
 	cp -a Source/JavaScriptCore/API/tests/testapiScripts ./WebKitBuild/Release/Source/JavaScriptCore/shell/
 #	Tools/Scripts/run-javascriptcore-tests --root WebKitBuild/Release/Source/JavaScriptCore/shell/ --no-jsc-stress --no-jit-stress-test

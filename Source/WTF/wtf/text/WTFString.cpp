@@ -692,6 +692,8 @@ CString String::latin1() const
 
 #if OS(MORPHOS) || OS(AMIGAOS)
 #if OS(AMIGAOS)
+struct Library *CodesetsBase; struct CodesetsIFace *ICodesets;
+
 ULONG GetLength(APTR str, LONG bytes, ULONG mib)
 {
     return ICodesets->CodesetsStrLen((CONST_STRPTR) str,
