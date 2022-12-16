@@ -28,7 +28,11 @@
 #include "LLIntOfflineAsmConfig.h"
 #include <stdio.h>
 
+#if OS(AMIGAOS)
+__attribute__((visibility("default"))) int main(int, char**)
+#else
 int main(int, char**)
+#endif
 {
 #include "LLIntDesiredSettings.h"
     printf("%p\n", settingsExtractorTable);

@@ -1,9 +1,9 @@
 ROOTPATH:=$(abspath ../../sdk/)
-LIB:=$(ROOTPATH)/lib
+# LIB:=$(ROOTPATH)/lib
 GEN:=$(ROOTPATH)/gen/host/libnix
 
-PKG_ICU:=$(LIB)/libicu67/instdir/lib/pkgconfig/
-PKG_SQLITE:=$(LIB)/sqlite/instdir/lib/pkgconfig/
+# PKG_ICU:=$(LIB)/libicu67/instdir/lib/pkgconfig/
+# PKG_SQLITE:=$(LIB)/sqlite/instdir/lib/pkgconfig/
 PKG_FONTCONFIG:=$(ROOTPATH)/morphoswb/libs/fontconfig/MorphOS/
 PKG:=$(PKG_ICU):$(PKG_SQLITE)
 
@@ -21,6 +21,8 @@ LIBC_PATH=$(SDK_PATH)/ppc-amigaos/local/clib2
 else
 LIBC_PATH=$(SDK_PATH)/ppc-amigaos/local/newlib
 endif
+	
+LIB:=$(LIBC_PATH)/lib
 
 all:
 
@@ -84,12 +86,12 @@ jscore-pack:
 		./WebKitBuild/Release/Source/JavaScriptCore/shell/testmasm \
 		 JSTests LayoutTests PerformanceTests
 
-configure: morphos.cmake link.sh CMakeLists.txt Dummy/libdummy.a ffmpeg/.buildstamp
+configure: amigaos.cmake link.sh CMakeLists.txt Dummy/libdummy.a ffmpeg/.buildstamp
 	rm -rf cross-build
 	mkdir cross-build
 	(cd cross-build && PKG_CONFIG_PATH=$(PKG) PATH=$(CMAKE):${PATH} \
-		cmake -DCMAKE_CROSSCOMPILING=ON -DCMAKE_BUILD_TYPE=RelWithDebugInfo -DCMAKE_TOOLCHAIN_FILE=$(realpath morphos.cmake) -DCMAKE_DL_LIBS="syscall" \
-		-DBUILD_SHARED_LIBS=NO -DPORT=MorphOS -DENABLE_WEBCORE=1 -DENABLE_WEBKIT_LEGACY=1 -DLOG_DISABLED=0 -DMORPHOS_MINIMAL=0 -DROOTPATH="$(ROOTPATH)" \
+		cmake -DCMAKE_CROSSCOMPILING=ON -DCMAKE_BUILD_TYPE=RelWithDebugInfo -DCMAKE_TOOLCHAIN_FILE=$(realpath amigaos.cmake) -DCMAKE_DL_LIBS="syscall" \
+		-DBUILD_SHARED_LIBS=NO -DPORT=AMIGAOS -DENABLE_WEBCORE=1 -DENABLE_WEBKIT_LEGACY=1 -DLOG_DISABLED=0 -DAMIGAOS_MINIMAL=0 -DROOTPATH="$(ROOTPATH)" \
 		-DJPEG_LIBRARY=$(LIB)/libjpeg/libjpeg.a \
 		-DJPEG_INCLUDE_DIR=$(LIB)/libjpeg \
 		-DLIBXML2_LIBRARY=$(LIB)/libxml2/instdir/lib/libxml2.a \
@@ -103,10 +105,10 @@ configure: morphos.cmake link.sh CMakeLists.txt Dummy/libdummy.a ffmpeg/.buildst
 		-DSQLITE_INCLUDE_DIR=$(LIB)/sqlite/instdir/include \
 		-DSQLite3_LIBRARY=$(LIB)/sqlite/instdir/include \
 		-DSQLite3_INCLUDE_DIR=$(LIB)/sqlite/instdir/include \
-		-DCAIRO_INCLUDE_DIRS=$(ROOTPATH)/morphoswb/libs/cairo/MorphOS/os-include/cairo \
-		-DCAIRO_LIBRARIES="$(ROOTPATH)/morphoswb/libs/cairo/MorphOS/lib/libnix/libcairo.a" \
-		-DCairo_INCLUDE_DIR=$(ROOTPATH)/morphoswb/libs/cairo/MorphOS/os-include/cairo \
-		-DCairo_LIBRARY="$(ROOTPATH)/morphoswb/libs/cairo/MorphOS/lib/libnix/libcairo.a" \
+		-DCAIRO_INCLUDE_DIRS=$(ROOTPATH)/amigaoswb/libs/cairo/AmigaOS/os-include/cairo \
+		-DCAIRO_LIBRARIES="$(ROOTPATH)/amigaoswb/libs/cairo/AmigaOS/lib/libnix/libcairo.a" \
+		-DCairo_INCLUDE_DIR=$(ROOTPATH)/amigaoswb/libs/cairo/AmigaOS/os-include/cairo \
+		-DCairo_LIBRARY="$(ROOTPATH)/amigaoswb/libs/cairo/AmigaOS/lib/libnix/libcairo.a" \
 		-DHarfBuzz_INCLUDE_DIR="$(realpath Dummy)"\
 		-DHarfBuzz_LIBRARY=$(GEN)/lib/libnghttp2.a \
 		-DICU_ROOT="$(LIB)/libicu67/instdir/" \
@@ -114,10 +116,10 @@ configure: morphos.cmake link.sh CMakeLists.txt Dummy/libdummy.a ffmpeg/.buildst
 		-DICU_DATA_LIBRARY_RELEASE="$(LIB)/libicu67/instdir/lib/libicudata.a" \
 		-DICU_I18N_LIBRARY_RELEASE="$(LIB)/libicu67/instdir/lib/libicui18n.a" \
 		-DHarfBuzz_ICU_LIBRARY="$(realpath Dummy)/libdummy.a" \
-		-DFREETYPE_INCLUDE_DIRS="$(ROOTPATH)/morphoswb/libs/freetype/include" \
-		-DFREETYPE_LIBRARY="$(ROOTPATH)/morphoswb/libs/freetype/library/lib/libfreetype.a" \
-		-DFontconfig_LIBRARY="$(ROOTPATH)/morphoswb/libs/fontconfig/MorphOS/libfontconfig-glue.a" \
-		-DFontconfig_INCLUDE_DIR="$(ROOTPATH)/morphoswb/libs/fontconfig" \
+		-DFREETYPE_INCLUDE_DIRS="$(ROOTPATH)/amigaoswb/libs/freetype/include" \
+		-DFREETYPE_LIBRARY="$(ROOTPATH)/amigaoswb/libs/freetype/library/lib/libfreetype.a" \
+		-DFontconfig_LIBRARY="$(ROOTPATH)/amigaoswb/libs/fontconfig/MorphOS/libfontconfig-glue.a" \
+		-DFontconfig_INCLUDE_DIR="$(ROOTPATH)/amigaoswb/libs/fontconfig" \
 		-DOpenJPEG_INCLUDE_DIR="$(GEN)/include/openjpeg-2.5" \
 		-DWebP_INCLUDE_DIR="$(GEN)/include" -DWebP_LIBRARY="$(GEN)/lib/libwebp.a" -DWebP_DEMUX_LIBRARY="$(GEN)/lib/libwebpdemux.a"\
 		-DAVFORMAT_LIBRARY="ffmpeg/instdir/lib/libavformat.a" -DAVFORMAT_INCLUDE_DIR="$(realpath ffmpeg/instdir/include)" \
