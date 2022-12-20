@@ -222,9 +222,9 @@ $(CMAKE):
 	(cd cmake-3.16.2 && make -j$(shell nproc))
 
 Dummy/libdummy.a:
-	ppc-morphos-gcc-9 -c -o Dummy/dummy.o Dummy/dummy.c
-	ppc-morphos-ar rc Dummy/libdummy.a Dummy/dummy.o
-	ppc-morphos-ranlib Dummy/libdummy.a
+	ppc-amigaos-gcc -c -o Dummy/dummy.o Dummy/dummy.c
+	ppc-amigaos-ar rc Dummy/libdummy.a Dummy/dummy.o
+	ppc-amigaos-ranlib Dummy/libdummy.a
 	cp Dummy/libdummy.a Dummy/libdl.a
 
 ffmpeg/.buildstamp:

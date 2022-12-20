@@ -52,7 +52,9 @@ ADD . /opt/code/webkitty
 WORKDIR /opt/code/webkitty
 
 # The following steps can be changed to get the final build binaries
-RUN make jscore-amigaos
+RUN make Dummy/libdummy.a && \
+	cp Dummy/libdl.a /opt/sdk/ppc-amigaos/local/clib2/lib/ && \
+	make jscore-amigaos
 
 FROM scratch AS export-stage
 COPY --from=build-stage /opt/code/webkitty /
