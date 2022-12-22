@@ -117,7 +117,11 @@ const int64_t* LLIntOffsetsExtractor::dummy()
 
 } // namespace JSC
 
+#if OS(AMIGAOS)
+__attribute__((visibility("default"))) int main(int, char**)
+#else
 int main(int, char**)
+#endif
 {
     // Out of an abundance of caution, make sure that LLIntOffsetsExtractor::dummy() is live,
     // and the extractorTable is live, too.

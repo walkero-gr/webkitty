@@ -2534,7 +2534,11 @@ static void run(const char*)
 
 #endif // ENABLE(B3_JIT)
 
+#if OS(AMIGAOS)
+__attribute__((visibility("default"))) int main(int argc, char** argv)
+#else
 int main(int argc, char** argv)
+#endif
 {
     const char* filter = nullptr;
     switch (argc) {

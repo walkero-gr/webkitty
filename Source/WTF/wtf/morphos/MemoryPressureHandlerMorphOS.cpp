@@ -34,7 +34,9 @@
 #endif
 #include <exec/memory.h>
 
+#if !OS(AMIGAOS)
 extern "C" { void dprintf(const char *,...); }
+#endif
 
 namespace WebKit {
 	extern void reactOnMemoryPressureInWebKit();

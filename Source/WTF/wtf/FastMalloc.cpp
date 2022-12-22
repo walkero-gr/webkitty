@@ -50,9 +50,15 @@
 #include <notify.h>
 #endif
 
-#if OS(MORPHOS) || OS(AMIGAOS)
+#if OS(MORPHOS)
 #include <cstdint>
 extern "C" { void dprintf(const char *,... ); }
+#undef CRASH
+extern "C" { void _oomCrash() { std::abort(); }; void oomCrash() __attribute__((weak, alias ("_oomCrash"))); }
+#define CRASH oomCrash
+#endif
+
+#if OS(AMIGAOS)
 #undef CRASH
 extern "C" { void _oomCrash() { std::abort(); }; void oomCrash() __attribute__((weak, alias ("_oomCrash"))); }
 #define CRASH oomCrash
