@@ -76,8 +76,7 @@ steps:
     - curl -sw "\n" "http://10.0.0.2:5000/container/count/drone-" | while read var1; do if [ $var1 -eq 1 ]; then hcloud server poweroff drone-agents; fi ; done
 
 depends_on:
-  - compile-tests
-  - compile-release-bytag
+  - compile-jsc
 
 trigger:
   status:
