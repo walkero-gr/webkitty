@@ -34,7 +34,9 @@
 #include <wtf/text/StringBuilder.h>
 
 #if !OS(WINDOWS)
+#if HAVE(MMAP)
 #include <sys/mman.h>
+#endif
 #include <sys/param.h>
 #include <sys/stat.h>
 #endif

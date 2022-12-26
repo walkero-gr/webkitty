@@ -83,8 +83,8 @@ set(LD_SUPPORTS_DISABLE_NEW_DTAGS FALSE)
 
 # Use clib2 for AmigaOS 4
 if (USE_CLIB2)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mcrt=clib2")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mcrt=clib2")
+    set(CMAKE_C_FLAGS "-mcrt=clib2 ${CMAKE_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS "-mcrt=clib2 ${CMAKE_CXX_FLAGS}")
 endif ()
 
 # Determine whether the archiver in use supports thin archives.
