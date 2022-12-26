@@ -694,8 +694,10 @@ CString String::latin1() const
 #if OS(AMIGAOS)
 struct Library *CodesetsBase; struct CodesetsIFace *ICodesets;
 
-ULONG GetLength(APTR str, LONG bytes, ULONG mib)
+LONG GetLength(APTR str, LONG bytes, ULONG mib)
 {
+    if (str == NULL) return -1;
+
     return ICodesets->CodesetsStrLen((CONST_STRPTR) str,
         CSA_SourceLen, bytes,
         CSA_SourceMIBenum, mib,
