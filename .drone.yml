@@ -32,10 +32,10 @@ type: docker
 name: compile-jsc
 
 clone:
-  depth: 10
+  depth: 5
 
 workspace:
-  path: /drone/src
+  path: /opt/code/webkitty
 
 steps:
 - name: with-clib2
