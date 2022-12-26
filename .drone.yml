@@ -17,8 +17,8 @@ steps:
 trigger:
   branch:
     include:
-    - master
-    - develop
+    - amigaos_*
+    - ci-cd
   event:
     include:
     - push
@@ -84,8 +84,8 @@ trigger:
     - success
   branch:
     include:
-    - master
-    - develop
+    - amigaos_*
+    - ci-cd
   event:
     include:
     - push
