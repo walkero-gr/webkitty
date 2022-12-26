@@ -592,7 +592,7 @@ if (CMAKE_CXX_COMPILER MATCHES ".*ppc-morphos.*")
 endif ()
 
 if (CMAKE_CXX_COMPILER MATCHES ".*ppc-amigaos.*")
-  list(APPEND WTF_LIBRARIES "-lsyscall -laboxstubs")
+    list(APPEND WTF_LIBRARIES "-use-dynld -lauto -athread=native")
 endif ()
 
 WEBKIT_FRAMEWORK_DECLARE(WTF)

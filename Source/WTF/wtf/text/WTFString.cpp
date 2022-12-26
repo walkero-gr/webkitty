@@ -47,6 +47,7 @@
 #ifndef MIBENUM_SYSTEM
 #define MIBENUM_SYSTEM 0xFFFFFFFF
 #endif
+#define CST_DoNotTerminate (TAG_USER + 3)
 #endif
 
 namespace WTF {
@@ -690,6 +691,46 @@ CString String::latin1() const
 }
 
 #if OS(MORPHOS) || OS(AMIGAOS)
+#if OS(AMIGAOS)
+struct Library *CodesetsBase; struct CodesetsIFace *ICodesets;
+
+LONG GetLength(APTR str, LONG bytes, ULONG mib)
+{
+    if (str == NULL) return -1;
+
+    return ICodesets->CodesetsStrLen((CONST_STRPTR) str,
+        CSA_SourceLen, bytes,
+        CSA_SourceMIBenum, mib,
+        TAG_DONE
+    );
+}
+
+LONG ConvertTagList(APTR src, LONG srcbytes, APTR dst, LONG dstbytes,
+   ULONG srcmib, ULONG dstmib, CONST struct TagItem *taglist)
+{
+    STRPTR convertedString = ICodesets->CodesetsConvertStr(
+        CSA_Source, (STRPTR) src,
+        CSA_SourceLen, (ULONG) srcbytes,
+        CSA_DestLenPtr, &dstbytes,
+        CSA_SourceMIBenum, srcmib,
+        CSA_DestMIBenum, dstmib,
+        TAG_DONE
+    );
+    if (convertedString)
+    {
+        dst = convertedString;
+        ICodesets->CodesetsFreeA(convertedString, NULL);
+
+        if ((srcbytes == 0) || (dstbytes == 0))
+        {
+            return 0;
+        }
+        return dstbytes;
+    }
+    return -1;
+}
+#endif
+
 String::String(const char * characters, unsigned inlength, unsigned mib)
 {
 	if (characters)
