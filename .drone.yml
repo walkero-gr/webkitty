@@ -31,6 +31,9 @@ kind: pipeline
 type: docker
 name: compile-jsc
 
+clone:
+  depth: 10
+
 workspace:
   path: /drone/src
 
