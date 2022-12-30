@@ -3082,9 +3082,19 @@ bool WebPage::handleIntuiMessage(IntuiMessage *imsg, const int mouseX, const int
 						{
 							m_page->dragController().dragUpdated(drag);
 						}
-						
-						if (_fMoveDragWindow)
-							_fMoveDragWindow(adjustedGlobalPosition.x(), adjustedGlobalPosition.y());
+
+                        D(dprintf("%s: move to %d %d do %d %d\n", __PRETTY_FUNCTION__, adjustedGlobalPosition.x(), adjustedGlobalPosition.y(), m_page->dragController().dragOffset().x(), m_page->dragController().dragOffset().y()));
+
+                        int dx = m_page->dragController().dragOffset().x();
+                        int dy = m_page->dragController().dragOffset().y();
+                        
+                        dx = std::max(0, std::min(dx, m_dragSize.width()));
+                        dy = std::max(0, std::min(dy, m_dragSize.height()));
+                        
+                        IntPoint dragWindowPosition(pme.globalPosition().x() - dx, pme.globalPosition().y() - dy);
+                        
+                        if (_fMoveDragWindow)
+							_fMoveDragWindow(dragWindowPosition.x(), dragWindowPosition.y());
 					}
 					break;
 				}
@@ -3860,6 +3870,11 @@ void WebPage::startDrag(WebCore::DragItem&& item, WebCore::DataTransfer& transfe
 		auto width = cairo_image_surface_get_width(imageRef.get());
 		auto height = cairo_image_surface_get_height(imageRef.get());
 
+        D(dprintf("%s: offset %d %d w %d h %d anchor %d %d\n", __PRETTY_FUNCTION__, m_page->dragController().dragOffset().x(), m_page->dragController().dragOffset().y(), width, height,
+            item.dragLocationInWindowCoordinates.x(), item.dragLocationInWindowCoordinates.y()));
+        
+        m_dragSize = IntSize(width, height);
+        
 		if (_fOpenDragWindow)
 			_fOpenDragWindow(m_page->dragController().dragOffset().x(), m_page->dragController().dragOffset().y(), width, height);
 	}
