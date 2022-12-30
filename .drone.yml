@@ -25,7 +25,7 @@
 #     - pull_request
 #     - tag
 
----
+# ---
 
 kind: pipeline
 type: docker
@@ -60,7 +60,7 @@ trigger:
 node:
   agents: awsbuilders
 
-# ---
+---
 
 # kind: pipeline
 # type: docker
