@@ -13,6 +13,8 @@ steps:
   pull: always
   image: walkero/webkitondocker
   commands:
+  - make Dummy/libdummy.a
+  - cp Dummy/libdl.a /opt/sdk/ppc-amigaos/local/clib2/lib/
   - make -f Makefile jscore-amigaos
 
 trigger:
