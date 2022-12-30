@@ -449,7 +449,8 @@ void OffscreenCanvas::setPlaceholderCanvas(HTMLCanvasElement& canvas)
 
 void OffscreenCanvas::pushBufferToPlaceholder()
 {
-    callOnMainThread([placeholderData = Ref { *m_placeholderData }] () mutable {
+    // canvas is a weakptr, would often go away while being proceessed on main thread
+    callOnMainThread([placeholderData = Ref { *m_placeholderData }, canvas = RefPtr { m_placeholderData->canvas.get() }] () mutable {
         Locker locker { placeholderData->bufferLock };
         if (placeholderData->canvas && placeholderData->pendingCommitBuffer)
             placeholderData->canvas->setImageBufferAndMarkDirty(WTFMove(placeholderData->pendingCommitBuffer));
