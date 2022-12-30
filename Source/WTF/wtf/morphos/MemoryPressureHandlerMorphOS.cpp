@@ -25,10 +25,18 @@
 
 #include "config.h"
 #include <wtf/MemoryPressureHandler.h>
+#if OS(AMIGAOS)
+#define __USE_INLINE__
+#endif
 #include <proto/exec.h>
+#if OS(AMIGAOS)
+#undef __USE_INLINE__
+#endif
 #include <exec/memory.h>
 
+#if !OS(AMIGAOS)
 extern "C" { void dprintf(const char *,...); }
+#endif
 
 namespace WebKit {
 	extern void reactOnMemoryPressureInWebKit();
@@ -74,10 +82,11 @@ void MemoryPressureHandler::morphosMeasurementTimerFired()
 	
 	if (memoryLow)
 	{
-        setMemoryPressureStatus(MemoryPressureStatus::SystemCritical);
-        releaseMemory(Critical::Yes);
-        WebKit::reactOnMemoryPressureInWebKit();
-        return;
+		setMemoryPressureStatus(MemoryPressureStatus::SystemCritical);
+		releaseMemory(Critical::Yes);
+		// TODO:This possible needs to be enabled when we build the WebKit fully
+		// WebKit::reactOnMemoryPressureInWebKit();
+		return;
 	}
 }
 

@@ -903,7 +903,11 @@ extern const JSC::JITOperationAnnotation startOfJITOperationsInTestB3 __asm("sec
 extern const JSC::JITOperationAnnotation endOfJITOperationsInTestB3 __asm("section$end$__DATA_CONST$__jsc_ops");
 #endif
 
+#if OS(AMIGAOS)
+__attribute__((visibility("default"))) int main(int argc, char** argv)
+#else
 int main(int argc, char** argv)
+#endif
 {
     const char* filter = nullptr;
     switch (argc) {

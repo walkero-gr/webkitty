@@ -2973,7 +2973,11 @@ static void startTimeoutThreadIfNeeded(VM& vm)
     startTimeoutTimer(timeoutDuration);
 }
 
+#if OS(AMIGAOS)
+__attribute__((visibility("default"))) int main(int argc, char** argv)
+#else
 int main(int argc, char** argv)
+#endif
 {
 #if OS(DARWIN) && CPU(ARM_THUMB2)
     // Enabled IEEE754 denormal support.
