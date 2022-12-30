@@ -34,7 +34,7 @@ namespace WebKit {
 using namespace WebCore::DOMCacheEngine;
 using namespace CacheStorage;
 
-#define D(x) x
+#define D(x) 
 
 #define CACHE_STORAGE_RELEASE_LOG(fmt, ...) D(dprintf("%s:" fmt "\n", __func__, ##__VA_ARGS__));
 #define CACHE_STORAGE_RELEASE_LOG_FUNCTION_IN_CALLBACK(functionName, fmt, resultGetter) D(dprintf(functionName ":" fmt "\n", resultGetter));
