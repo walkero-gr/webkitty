@@ -21,12 +21,10 @@ trigger:
   branch:
     include:
     - amigaos_*
-    - ci-cd-aws
   event:
     include:
-    - push
     - pull_request
-    - tag
+    - merge
 
 ---
 
@@ -53,11 +51,10 @@ trigger:
   branch:
     include:
     - amigaos_*
-    - ci-cd-aws
   event:
     include:
-    - push
     - pull_request
+    - merge
 
 depends_on:
   - awsbuilders-poweron
