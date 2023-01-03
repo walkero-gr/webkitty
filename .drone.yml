@@ -23,8 +23,9 @@ trigger:
     - amigaos_*
   event:
     include:
+    - push
     - pull_request
-    - merge
+    - tag
 
 ---
 
@@ -53,8 +54,8 @@ trigger:
     - amigaos_*
   event:
     include:
+    - push
     - pull_request
-    - merge
 
 depends_on:
   - awsbuilders-poweron
