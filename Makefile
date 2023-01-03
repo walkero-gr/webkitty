@@ -52,6 +52,8 @@ jscore-amigaos: amigaos.cmake
 	mkdir -p cross-build WebKitBuild/Release/bin
 	(cd cross-build && \
 		$(realpath Tools/Scripts/run-javascriptcore-tests) --jsc-only \
+		--no-testmasm --no-testair --no-testb3 --no-testdfg --no-testapi \
+		--no-jsc-stress --no-mozilla-tests --no-jit-stress-tests --no-quick \
 		--cmakeargs='-DUSE_CLIB2=$(USE_CLIB2) \
 		-DCMAKE_CROSSCOMPILING=ON -DCMAKE_TOOLCHAIN_FILE=$(realpath amigaos.cmake) -DCMAKE_MODULE_PATH=$(realpath Source/cmake) \
 		-DJAVASCRIPTCORE_DIR=$(realpath Source/JavaScriptCore) -DBUILD_SHARED_LIBS=NO \
