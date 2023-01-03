@@ -1,25 +1,35 @@
 FFMPEG_VERSION=4.4
 OPUS_VERSION=1.3.1
 
+USE_CLIB2=YES
+ifeq ($(USE_CLIB2), YES)
+LIBC=clib2
+else
+LIBC=newlib
+endif
+
 all: .buildstamp
 
 .buildstamp: ffmpeg-$(FFMPEG_VERSION).tar.xz ffmpeg-$(FFMPEG_VERSION).diff opus-$(OPUS_VERSION).tar.gz
 	mkdir -p instdir/include instdir/lib
 	rm -rf ffmpeg-$(OPUS_VERSION)
 	tar xf opus-$(OPUS_VERSION).tar.gz
-	(cd opus-$(OPUS_VERSION) && CC="ppc-morphos-gcc-9 -noixemul" LD=ppc-morphos-ld ./configure --host=ppc-morphos --prefix="")
-	(cd opus-$(OPUS_VERSION) && CC="ppc-morphos-gcc-9 -noixemul" LD=ppc-morphos-ld make -j$(shell nproc) )
-	(cd opus-$(OPUS_VERSION) && make DESTDIR="$(abspath ./)/instdir" install)
+	(cd opus-$(OPUS_VERSION) && \
+			CC="ppc-amigaos-gcc" LD="ppc-amigaos-ld" CFLAGS="-mcrt=${LIBC}" LDFLAGS="-mcrt=${LIBC}" LIBS="" ./configure --host=ppc-amigaos --prefix="" && \
+			make -j$(shell nproc) && \
+			make DESTDIR="$(abspath ./)/instdir" install )
 	rm -rf ffmpeg-$(FFMPEG_VERSION)
-	(../../../../aboxtools/xz/xz -dcf ffmpeg-$(FFMPEG_VERSION).tar.xz | tar -x)
+	(xz -dcf ffmpeg-$(FFMPEG_VERSION).tar.xz | tar -x)
 	(cd ffmpeg-$(FFMPEG_VERSION) && patch -p1 <../ffmpeg-$(FFMPEG_VERSION).diff)
-	(cd ffmpeg-$(FFMPEG_VERSION) && CFLAGS="-noixemul -O3 -I$(abspath instdir/include) -I$(abspath aom-build/instdir/include)" LDFLAGS="-noixemul -L$(abspath instdir/lib) -L$(abspath aom-build/instdir/lib) " \
-		PKG_CONFIG_PATH="$(abspath instdir/lib/pkgconfig):$(abspath aom-build/instdir/lib/pkgconfig)" ./configure --prefix="$(abspath ./instdir)" --cc=/gg/bin/ppc-morphos-gcc-9 --ld=/gg/bin/ppc-morphos-gcc-9 \
-		--enable-cross-compile --cross-prefix=/gg/bin/ --arch=powerpc --cpu=powerpc --target-os=linux --enable-runtime-cpudetect \
+	(cd ffmpeg-$(FFMPEG_VERSION) && CFLAGS="-mcrt=${LIBC} -O3 -I$(abspath instdir/include) -I$(abspath aom-build/instdir/include)" LDFLAGS="-mcrt=${LIBC} -L$(abspath instdir/lib) -L$(abspath aom-build/instdir/lib) " \
+		PKG_CONFIG_PATH="$(abspath instdir/lib/pkgconfig):$(abspath aom-build/instdir/lib/pkgconfig)" ./configure --prefix="$(abspath ./instdir)" --cc=/opt/ppc-amigaos/bin/ppc-amigaos-gcc --ld=/opt/ppc-amigaos/bin/ppc-amigaos-gcc \
+		--nm=/opt/ppc-amigaos/bin/ppc-amigaos-nm --ar=/opt/ppc-amigaos/bin/ppc-amigaos-ar \
+		--ranlib=/opt/ppc-amigaos/bin/ppc-amigaos-ranlib --strip=/opt/ppc-amigaos/bin/ppc-amigaos-strip \
+		--enable-cross-compile --cross-prefix=/opt/ppc-amigaos/bin/ --arch=powerpc --cpu=powerpc --target-os=linux --enable-runtime-cpudetect \
 		--enable-pthreads --disable-shared --disable-indevs --disable-protocols --enable-protocol=file --disable-network --disable-encoders --disable-decoders \
-		 --disable-hwaccels --disable-muxers --disable-demuxers --disable-parsers --disable-bsfs --disable-devices --disable-filters --enable-decoder=aac \
+		--disable-hwaccels --disable-muxers --disable-demuxers --disable-parsers --disable-bsfs --disable-devices --disable-filters --enable-decoder=aac \
 		--enable-decoder=aac_latm --enable-decoder=h264 --enable-decoder=mp3 --enable-decoder=theora --enable-decoder=vorbis --enable-demuxer=aac \
-		 --enable-parser=aac --enable-parser=aac_latm --enable-demuxer=mp3 --enable-demuxer=mov --enable-demuxer=ogg --enable-parser=mpegaudio \
+		--enable-parser=aac --enable-parser=aac_latm --enable-demuxer=mp3 --enable-demuxer=mov --enable-demuxer=ogg --enable-parser=mpegaudio \
 		--enable-bsf=h264_mp4toannexb --enable-decoder=flac --enable-demuxer=flac --enable-parser=flac \
 		--enable-demuxer=flv --enable-decoder=flv --enable-decoder=h263 --enable-decoder=vp8 --enable-parser=vp8 \
 		--enable-decoder=vp9 --enable-parser=vp9 --enable-bsf=aac_adtstoasc --enable-decoder=mpeg4 --enable-parser=mpeg4video \
@@ -40,6 +50,7 @@ all: .buildstamp
 	touch $@
 
 clean:
+	rm -rf opus-1.3.1
 	rm -rf instdir
 	rm -rf ffmpeg-$(FFMPEG_VERSION) .buildstamp
 	rm -rf aom aom-build .aom
