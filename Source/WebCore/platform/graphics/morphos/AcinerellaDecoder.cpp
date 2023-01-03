@@ -43,6 +43,11 @@ AcinerellaDecoder::AcinerellaDecoder(AcinerellaDecoderClient *client, RefPtr<Aci
 AcinerellaDecoder::~AcinerellaDecoder()
 {
 	DLIFETIME(dprintf("%s: %p --\033[0m\n", __func__, this));
+    if (!m_terminating)
+    {
+        dprintf("Wayfarer's media decoder shut down incorrectly, please send the following log to wayfarer@wayfarer.icu\n");
+        DumpTaskState(FindTask(0));
+    }
 }
 
 void AcinerellaDecoder::warmUp()

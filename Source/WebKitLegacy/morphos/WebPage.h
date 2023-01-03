@@ -362,6 +362,7 @@ private:
     WTF::URL m_hoveredURL;
     WebCore::SelectionData m_dragData;
     WebCore::DragImage m_dragImage;
+    WebCore::IntSize m_dragSize;
 };
 
 }
