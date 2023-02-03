@@ -31,7 +31,7 @@ trigger:
 
 kind: pipeline
 type: docker
-name: compile-jsc
+name: compile-webkit
 
 clone:
   depth: 1
@@ -40,13 +40,18 @@ workspace:
   path: /opt/code/webkitty
 
 steps:
-- name: with-clib2
+- name: JSC-with-clib2
   pull: always
   image: walkero/webkitondocker
   commands:
   - make Dummy/libdummy.a
   - cp Dummy/libdl.a /opt/sdk/ppc-amigaos/local/clib2/lib/
   - make jscore-amigaos
+- name: ffmpeg-with-clib2
+  pull: always
+  image: walkero/webkitondocker
+  commands:
+  - make ffmpeg/.buildstamp
 
 trigger:
   branch:
