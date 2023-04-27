@@ -32,7 +32,7 @@
 #include "HbUniquePtr.h"
 #include "SurrogatePairAwareTextIterator.h"
 
-#if OS(MORPHOS) || OS(AMIGAOS)
+#if (OS(MORPHOS) || OS(AMIGAOS)) && USE(HARFBUZZ)
 #define _NO_PPCINLINE
 #include <proto/harfbuzz.h>
 #include <libraries/harfbuzz.h>

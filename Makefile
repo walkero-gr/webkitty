@@ -10,6 +10,9 @@ PKG:=$(PKG_ICU):$(PKG_SQLITE)
 DEBIAN_PKG:=libicu-dev ruby-dev clang-7
 NATIVE_GCC:=/usr/bin/
 
+CROSS_CC:=/opt/ppc-amigaos/bin/ppc-amigaos-gcc
+CROSS_CXX:=/opt/ppc-amigaos/bin/ppc-amigaos-g++
+
 OBJC:=$(ROOTPATH)/morphoswb/classes/frameworks/includes/
 
 CMAKE = cmake
@@ -23,6 +26,7 @@ LIBC_PATH=$(SDK_PATH)/ppc-amigaos/local/newlib
 endif
 	
 LIB:=$(LIBC_PATH)/lib
+CMN_INC:=$(SDK_PATH)/ppc-amigaos/local/common/include
 
 all:
 
@@ -57,7 +61,8 @@ jscore-amigaos: amigaos.cmake
 		--cmakeargs='-DUSE_CLIB2=$(USE_CLIB2) \
 		-DCMAKE_CROSSCOMPILING=ON -DCMAKE_TOOLCHAIN_FILE=$(realpath amigaos.cmake) -DCMAKE_MODULE_PATH=$(realpath Source/cmake) \
 		-DJAVASCRIPTCORE_DIR=$(realpath Source/JavaScriptCore) -DBUILD_SHARED_LIBS=NO \
-		-DICU_INCLUDE_DIR=$(LIBC_PATH)/include -DICU_LIBRARIES=$(LIBC_PATH)/lib \
+		-DICU_INCLUDE_DIR=$(LIBC_PATH)/include \
+		-DICU_LIBRARIES=$(LIBC_PATH)/lib \
 		-DICU_DATA_LIBRARY_RELEASE=$(LIBC_PATH)/lib/libicudata.a \
 		-DICU_I18N_LIBRARY_RELEASE=$(LIBC_PATH)/lib/libicui18n.a \
 		-DICU_UC_LIBRARY_RELEASE=$(LIBC_PATH)/lib/libicuuc.a \
@@ -66,6 +71,7 @@ jscore-amigaos: amigaos.cmake
 		-DPNG_LIBRARY=$(GEN)/libpng16/lib/ -DPNG_INCLUDE_DIR=$(GEN)/libpng16/include \
 		-DLIBXSLT_LIBRARIES=$(LIB)/libxslt/instdir/lib -DLIBXSLT_INCLUDE_DIR=$(LIB)/libxslt/instdir/include \
 		-DSQLITE_LIBRARIES=$(LIB)/sqlite/instdir/lib -DSQLITE_INCLUDE_DIR=$(LIB)/sqlite/instdir/include \
+		-DCairo_INCLUDE_DIR=$(CMN_INC)/cairo \
 		-DCMAKE_BUILD_TYPE=Release -DPORT=JSCOnly -DUSE_SYSTEM_MALLOC=YES \
 		-DCMAKE_FIND_LIBRARY_SUFFIXES=".a" ')
 	cp -a Source/JavaScriptCore/API/tests/testapiScripts ./WebKitBuild/Release/Source/JavaScriptCore/shell/
@@ -91,9 +97,10 @@ jscore-pack:
 configure: amigaos.cmake link.sh CMakeLists.txt Dummy/libdummy.a ffmpeg/.buildstamp
 	rm -rf cross-build
 	mkdir cross-build
-	(cd cross-build && PKG_CONFIG_PATH=$(PKG) PATH=$(CMAKE):${PATH} \
-		cmake -DCMAKE_CROSSCOMPILING=ON -DCMAKE_BUILD_TYPE=RelWithDebugInfo -DCMAKE_TOOLCHAIN_FILE=$(realpath amigaos.cmake) -DCMAKE_DL_LIBS="syscall" \
-		-DBUILD_SHARED_LIBS=NO -DPORT=AMIGAOS -DENABLE_WEBCORE=1 -DENABLE_WEBKIT_LEGACY=1 -DLOG_DISABLED=0 -DAMIGAOS_MINIMAL=0 -DROOTPATH="$(ROOTPATH)" \
+	(cd cross-build \
+		cmake -DUSE_CLIB2=$(USE_CLIB2) \
+		-DCMAKE_CROSSCOMPILING=ON -DCMAKE_BUILD_TYPE=RelWithDebugInfo -DCMAKE_TOOLCHAIN_FILE=$(realpath amigaos.cmake) -DCMAKE_DL_LIBS="syscall" \
+		-DBUILD_SHARED_LIBS=NO -DPORT=AmigaOS -DENABLE_WEBCORE=1 -DENABLE_WEBKIT_LEGACY=1 -DLOG_DISABLED=0 -DAMIGAOS_MINIMAL=0 -DROOTPATH="$(ROOTPATH)" \
 		-DJPEG_LIBRARY=$(LIB)/libjpeg/libjpeg.a \
 		-DJPEG_INCLUDE_DIR=$(LIB)/libjpeg \
 		-DLIBXML2_LIBRARY=$(LIB)/libxml2/instdir/lib/libxml2.a \
@@ -132,47 +139,63 @@ configure: amigaos.cmake link.sh CMakeLists.txt Dummy/libdummy.a ffmpeg/.buildst
 		-DOBJC_INCLUDE="$(OBJC)" \
 		-DCMAKE_MODULE_PATH=$(realpath Source/cmake) $(realpath ./))
 
-configure-mini: morphos.cmake link.sh CMakeLists.txt Dummy/libdummy.a ffmpeg/.buildstamp
+configure-mini: amigaos.cmake link.sh CMakeLists.txt Dummy/libdummy.a ffmpeg/.buildstamp
 	rm -rf cross-build-mini
 	mkdir cross-build-mini
-	(cd cross-build-mini && PKG_CONFIG_PATH=$(PKG) PATH=$(CMAKE):${PATH} \
-		cmake -DCMAKE_CROSSCOMPILING=ON -DCMAKE_BUILD_TYPE=RelWithDebugInfo -DCMAKE_TOOLCHAIN_FILE=$(realpath morphos.cmake) -DCMAKE_DL_LIBS="syscall" \
-		-DBUILD_SHARED_LIBS=NO -DPORT=MorphOS -DENABLE_WEBCORE=1 -DENABLE_WEBKIT_LEGACY=1 -DLOG_DISABLED=0 -DMORPHOS_MINIMAL=1 -DROOTPATH="$(ROOTPATH)" \
-		-DJPEG_LIBRARY=$(LIB)/libjpeg/libjpeg.a \
-		-DJPEG_INCLUDE_DIR=$(LIB)/libjpeg \
-		-DLIBXML2_LIBRARY=$(LIB)/libxml2/instdir/lib/libxml2.a \
-		-DLIBXML2_INCLUDE_DIR="$(LIB)/libxml2/instdir/include/libxml2/" \
-		-DPNG_LIBRARIES=$(GEN)/libpng16/lib/libpng16.a \
-		-DPNG_PNG_INCLUDE_DIR=$(GEN)/libpng16/include/libpng16/ \
-		-DPNG_INCLUDE_DIRS=$(GEN)/libpng16/include/libpng16/ \
+	(cd cross-build-mini && \
+		cmake -DUSE_CLIB2=$(USE_CLIB2) \
+		-DCMAKE_CROSSCOMPILING=ON -DCMAKE_BUILD_TYPE=RelWithDebugInfo -DCMAKE_TOOLCHAIN_FILE=$(realpath amigaos.cmake) -DCMAKE_DL_LIBS="syscall" \
+		-DCMAKE_C_COMPILER=$(CROSS_CC) -DCMAKE_CXX_COMPILER=$(CROSS_CXX) \
+		-DBUILD_SHARED_LIBS=NO -DPORT=AmigaOS -DENABLE_WEBCORE=1 -DENABLE_WEBKIT_LEGACY=1 -DLOG_DISABLED=0 \
+		-DENABLE_OPENTYPE_MATH=0 \
+		-DAMIGAOS_MINIMAL=1 -DROOTPATH="$(ROOTPATH)" \
+		-DJPEG_LIBRARY=$(LIBC_PATH)/lib/libjpeg.a \
+		-DJPEG_INCLUDE_DIR=$(CMN_INC)/libjpeg \
+		-DLIBXML2_LIBRARY=$(LIBC_PATH)/lib/libxml2.a \
+		-DLIBXML2_INCLUDE_DIR="$(CMN_INC)/libxml2/" \
+		-DPNG_LIBRARY="$(LIBC_PATH)/lib/libpng.a" \
+		-DPNG_LIBRARIES=$(LIBC_PATH)/lib/libpng16.a \
+		-DPNG_PNG_INCLUDE_DIR=$(CMN_INC)/libpng16/ \
+		-DPNG_INCLUDE_DIRS=$(CMN_INC)/libpng16/ \
 		-DLIBXSLT_LIBRARIES=$(LIB)/libxslt/instdir/lib/libxslt.a \
-		-DLIBXSLT_INCLUDE_DIR=$(LIB)/libxslt/instdir/include \
+		-DLIBXSLT_INCLUDE_DIR=$(CMN_INC) \
 		-DSQLITE_LIBRARIES=$(LIB)/sqlite/instdir/lib/libsqlite3.a \
-		-DSQLITE_INCLUDE_DIR=$(LIB)/sqlite/instdir/include \
+		-DSQLITE_INCLUDE_DIR=$(CMN_INC) \
 		-DSQLite3_LIBRARY=$(LIB)/sqlite/instdir/include \
-		-DSQLite3_INCLUDE_DIR=$(LIB)/sqlite/instdir/include \
-		-DCAIRO_INCLUDE_DIRS=$(ROOTPATH)/morphoswb/libs/cairo/MorphOS/os-include/cairo \
-		-DCAIRO_LIBRARIES="$(ROOTPATH)/morphoswb/libs/cairo/MorphOS/lib/libnix/libcairo.a" \
-		-DCairo_INCLUDE_DIR=$(ROOTPATH)/morphoswb/libs/cairo/MorphOS/os-include/cairo \
-		-DCairo_LIBRARY="$(ROOTPATH)/morphoswb/libs/cairo/MorphOS/lib/libnix/libcairo.a" \
-		-DHarfBuzz_INCLUDE_DIR="$(realpath Dummy)"\
-		-DHarfBuzz_LIBRARY=$(GEN)/lib/libnghttp2.a \
-		-DICU_ROOT="$(LIB)/libicu67/instdir/" \
-		-DICU_UC_LIBRARY_RELEASE="$(LIB)/libicu67/instdir/lib/libicuuc.a" \
-		-DICU_DATA_LIBRARY_RELEASE="$(LIB)/libicu67/instdir/lib/libicudata.a" \
-		-DICU_I18N_LIBRARY_RELEASE="$(LIB)/libicu67/instdir/lib/libicui18n.a" \
+		-DSQLite3_INCLUDE_DIR=$(CMN_INC) \
+		-DCAIRO_INCLUDE_DIRS=$(CMN_INC)/cairo \
+		-DCAIRO_LIBRARIES="$(LIBC_PATH)/lib/libcairo.a" \
+		-DCairo_INCLUDE_DIR=$(CMN_INC)/cairo \
+		-DCairo_LIBRARY="$(LIBC_PATH)/lib/libcairo.a" \
+		-DHarfBuzz_INCLUDE_DIR=$(CMN_INC)/harfbuzz\
+		-DHarfBuzz_LIBRARY=$(LIBC_PATH)/lib/libnghttp2.a \
 		-DHarfBuzz_ICU_LIBRARY="$(realpath Dummy)/libdummy.a" \
-		-DFREETYPE_INCLUDE_DIRS="$(ROOTPATH)/morphoswb/libs/freetype/include" \
-		-DFREETYPE_LIBRARY="$(ROOTPATH)/morphoswb/libs/freetype/library/lib/libfreetype.a" \
-		-DFontconfig_LIBRARY="$(ROOTPATH)/morphoswb/libs/fontconfig/MorphOS/libfontconfig-glue.a" \
-		-DFontconfig_INCLUDE_DIR="$(ROOTPATH)/morphoswb/libs/fontconfig" \
-		-DOpenJPEG_INCLUDE_DIR="$(GEN)/include/openjpeg-2.5" \
-		-DWebP_INCLUDE_DIR="$(GEN)/include" -DWebP_LIBRARY="$(GEN)/lib/libwebp.a" -DWebP_DEMUX_LIBRARY="$(GEN)/lib/libwebpdemux.a"\
+		-DICU_ROOT="$(LIB)/libicu67/instdir/" \
+		-DICU_INCLUDE_DIR=$(LIBC_PATH)/include \
+		-DICU_UC_LIBRARY_RELEASE="$(LIBC_PATH)/lib/libicuuc.a" \
+		-DICU_DATA_LIBRARY_RELEASE="$(LIBC_PATH)/lib/libicudata.a" \
+		-DICU_I18N_LIBRARY_RELEASE="$(LIBC_PATH)/lib/libicui18n.a" \
+		-DFREETYPE_INCLUDE_DIRS="$(CMN_INC)" \
+		-DFREETYPE_LIBRARY="$(LIBC_PATH)/lib/libfreetype.a" \
+		-DFontconfig_LIBRARY="$(LIBC_PATH)/lib/libfontconfig-glue.a" \
+		-DFontconfig_INCLUDE_DIR="$(CMN_INC)" \
+		-DOpenJPEG_INCLUDE_DIR="$(CMN_INC)" \
+		-DWebP_INCLUDE_DIR="$(CMN_INC)" \
+		-DWebP_LIBRARY="$(LIBC_PATH)/lib/libwebp.a" \
+		-DWebP_DEMUX_LIBRARY="$(LIBC_PATH)/lib/libwebpdemux.a"\
 		-DAVFORMAT_LIBRARY="ffmpeg/instdir/lib/libavformat.a" -DAVFORMAT_INCLUDE_DIR="$(realpath ffmpeg/instdir/include)" \
 		-DAVCODEC_LIBRARY="ffmpeg/instdir/lib/libavcodec.a" -DAVCODEC_INCLUDE_DIR="$(realpath ffmpeg/instdir/include)" \
 		-DAVUTIL_LIBRARY="ffmpeg/instdir/lib/libavutil.a" -DAVUTIL_INCLUDE_DIR="$(realpath ffmpeg/instdir/include)" \
 		-DSWSCALE_LIBRARY="ffmpeg/instdir/lib/libswscale.a" -DSWSCALE_INCLUDE_DIR="$(realpath ffmpeg/instdir/include)" \
 		-DOBJC_INCLUDE="$(OBJC)" \
+		-DCURL_INCLUDE_DIR="$(CMN_INC)" \
+		-DOPENSSL_INCLUDE_DIR="$(CMN_INC)" \
+		-DZLIB_INCLUDE_DIR="$(CMN_INC)" \
+		-DNGHTTP2_INCLUDE_DIRS="$(CMN_INC)" \
+		-DHYPHEN_INCLUDE_DIR="$(CMN_INC)" \
+		-DLibPSL_LIBRARY=$(LIBC_PATH)/lib/libpsl.a \
+		-DLibPSL_INCLUDE_DIR="$(CMN_INC)" \
+		-DOpenJPEG_LIBRARY=$(LIBC_PATH)/lib/libopenjp2.a \
 		-DCMAKE_MODULE_PATH=$(realpath Source/cmake) $(realpath ./))
 
 build:

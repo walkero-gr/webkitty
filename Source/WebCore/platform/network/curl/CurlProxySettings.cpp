@@ -32,6 +32,10 @@
 #include <winsock2.h>
 #endif
 
+#if OS(AMIGAOS)
+#include <sys/select.h>
+#endif
+
 #include <curl/curl.h>
 #include <wtf/text/StringConcatenateNumbers.h>
 

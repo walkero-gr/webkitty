@@ -14,11 +14,11 @@ list(APPEND WTF_SOURCES
 
         unix/UniStdExtrasUnix.cpp
 
-        morphos/LanguageMorphOS.cpp
-        morphos/Misc.cpp
-        morphos/MD5.cpp
+        amigaos/LanguageAmigaOS.cpp
+        amigaos/Misc.cpp
+        amigaos/MD5.cpp
 
-        morphos/MemoryPressureHandlerMorphOS.cpp
+        amigaos/MemoryPressureHandlerAmigaOS.cpp
     )
 
     list(APPEND WTF_SOURCES

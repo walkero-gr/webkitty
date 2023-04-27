@@ -46,12 +46,21 @@
 #include <shlwapi.h>
 #endif
 
-#if OS(MORPHOS) || OS(AMIGAOS)
+#if OS(MORPHOS)
 #include <exec/libraries.h>
 #include <proto/exec.h>
 #include <ppcinline/macros.h>
 extern "C" {
 void dprintf(const char *fmt, ... );
+};
+#define CURL_TRACES 0
+#endif
+
+#if OS(AMIGAOS)
+#include <exec/libraries.h>
+#include <proto/exec.h>
+extern "C" {
+int dprintf(int fd, const char *fmt, ... );
 };
 #define CURL_TRACES 0
 #endif

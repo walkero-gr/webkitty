@@ -14,10 +14,9 @@ list(APPEND WebCore_PRIVATE_INCLUDE_DIRECTORIES
 list(APPEND WebCore_PRIVATE_INCLUDE_DIRECTORIES
     ${WEBCORE_DIR}/platform
     ${WEBCORE_DIR}/platform/adwaita
-    ${WEBCORE_DIR}/platform/morphos
     ${WEBCORE_DIR}/platform/amigaos
     ${WEBCORE_DIR}/platform/generic
-    ${WEBCORE_DIR}/platform/graphics/morphos
+    ${WEBCORE_DIR}/platform/graphics/amigaos
     ${WEBCORE_DIR}/platform/mediacapabilities
 )
 
@@ -42,65 +41,65 @@ list(APPEND WebCore_LIBRARIES
 )
 
 list(APPEND WebCore_SOURCES
-    editing/morphos/EditorMorphOS.cpp
-    editing/morphos/AutofillElements.cpp
-    platform/morphos/Altivec.cpp
-    platform/morphos/PasteboardMorphOS.cpp
-    platform/morphos/CursorMorphOS.cpp
-    platform/morphos/PlatformKeyboardEvent.cpp
-    platform/morphos/PlatformScreenMorphOS.cpp
-    platform/morphos/MIMETypeRegistryMorphOS.cpp
-    platform/morphos/DragDataMorphOS.cpp
-    platform/morphos/DragImageMorphOS.cpp
-    platform/morphos/SelectionData.cpp
+    editing/amigaos/EditorAmigaOS.cpp
+    editing/amigaos/AutofillElements.cpp
+    platform/amigaos/Altivec.cpp
+    platform/amigaos/PasteboardAmigaOS.cpp
+    platform/amigaos/CursorAmigaOS.cpp
+    platform/amigaos/PlatformKeyboardEvent.cpp
+    platform/amigaos/PlatformScreenAmigaOS.cpp
+    platform/amigaos/MIMETypeRegistryAmigaOS.cpp
+    platform/amigaos/DragDataAmigaOS.cpp
+    platform/amigaos/DragImageAmigaOS.cpp
+    platform/amigaos/SelectionData.cpp
     platform/amigaos/UserAgentAmigaOS.cpp
     platform/generic/KeyedDecoderGeneric.cpp
     platform/generic/KeyedEncoderGeneric.cpp
-    platform/graphics/morphos/GraphicsLayerMorphOS.cpp
-    platform/graphics/morphos/ImageMorphOS.cpp
-    platform/graphics/morphos/DisplayRefreshMonitorMorphOS.cpp
-    platform/network/morphos/CurlSSLHandleMorphOS.cpp
-    platform/network/morphos/NetworkStateNotifierMorphOS.cpp
+    platform/graphics/amigaos/GraphicsLayerAmigaOS.cpp
+    platform/graphics/amigaos/ImageAmigaOS.cpp
+    platform/graphics/amigaos/DisplayRefreshMonitorAmigaOS.cpp
+    platform/network/amigaos/CurlSSLHandleAmigaOS.cpp
+    platform/network/amigaos/NetworkStateNotifierAmigaOS.cpp
     #platform/posix/SharedBufferPOSIX.cpp
     platform/text/LocaleICU.cpp
     platform/text/hyphen/HyphenationLibHyphen.cpp
-    rendering/RenderThemeMorphOS.cpp
+    rendering/RenderThemeAmigaOS.cpp
     rendering/RenderThemeAdwaita.cpp
-    page/morphos/DragControllerMorphOS.cpp
+    page/amigaos/DragControllerAmigaOS.cpp
     platform/adwaita/ThemeAdwaita.cpp
     platform/adwaita/ScrollbarThemeAdwaita.cpp
 )
 
 list(APPEND WebCore_PRIVATE_FRAMEWORK_HEADERS
     platform/adwaita/ScrollbarThemeAdwaita.h
-    platform/graphics/morphos/MediaPlayerMorphOS.h
-    platform/morphos/SelectionData.h
+    platform/graphics/amigaos/MediaPlayerAmigaOS.h
+    platform/amigaos/SelectionData.h
 )
 
-if (NOT MORPHOS_MINIMAL)
+if (NOT AMIGAOS_MINIMAL)
 	list(APPEND WebCore_SOURCES
-		platform/audio/morphos/AudioDestinationMorphOS.cpp
-		platform/audio/morphos/AudioBusMorphOS.cpp
-		platform/audio/morphos/AudioFileReaderMorphOS.cpp
-		platform/audio/morphos/AudioDestinationOutputMorphOS.cpp
-		platform/audio/morphos/FFTFrameMorphOS.cpp
-		platform/graphics/morphos/acinerella.c
-		platform/graphics/morphos/AcinerellaPointer.cpp
-		platform/graphics/morphos/AcinerellaBuffer.cpp
-		platform/graphics/morphos/AcinerellaMuxer.cpp
-		platform/graphics/morphos/AcinerellaHLS.cpp
-		platform/graphics/morphos/AcinerellaDecoder.cpp
-		platform/graphics/morphos/AcinerellaAudioDecoder.cpp
-		platform/graphics/morphos/AcinerellaVideoDecoder.cpp
-		platform/graphics/morphos/AcinerellaContainer.cpp
-		platform/graphics/morphos/MediaPlayerPrivateMorphOS.cpp
-		platform/graphics/morphos/MediaSourcePrivateMorphOS.cpp
-		platform/graphics/morphos/MediaSourceBufferPrivateMorphOS.cpp
-		platform/graphics/morphos/AudioTrackPrivateMorphOS.cpp
-		platform/graphics/morphos/VideoTrackPrivateMorphOS.cpp
-		platform/graphics/morphos/MediaDescriptionMorphOS.cpp
-		platform/graphics/morphos/MediaSampleMorphOS.cpp
-		platform/mediastream/morphos/RealtimeMediaSourceCenterMorphOS.cpp
+		platform/audio/amigaos/AudioDestinationAmigaOS.cpp
+		platform/audio/amigaos/AudioBusAmigaOS.cpp
+		platform/audio/amigaos/AudioFileReaderAmigaOS.cpp
+		platform/audio/amigaos/AudioDestinationOutputAmigaOS.cpp
+		platform/audio/amigaos/FFTFrameAmigaOS.cpp
+		platform/graphics/amigaos/acinerella.c
+		platform/graphics/amigaos/AcinerellaPointer.cpp
+		platform/graphics/amigaos/AcinerellaBuffer.cpp
+		platform/graphics/amigaos/AcinerellaMuxer.cpp
+		platform/graphics/amigaos/AcinerellaHLS.cpp
+		platform/graphics/amigaos/AcinerellaDecoder.cpp
+		platform/graphics/amigaos/AcinerellaAudioDecoder.cpp
+		platform/graphics/amigaos/AcinerellaVideoDecoder.cpp
+		platform/graphics/amigaos/AcinerellaContainer.cpp
+		platform/graphics/amigaos/MediaPlayerPrivateAmigaOS.cpp
+		platform/graphics/amigaos/MediaSourcePrivateAmigaOS.cpp
+		platform/graphics/amigaos/MediaSourceBufferPrivateAmigaOS.cpp
+		platform/graphics/amigaos/AudioTrackPrivateAmigaOS.cpp
+		platform/graphics/amigaos/VideoTrackPrivateAmigaOS.cpp
+		platform/graphics/amigaos/MediaDescriptionAmigaOS.cpp
+		platform/graphics/amigaos/MediaSampleAmigaOS.cpp
+		platform/mediastream/amigaos/RealtimeMediaSourceCenterAmigaOS.cpp
 	)
 endif()
 
