@@ -26,7 +26,8 @@
 #include "config.h"
 #include "DisplayRefreshMonitorAmigaOS.h"
 
-extern "C" { void dprintf(const char *,...); }
+// TODO: This is part of clib2 so it probably not needed
+// extern "C" { void dprintf(const char *,...); }
 
 namespace WebCore {
 

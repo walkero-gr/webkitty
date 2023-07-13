@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+// TODO: Need to make these disabled methods to work
+// Temporarily disable to move on with the webkit compilation
+// 
+
 #include "config.h"
 #include "PlatformKeyboardEvent.h"
 
@@ -38,12 +42,13 @@
 #include <wtf/ASCIICType.h>
 
 #include <exec/types.h>
-#include <devices/rawkeycodes.h>
 #include <intuition/intuition.h>
 #include <clib/alib_protos.h>
 // #include <intuition/intuimessageclass.h>
 #include <proto/keymap.h>
 
+#include <devices/keymap.h>
+#include <devices/rawkeycodes.h>
 namespace WebCore {
 
 inline int rawkeyCodeToWindows(const ULONG rawkey, char c, const bool isUp)
@@ -55,10 +60,10 @@ inline int rawkeyCodeToWindows(const ULONG rawkey, char c, const bool isUp)
 		case RAWKEY_PAGEUP:    return VK_PRIOR;
 		case RAWKEY_PAGEDOWN:  return VK_NEXT;
 		case RAWKEY_F11:       return VK_F11;
-		case RAWKEY_UP:        return VK_UP;
-		case RAWKEY_DOWN:      return VK_DOWN;
-		case RAWKEY_RIGHT:     return VK_RIGHT;
-		case RAWKEY_LEFT:      return VK_LEFT;
+		case RAWKEY_CRSRUP:    return VK_UP;
+		case RAWKEY_CRSRDOWN:  return VK_DOWN;
+		case RAWKEY_CRSRRIGHT: return VK_RIGHT;
+		case RAWKEY_CRSRLEFT:  return VK_LEFT;
 		case RAWKEY_F1:        return VK_F1;
 		case RAWKEY_F2:        return VK_F2;
 		case RAWKEY_F3:        return VK_F3;
@@ -73,23 +78,23 @@ inline int rawkeyCodeToWindows(const ULONG rawkey, char c, const bool isUp)
 		case RAWKEY_LSHIFT:    return VK_SHIFT;
 		case RAWKEY_RSHIFT:    return VK_SHIFT;
 		case RAWKEY_CAPSLOCK:  return VK_CAPITAL;
-		case RAWKEY_LCONTROL:  return VK_CONTROL;
+		case RAWKEY_LCTRL:     return VK_CONTROL;
 		case RAWKEY_LALT:      return VK_MENU;
 		case RAWKEY_RALT:      return isUp ? VK_MENU : VK_CONTROL;
-		case RAWKEY_LAMIGA:    return VK_LWIN;
-		case RAWKEY_RAMIGA:    return VK_RWIN;
-		case RAWKEY_PRTSCREEN: return VK_PRINT;
-		case RAWKEY_PAUSE:     return VK_PAUSE;
+		case RAWKEY_LCOMMAND:  return VK_LWIN;
+		case RAWKEY_RCOMMAND:  return VK_RWIN;
+		case RAWKEY_PRINTSCR:  return VK_PRINT;
+		case RAWKEY_BREAK:     return VK_PAUSE;
 		case RAWKEY_F12:       return VK_F12;
 		case RAWKEY_HOME:      return VK_HOME;
 		case RAWKEY_END:       return VK_END;
-		case RAWKEY_NUMLOCK:   return VK_NUMLOCK;
-		case RAWKEY_SCRLOCK:   return VK_SCROLL;
+		// case RAWKEY_NUMLOCK:   return VK_NUMLOCK;
+		// case RAWKEY_SCRLOCK:   return VK_SCROLL;
 		case RAWKEY_BACKSPACE: return VK_BACK;
 		case RAWKEY_RETURN:    return VK_RETURN;
-		case RAWKEY_ESCAPE:    return VK_ESCAPE;
+		case RAWKEY_ESC:       return VK_ESCAPE;
 		case RAWKEY_SPACE:     return VK_SPACE;
-		case RAWKEY_DELETE:    return VK_DELETE;
+		case RAWKEY_DEL:       return VK_DELETE;
 //		case RAWKEY_TILDE:     return VK_OEM_3;
 		default:
 			switch (c)
@@ -525,50 +530,52 @@ PlatformKeyboardEvent::PlatformKeyboardEvent(struct IntuiMessage *imsg)
     , m_isSystemKey(false)
 	, m_intuiMessage(imsg)
 {
-	ULONG inputChar;
-	DoMethod(reinterpret_cast<Boopsiobject *>(imsg), OM_GET, IMSGA_UCS4, &inputChar);
+    // TODO: Need to make this work
+    notImplemented();
+// 	ULONG inputChar;
+// 	DoMethod(reinterpret_cast<Boopsiobject *>(imsg), OM_GET, IMSGA_UCS4, &inputChar);
 
-	UChar ch[2] = { UChar(inputChar), 0 };
+// 	UChar ch[2] = { UChar(inputChar), 0 };
 
-	ULONG keyval = imsg->Code & ~IECODE_UP_PREFIX;
-	bool isUp = !!(imsg->Code & IECODE_UP_PREFIX);
+// 	ULONG keyval = imsg->Code & ~IECODE_UP_PREFIX;
+// 	bool isUp = !!(imsg->Code & IECODE_UP_PREFIX);
 
-	// String containing the input
-    m_text = WTF::String(ch, 1);
-    m_unmodifiedText = m_text;
+// 	// String containing the input
+//     m_text = WTF::String(ch, 1);
+//     m_unmodifiedText = m_text;
 
-	struct InputEvent ie;
-	char c = '\0';
+// 	struct InputEvent ie;
+// 	char c = '\0';
 
-	ie.ie_NextEvent = NULL;
-	ie.ie_Class = IECLASS_RAWKEY;
-	ie.ie_SubClass = 0;
-	ie.ie_Code = keyval;
-	ie.ie_Qualifier = 0;
-	ie.ie_EventAddress = (APTR *) *((ULONG *)imsg->IAddress);
+// 	ie.ie_NextEvent = NULL;
+// 	ie.ie_Class = IECLASS_RAWKEY;
+// 	ie.ie_SubClass = 0;
+// 	ie.ie_Code = keyval;
+// 	ie.ie_Qualifier = 0;
+// 	ie.ie_EventAddress = (APTR *) *((ULONG *)imsg->IAddress);
 
-	if (MapRawKey(&ie, (STRPTR)&c, 1, NULL) != 1)
-		c = '\0';
+// 	if (MapRawKey(&ie, (STRPTR)&c, 1, NULL) != 1)
+// 		c = '\0';
 
-	// Windows VK key
-    m_windowsVirtualKeyCode = rawkeyCodeToWindows(keyval, c, isUp);
+// 	// Windows VK key
+//     m_windowsVirtualKeyCode = rawkeyCodeToWindows(keyval, c, isUp);
 
-	// String describing the VK key
-    m_key = (inputChar >= ' ' && inputChar != 0x7F) ? m_text : keyIdentifierForWindowsKeyCode(m_windowsVirtualKeyCode);
+// 	// String describing the VK key
+//     m_key = (inputChar >= ' ' && inputChar != 0x7F) ? m_text : keyIdentifierForWindowsKeyCode(m_windowsVirtualKeyCode);
 	
-	// Input 2 String
-    m_code = keyCodeForHardwareKeyCode(keyval);
+// 	// Input 2 String
+//     m_code = keyCodeForHardwareKeyCode(keyval);
 
-	// Rawkey 2 String
-    m_keyIdentifier = keyIdentifierForWindowsKeyCode(m_windowsVirtualKeyCode);
-    m_isKeypad = false;//keyval >= GDK_KEY_KP_Space && keyval <= GDK_KEY_KP_9;
+// 	// Rawkey 2 String
+//     m_keyIdentifier = keyIdentifierForWindowsKeyCode(m_windowsVirtualKeyCode);
+//     m_isKeypad = false;//keyval >= GDK_KEY_KP_Space && keyval <= GDK_KEY_KP_9;
 
-// dead key handling needed here
-//    // To match the behavior of IE, we return VK_PROCESSKEY for keys that triggered composition results.
-//    if (compositionResults.compositionUpdated())
-//        m_windowsVirtualKeyCode = VK_PROCESSKEY;
+// // dead key handling needed here
+// //    // To match the behavior of IE, we return VK_PROCESSKEY for keys that triggered composition results.
+// //    if (compositionResults.compositionUpdated())
+// //        m_windowsVirtualKeyCode = VK_PROCESSKEY;
 
-	_lastQualifiers = imsg->Qualifier;
+// 	_lastQualifiers = imsg->Qualifier;
 }
 
 void PlatformKeyboardEvent::getCurrentModifierState(bool& shiftKey, bool& ctrlKey, bool& altKey, bool& metaKey)

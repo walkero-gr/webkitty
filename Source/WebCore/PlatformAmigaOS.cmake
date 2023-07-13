@@ -115,5 +115,5 @@ set(WebCore_USER_AGENT_SCRIPTS_DEPENDENCIES ${WEBCORE_DIR}/rendering/RenderTheme
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Os -DAMIGAOS_MINIMAL=${AMIGAOS_MINIMAL}")
 
-set_source_files_properties(platform/morphos/Altivec.cpp PROPERTIES COMPILE_FLAGS "-maltivec ${COMPILE_FLAGS}")
+set_source_files_properties(platform/amigaos/Altivec.cpp PROPERTIES COMPILE_FLAGS "-maltivec ${COMPILE_FLAGS}")
 

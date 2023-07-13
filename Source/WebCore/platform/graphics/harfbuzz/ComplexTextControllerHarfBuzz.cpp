@@ -32,7 +32,7 @@
 #include "HbUniquePtr.h"
 #include "SurrogatePairAwareTextIterator.h"
 
-#if (OS(MORPHOS) || OS(AMIGAOS)) && USE(HARFBUZZ)
+#if OS(MORPHOS) && USE(HARFBUZZ)
 #define _NO_PPCINLINE
 #include <proto/harfbuzz.h>
 #include <libraries/harfbuzz.h>
@@ -42,6 +42,15 @@
 #include <unicode/utf16.h>
 #include <unicode/uversion.h>
 #undef _NO_PPCINLINE
+#elif OS(AMIGAOS) && USE(HARFBUZZ)
+#include <hb-ft.h>
+// #include <hb-icu.h>
+#include <hb-ot.h>
+#include <unicode/uchar.h>
+#include <unicode/unorm2.h>
+#include <unicode/ustring.h>
+#include <unicode/utf16.h>
+#include <unicode/uversion.h>
 #else
 #include <hb-ft.h>
 #include <hb-icu.h>
@@ -497,6 +506,8 @@ static hb_script_t findScriptForVerticalGlyphSubstitution(hb_face_t* face)
 }
 
 #if OS(MORPHOS) || OS(AMIGAOS)
+// TODO: Maybe we need to enable this part of the code, when we will enable harfbuzz
+//  || OS(AMIGAOS)
 
 #define HB_UNUSED  __attribute__((unused))
 #define ARRAY_LENGTH(array) (sizeof((array))/sizeof((array)[0]))
@@ -746,6 +757,8 @@ void ComplexTextController::collectComplexTextRunsForCharacters(const UChar* cha
         }
         
         #if OS(MORPHOS) || OS(AMIGAOS)
+        // TODO: Do we need it? Maybe when harfbuzz is enabled
+        // || OS(AMIGAOS)
         // NOTE: re-bind ICU functions, must be done after each hb_buffer_reset
         morphosHBICUBinding::bind(buffer);
         #endif

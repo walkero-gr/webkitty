@@ -51,9 +51,16 @@
 #if OS(MORPHOS) || OS(AMIGAOS)
 #define __WANT_PNG_1_6__
 #include <png.h>
+#define __USE_INLINE__
 #include <proto/dos.h>
+#undef __USE_INLINE__
 #include <string.h>
+#if OS(MORPHOS)
 #include <proto/random.h>
+// TODO: Decide if this is needed
+// #else
+// #include <stdlib.h>
+#endif
 #endif
 
 namespace WebCore {

@@ -37,7 +37,8 @@ HasAltivec::HasAltivec()
 {
 	LONG altivec = 0;
 	IExec->GetCPUInfoTags(GCIT_VectorUnit, &altivec, TAG_DONE);
-	m_hasAltivec = altivec == 1;
+	// TODO: Disabled altivec here
+	m_hasAltivec = altivec == 0;
 }
 
 bool HasAltivec::hasAltivec()

@@ -23,6 +23,10 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+// TODO: Need to make these disabled methods to work
+// Temporarily disable to move on with the webkit compilation
+// 
+
 #include "config.h"
 #include "PlatformScreen.h"
 #include "Widget.h"
@@ -39,18 +43,19 @@ namespace WebCore {
 
 int screenDepth(Widget* widget)
 {
-	Boopsiobject *area = static_cast<Boopsiobject *>(widget->platformWidget());
+	// TODO: Make this get the screeb depth
+	// Boopsiobject *area = static_cast<Boopsiobject *>(widget->platformWidget());
 
-	if (area && muiRenderInfo(area))
-	{
-		Boopsiobject *screen = reinterpret_cast<Boopsiobject *>(muiRenderInfo(area)->mri_Screen);
-		if (screen)
-		{
-			ULONG depth = 32;
-			DoMethod(screen, OM_GET, SA_Depth, &depth);
-			return depth;
-		}
-	}
+	// if (area && muiRenderInfo(area))
+	// {
+	// 	Boopsiobject *screen = reinterpret_cast<Boopsiobject *>(muiRenderInfo(area)->mri_Screen);
+	// 	if (screen)
+	// 	{
+	// 		ULONG depth = 32;
+	// 		DoMethod(screen, OM_GET, SA_Depth, &depth);
+	// 		return depth;
+	// 	}
+	// }
 
     notImplemented();
     return 32;
@@ -74,19 +79,20 @@ bool screenHasInvertedColors()
 
 FloatRect screenRect(Widget* widget)
 {
-	Boopsiobject *area = static_cast<Boopsiobject *>(widget->platformWidget());
+	// TODO: Get the right screen size
+	// Boopsiobject *area = static_cast<Boopsiobject *>(widget->platformWidget());
 
-	if (area && muiRenderInfo(area))
-	{
-		Boopsiobject *screen = reinterpret_cast<Boopsiobject *>(muiRenderInfo(area)->mri_Screen);
-		if (screen)
-		{
-			ULONG w = 1920, h = 1080;
-			DoMethod(screen, OM_GET, SA_Width, &w);
-			DoMethod(screen, OM_GET, SA_Height, &h);
-			return { 0, 0, w, h };
-		}
-	}
+	// if (area && muiRenderInfo(area))
+	// {
+	// 	Boopsiobject *screen = reinterpret_cast<Boopsiobject *>(muiRenderInfo(area)->mri_Screen);
+	// 	if (screen)
+	// 	{
+	// 		ULONG w = 1920, h = 1080;
+	// 		DoMethod(screen, OM_GET, SA_Width, &w);
+	// 		DoMethod(screen, OM_GET, SA_Height, &h);
+	// 		return { 0, 0, w, h };
+	// 	}
+	// }
 	
     notImplemented();
 	return { 0, 0, 1920, 1080 };

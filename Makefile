@@ -20,13 +20,13 @@ STRIP = ppc-amigaos-strip
 
 USE_CLIB2=YES
 ifeq ($(USE_CLIB2), YES)
-LIBC_PATH=$(SDK_PATH)/ppc-amigaos/local/clib2
+LIBC_PATH=$(SDK_PATH)/local/clib2
 else
-LIBC_PATH=$(SDK_PATH)/ppc-amigaos/local/newlib
+LIBC_PATH=$(SDK_PATH)/local/newlib
 endif
 	
 LIB:=$(LIBC_PATH)/lib
-CMN_INC:=$(SDK_PATH)/ppc-amigaos/local/common/include
+CMN_INC:=$(SDK_PATH)/local/common/include
 
 all:
 
@@ -66,12 +66,12 @@ jscore-amigaos: amigaos.cmake
 		-DICU_DATA_LIBRARY_RELEASE=$(LIBC_PATH)/lib/libicudata.a \
 		-DICU_I18N_LIBRARY_RELEASE=$(LIBC_PATH)/lib/libicui18n.a \
 		-DICU_UC_LIBRARY_RELEASE=$(LIBC_PATH)/lib/libicuuc.a \
-		-DJPEG_LIBRARY=$(LIB)/libjpeg -DJPEG_INCLUDE_DIR=$(LIB)/libjpeg \
+		-DJPEG_LIBRARY=$(LIB)/libjpeg -DJPEG_INCLUDE_DIR=$(LIB) \
 		-DLIBXML2_LIBRARY=$(LIB)/libxml2/instdir/lib -DLIBXML2_INCLUDE_DIR=$(LIB)/libxml2/instdir/include/libxml2 \
 		-DPNG_LIBRARY=$(GEN)/libpng16/lib/ -DPNG_INCLUDE_DIR=$(GEN)/libpng16/include \
 		-DLIBXSLT_LIBRARIES=$(LIB)/libxslt/instdir/lib -DLIBXSLT_INCLUDE_DIR=$(LIB)/libxslt/instdir/include \
 		-DSQLITE_LIBRARIES=$(LIB)/sqlite/instdir/lib -DSQLITE_INCLUDE_DIR=$(LIB)/sqlite/instdir/include \
-		-DCairo_INCLUDE_DIR=$(CMN_INC)/cairo \
+		-DCairo_INCLUDE_DIR=$(LIBC_PATH)/include/cairo \
 		-DCMAKE_BUILD_TYPE=Release -DPORT=JSCOnly -DUSE_SYSTEM_MALLOC=YES \
 		-DCMAKE_FIND_LIBRARY_SUFFIXES=".a" ')
 	cp -a Source/JavaScriptCore/API/tests/testapiScripts ./WebKitBuild/Release/Source/JavaScriptCore/shell/
@@ -150,26 +150,20 @@ configure-mini: amigaos.cmake link.sh CMakeLists.txt Dummy/libdummy.a ffmpeg/.bu
 		-DENABLE_OPENTYPE_MATH=0 \
 		-DAMIGAOS_MINIMAL=1 -DROOTPATH="$(ROOTPATH)" \
 		-DJPEG_LIBRARY=$(LIBC_PATH)/lib/libjpeg.a \
-		-DJPEG_INCLUDE_DIR=$(CMN_INC)/libjpeg \
+		-DJPEG_INCLUDE_DIR=$(LIBC_PATH)/include \
 		-DLIBXML2_LIBRARY=$(LIBC_PATH)/lib/libxml2.a \
-		-DLIBXML2_INCLUDE_DIR="$(CMN_INC)/libxml2/" \
-		-DPNG_LIBRARY="$(LIBC_PATH)/lib/libpng.a" \
-		-DPNG_LIBRARIES=$(LIBC_PATH)/lib/libpng16.a \
-		-DPNG_PNG_INCLUDE_DIR=$(CMN_INC)/libpng16/ \
-		-DPNG_INCLUDE_DIRS=$(CMN_INC)/libpng16/ \
+		-DLIBXML2_INCLUDE_DIR="$(LIBC_PATH)/include/libxml2/" \
+		-DPNG_LIBRARY="$(LIBC_PATH)/lib/libpng16.a" \
+		-DPNG_INCLUDE_DIR=$(LIBC_PATH)/include/libpng16/ \
 		-DLIBXSLT_LIBRARIES=$(LIB)/libxslt/instdir/lib/libxslt.a \
 		-DLIBXSLT_INCLUDE_DIR=$(CMN_INC) \
-		-DSQLITE_LIBRARIES=$(LIB)/sqlite/instdir/lib/libsqlite3.a \
-		-DSQLITE_INCLUDE_DIR=$(CMN_INC) \
 		-DSQLite3_LIBRARY=$(LIB)/sqlite/instdir/include \
 		-DSQLite3_INCLUDE_DIR=$(CMN_INC) \
-		-DCAIRO_INCLUDE_DIRS=$(CMN_INC)/cairo \
-		-DCAIRO_LIBRARIES="$(LIBC_PATH)/lib/libcairo.a" \
-		-DCairo_INCLUDE_DIR=$(CMN_INC)/cairo \
+		-DCairo_INCLUDE_DIR=$(LIBC_PATH)/include/cairo/ \
 		-DCairo_LIBRARY="$(LIBC_PATH)/lib/libcairo.a" \
-		-DHarfBuzz_INCLUDE_DIR=$(CMN_INC)/harfbuzz\
+		-DHarfBuzz_INCLUDE_DIR=$(LIBC_PATH)/include/harfbuzz/ \
 		-DHarfBuzz_LIBRARY=$(LIBC_PATH)/lib/libnghttp2.a \
-		-DHarfBuzz_ICU_LIBRARY="$(realpath Dummy)/libdummy.a" \
+		-DHarfBuzz_ICU_LIBRARY="$(LIBC_PATH)/lib/libharfbuzz-icu.a" \
 		-DICU_ROOT="$(LIB)/libicu67/instdir/" \
 		-DICU_INCLUDE_DIR=$(LIBC_PATH)/include \
 		-DICU_UC_LIBRARY_RELEASE="$(LIBC_PATH)/lib/libicuuc.a" \
@@ -177,9 +171,9 @@ configure-mini: amigaos.cmake link.sh CMakeLists.txt Dummy/libdummy.a ffmpeg/.bu
 		-DICU_I18N_LIBRARY_RELEASE="$(LIBC_PATH)/lib/libicui18n.a" \
 		-DFREETYPE_INCLUDE_DIRS="$(CMN_INC)" \
 		-DFREETYPE_LIBRARY="$(LIBC_PATH)/lib/libfreetype.a" \
-		-DFontconfig_LIBRARY="$(LIBC_PATH)/lib/libfontconfig-glue.a" \
-		-DFontconfig_INCLUDE_DIR="$(CMN_INC)" \
-		-DOpenJPEG_INCLUDE_DIR="$(CMN_INC)" \
+		-DFontconfig_LIBRARY="$(LIBC_PATH)/lib/libfontconfig.a" \
+		-DFontconfig_INCLUDE_DIR="$(LIBC_PATH)/include/" \
+		-DOpenJPEG_INCLUDE_DIR="$(LIBC_PATH)/include/openjpeg-2.5" \
 		-DWebP_INCLUDE_DIR="$(CMN_INC)" \
 		-DWebP_LIBRARY="$(LIBC_PATH)/lib/libwebp.a" \
 		-DWebP_DEMUX_LIBRARY="$(LIBC_PATH)/lib/libwebpdemux.a"\

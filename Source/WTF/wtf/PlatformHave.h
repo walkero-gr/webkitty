@@ -379,8 +379,8 @@
 #if !OS(WINDOWS)
 #define HAVE_STACK_BOUNDS_FOR_NEW_THREAD 1
 #endif
-
-#if !OS(WINDOWS) && !PLATFORM(PLAYSTATION)
+// TODO: Make it use clib2 memmem by removing amigaos from here
+#if !OS(WINDOWS) && !PLATFORM(PLAYSTATION) && !OS(AMIGAOS)
 #define HAVE_MEMMEM 1
 #endif
 
