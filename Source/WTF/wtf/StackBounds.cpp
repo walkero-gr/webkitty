@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-#if OS(MORPHOS) || OS(AMIGAOS)
+#if OS(MORPHOS)
 #define _GNU_SOURCE
 #endif
 

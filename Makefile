@@ -71,7 +71,7 @@ jscore-amigaos: amigaos.cmake
 		-DPNG_LIBRARY=$(GEN)/libpng16/lib/ -DPNG_INCLUDE_DIR=$(GEN)/libpng16/include \
 		-DLIBXSLT_LIBRARIES=$(LIB)/libxslt/instdir/lib -DLIBXSLT_INCLUDE_DIR=$(LIB)/libxslt/instdir/include \
 		-DSQLITE_LIBRARIES=$(LIB)/sqlite/instdir/lib -DSQLITE_INCLUDE_DIR=$(LIB)/sqlite/instdir/include \
-		-DCairo_INCLUDE_DIR=$(LIBC_PATH)/include/cairo \
+		-DCairo_LIBRARY="$(LIBC_PATH)/lib/libcairo.a" \
 		-DCMAKE_BUILD_TYPE=Release -DPORT=JSCOnly -DUSE_SYSTEM_MALLOC=YES \
 		-DCMAKE_FIND_LIBRARY_SUFFIXES=".a" ')
 	cp -a Source/JavaScriptCore/API/tests/testapiScripts ./WebKitBuild/Release/Source/JavaScriptCore/shell/
