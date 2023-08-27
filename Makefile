@@ -1,11 +1,4 @@
-ROOTPATH:=$(abspath ../../sdk/)
-# LIB:=$(ROOTPATH)/lib
 GEN:=$(ROOTPATH)/gen/host/libnix
-
-# PKG_ICU:=$(LIB)/libicu67/instdir/lib/pkgconfig/
-# PKG_SQLITE:=$(LIB)/sqlite/instdir/lib/pkgconfig/
-PKG_FONTCONFIG:=$(ROOTPATH)/morphoswb/libs/fontconfig/MorphOS/
-PKG:=$(PKG_ICU):$(PKG_SQLITE)
 
 DEBIAN_PKG:=libicu-dev ruby-dev clang-7
 NATIVE_GCC:=/usr/bin/
@@ -20,14 +13,14 @@ STRIP = ppc-amigaos-strip
 
 USE_CLIB2=YES
 ifeq ($(USE_CLIB2), YES)
-LIBC_PATH=$(SDK_PATH)/local/clib2
+ROOTPATH=$(SDK_PATH)/local/clib2
 LIBC=clib2
 else
-LIBC_PATH=$(SDK_PATH)/local/newlib
+ROOTPATH=$(SDK_PATH)/local/newlib
 LIBC=newlib
 endif
 	
-LIB:=$(LIBC_PATH)/lib
+LIB:=$(ROOTPATH)/lib
 CMN_INC:=$(SDK_PATH)/local/common/include
 
 all:
@@ -135,53 +128,13 @@ configure-mini: amigaos.cmake link.sh CMakeLists.txt Dummy/libdummy.a ffmpeg/.bu
 	mkdir cross-build-mini
 	(cd cross-build-mini && \
 		cmake -DUSE_CLIB2=$(USE_CLIB2) \
-		-DCMAKE_CROSSCOMPILING=ON -DCMAKE_BUILD_TYPE=RelWithDebugInfo -DCMAKE_TOOLCHAIN_FILE=$(realpath amigaos.cmake) -DCMAKE_DL_LIBS="syscall" \
-		-DCMAKE_C_COMPILER=$(CROSS_CC) -DCMAKE_CXX_COMPILER=$(CROSS_CXX) \
+		-DCMAKE_CROSSCOMPILING=ON -DCMAKE_BUILD_TYPE=RelWithDebugInfo \
+		-DCMAKE_TOOLCHAIN_FILE=$(realpath amigaos.cmake) -DCMAKE_DL_LIBS="syscall" \
+		-DCMAKE_MODULE_PATH=$(realpath Source/cmake) \
 		-DBUILD_SHARED_LIBS=NO -DPORT=AmigaOS -DENABLE_WEBCORE=1 -DENABLE_WEBKIT_LEGACY=1 -DLOG_DISABLED=0 \
 		-DENABLE_OPENTYPE_MATH=0 \
 		-DAMIGAOS_MINIMAL=1 -DROOTPATH="$(ROOTPATH)" \
-		-DJPEG_LIBRARY=$(LIBC_PATH)/lib/libjpeg.a \
-		-DJPEG_INCLUDE_DIR=$(LIBC_PATH)/include \
-		-DLIBXML2_LIBRARY=$(LIBC_PATH)/lib/libxml2.a \
-		-DLIBXML2_INCLUDE_DIR="$(LIBC_PATH)/include/libxml2/" \
-		-DPNG_LIBRARY="$(LIBC_PATH)/lib/libpng16.a" \
-		-DPNG_INCLUDE_DIR=$(LIBC_PATH)/include/libpng16/ \
-		-DLIBXSLT_LIBRARIES=$(LIB)/libxslt/instdir/lib/libxslt.a \
-		-DLIBXSLT_INCLUDE_DIR=$(CMN_INC) \
-		-DSQLite3_LIBRARY=$(LIB)/sqlite/instdir/include \
-		-DSQLite3_INCLUDE_DIR=$(CMN_INC) \
-		-DCairo_INCLUDE_DIR=$(LIBC_PATH)/include/cairo/ \
-		-DCairo_LIBRARY="$(LIBC_PATH)/lib/libcairo.a" \
-		-DHarfBuzz_INCLUDE_DIR=$(LIBC_PATH)/include/harfbuzz/ \
-		-DHarfBuzz_LIBRARY=$(LIBC_PATH)/lib/libnghttp2.a \
-		-DHarfBuzz_ICU_LIBRARY="$(LIBC_PATH)/lib/libharfbuzz-icu.a" \
-		-DICU_ROOT="$(LIB)/libicu67/instdir/" \
-		-DICU_INCLUDE_DIR=$(LIBC_PATH)/include \
-		-DICU_UC_LIBRARY_RELEASE="$(LIBC_PATH)/lib/libicuuc.a" \
-		-DICU_DATA_LIBRARY_RELEASE="$(LIBC_PATH)/lib/libicudata.a" \
-		-DICU_I18N_LIBRARY_RELEASE="$(LIBC_PATH)/lib/libicui18n.a" \
-		-DFREETYPE_INCLUDE_DIRS="$(CMN_INC)" \
-		-DFREETYPE_LIBRARY="$(LIBC_PATH)/lib/libfreetype.a" \
-		-DFontconfig_LIBRARY="$(LIBC_PATH)/lib/libfontconfig.a" \
-		-DFontconfig_INCLUDE_DIR="$(LIBC_PATH)/include/" \
-		-DOpenJPEG_INCLUDE_DIR="$(LIBC_PATH)/include/openjpeg-2.5" \
-		-DWebP_INCLUDE_DIR="$(CMN_INC)" \
-		-DWebP_LIBRARY="$(LIBC_PATH)/lib/libwebp.a" \
-		-DWebP_DEMUX_LIBRARY="$(LIBC_PATH)/lib/libwebpdemux.a"\
-		-DAVFORMAT_LIBRARY="ffmpeg/instdir/lib/libavformat.a" -DAVFORMAT_INCLUDE_DIR="$(realpath ffmpeg/instdir/include)" \
-		-DAVCODEC_LIBRARY="ffmpeg/instdir/lib/libavcodec.a" -DAVCODEC_INCLUDE_DIR="$(realpath ffmpeg/instdir/include)" \
-		-DAVUTIL_LIBRARY="ffmpeg/instdir/lib/libavutil.a" -DAVUTIL_INCLUDE_DIR="$(realpath ffmpeg/instdir/include)" \
-		-DSWSCALE_LIBRARY="ffmpeg/instdir/lib/libswscale.a" -DSWSCALE_INCLUDE_DIR="$(realpath ffmpeg/instdir/include)" \
-		-DOBJC_INCLUDE="$(OBJC)" \
-		-DCURL_INCLUDE_DIR="$(CMN_INC)" \
-		-DOPENSSL_INCLUDE_DIR="$(CMN_INC)" \
-		-DZLIB_INCLUDE_DIR="$(CMN_INC)" \
-		-DNGHTTP2_INCLUDE_DIRS="$(CMN_INC)" \
-		-DHYPHEN_INCLUDE_DIR="$(CMN_INC)" \
-		-DLibPSL_LIBRARY=$(LIBC_PATH)/lib/libpsl.a \
-		-DLibPSL_INCLUDE_DIR="$(CMN_INC)" \
-		-DOpenJPEG_LIBRARY=$(LIBC_PATH)/lib/libopenjp2.a \
-		-DCMAKE_MODULE_PATH=$(realpath Source/cmake) $(realpath ./))
+		$(realpath ./))
 
 build:
 	(cd cross-build && make -j$(shell nproc))
@@ -205,10 +158,10 @@ cross-build-mini:
 .build-mini: cross-build-mini build-mini
 
 amigaos.cmake: amigaos.cmake.in
-	gcc -xc -E -P -C -o$@ -nostdinc $@.in -D_IN_ROOTPATH=$(ROOTPATH) -D_IN_DUMMYPATH=$(realpath Dummy) -D_LIBC=$(LIBC)
+	gcc -xc -E -P -C -o$@ -nostdinc $@.in -D_IN_ROOTPATH=$(ROOTPATH) -D_IN_DUMMYPATH=$(realpath Dummy) -D_LIBC=$(LIBC) -D_CMN_INC=$(CMN_INC)
 
 link.sh: link.sh.in
-	gcc -xc -E -P -C -o$@ -nostdinc $@.in -D_IN_ROOTPATH=$(ROOTPATH)
+	gcc -xc -E -P -C -o$@ -nostdinc $@.in -D_IN_ROOTPATH=$(ROOTPATH) -D_LIBC=$(LIBC)
 	chmod u+x $@
 
 libwebkit.a:

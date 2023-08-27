@@ -37,9 +37,9 @@
 #include "ResourceResponse.h"
 #include "SharedBuffer.h"
 #if OS(AMIGAOS)
-// #define _GNU_SOURCE
-// #include <string.h> // TODO: For some reason the memmem that is defined here is not used
-#undef HAVE_MEMMEM // This works because it is defined in the StringExtras.h
+#define _GNU_SOURCE
+#include <string.h>
+#undef _GNU_SOURCE
 #endif
 #include <wtf/StringExtras.h>
 
