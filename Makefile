@@ -21,8 +21,10 @@ STRIP = ppc-amigaos-strip
 USE_CLIB2=YES
 ifeq ($(USE_CLIB2), YES)
 LIBC_PATH=$(SDK_PATH)/local/clib2
+LIBC=clib2
 else
 LIBC_PATH=$(SDK_PATH)/local/newlib
+LIBC=newlib
 endif
 	
 LIB:=$(LIBC_PATH)/lib
@@ -61,17 +63,6 @@ jscore-amigaos: amigaos.cmake
 		--cmakeargs='-DUSE_CLIB2=$(USE_CLIB2) \
 		-DCMAKE_CROSSCOMPILING=ON -DCMAKE_TOOLCHAIN_FILE=$(realpath amigaos.cmake) -DCMAKE_MODULE_PATH=$(realpath Source/cmake) \
 		-DJAVASCRIPTCORE_DIR=$(realpath Source/JavaScriptCore) -DBUILD_SHARED_LIBS=NO \
-		-DICU_INCLUDE_DIR=$(LIBC_PATH)/include \
-		-DICU_LIBRARIES=$(LIBC_PATH)/lib \
-		-DICU_DATA_LIBRARY_RELEASE=$(LIBC_PATH)/lib/libicudata.a \
-		-DICU_I18N_LIBRARY_RELEASE=$(LIBC_PATH)/lib/libicui18n.a \
-		-DICU_UC_LIBRARY_RELEASE=$(LIBC_PATH)/lib/libicuuc.a \
-		-DJPEG_LIBRARY=$(LIB)/libjpeg -DJPEG_INCLUDE_DIR=$(LIB) \
-		-DLIBXML2_LIBRARY=$(LIB)/libxml2/instdir/lib -DLIBXML2_INCLUDE_DIR=$(LIB)/libxml2/instdir/include/libxml2 \
-		-DPNG_LIBRARY=$(GEN)/libpng16/lib/ -DPNG_INCLUDE_DIR=$(GEN)/libpng16/include \
-		-DLIBXSLT_LIBRARIES=$(LIB)/libxslt/instdir/lib -DLIBXSLT_INCLUDE_DIR=$(LIB)/libxslt/instdir/include \
-		-DSQLITE_LIBRARIES=$(LIB)/sqlite/instdir/lib -DSQLITE_INCLUDE_DIR=$(LIB)/sqlite/instdir/include \
-		-DCairo_LIBRARY="$(LIBC_PATH)/lib/libcairo.a" \
 		-DCMAKE_BUILD_TYPE=Release -DPORT=JSCOnly -DUSE_SYSTEM_MALLOC=YES \
 		-DCMAKE_FIND_LIBRARY_SUFFIXES=".a" ')
 	cp -a Source/JavaScriptCore/API/tests/testapiScripts ./WebKitBuild/Release/Source/JavaScriptCore/shell/
@@ -214,7 +205,7 @@ cross-build-mini:
 .build-mini: cross-build-mini build-mini
 
 amigaos.cmake: amigaos.cmake.in
-	gcc -xc -E -P -C -o$@ -nostdinc $@.in -D_IN_ROOTPATH=$(ROOTPATH) -D_IN_DUMMYPATH=$(realpath Dummy)
+	gcc -xc -E -P -C -o$@ -nostdinc $@.in -D_IN_ROOTPATH=$(ROOTPATH) -D_IN_DUMMYPATH=$(realpath Dummy) -D_LIBC=$(LIBC)
 
 link.sh: link.sh.in
 	gcc -xc -E -P -C -o$@ -nostdinc $@.in -D_IN_ROOTPATH=$(ROOTPATH)
