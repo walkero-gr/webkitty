@@ -47,6 +47,10 @@
 #include <winsock2.h>
 #endif
 
+#if OS(AMIGAOS)
+#include <sys/select.h>
+#endif
+
 #include <curl/curl.h>
 
 namespace WebCore {
@@ -64,7 +68,11 @@ class CurlGlobal {
 protected:
     CurlGlobal()
     {
+    #if OS(AMIGAOS)
+        curl_global_init(CURL_GLOBAL_ALL);
+    #else
         curl_global_init(CURL_GLOBAL_ALL | CURL_GLOBAL_NO_GETENV);
+    #endif
     }
     
     virtual ~CurlGlobal()

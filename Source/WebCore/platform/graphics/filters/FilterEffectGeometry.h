@@ -29,6 +29,10 @@
 #include <wtf/OptionSet.h>
 #include <wtf/Ref.h>
 
+#if OS(AMIGAOS)
+#include <wtf/EnumTraits.h>
+#endif
+
 namespace WebCore {
 
 class FilterEffect;

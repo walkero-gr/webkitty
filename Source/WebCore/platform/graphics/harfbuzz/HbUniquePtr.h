@@ -26,7 +26,7 @@
 
 #if USE(HARFBUZZ)
 
-#if OS(MORPHOS) || OS(AMIGAOS)
+#if OS(MORPHOS)
 #define _NO_PPCINLINE
 #include <proto/harfbuzz.h>
 #include <libraries/harfbuzz.h>

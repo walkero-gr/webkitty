@@ -32,6 +32,7 @@
 #include "ImageBufferUtilitiesCairo.h"
 
 #if USE(CAIRO)
+#error "USING CAIRO... GREAT"
 
 #include "CairoUtilities.h"
 #include "MIMETypeRegistry.h"
@@ -51,9 +52,18 @@
 #if OS(MORPHOS) || OS(AMIGAOS)
 #define __WANT_PNG_1_6__
 #include <png.h>
-#include <proto/dos.h>
+// TODO: Is the following needed?
+// #define __USE_INLINE__
+// #include <proto/dos.h>
+// #undef __USE_INLINE__
 #include <string.h>
+#if OS(MORPHOS)
+#error "IS MORPHOS SET?"
 #include <proto/random.h>
+// TODO: Decide if this is needed
+// #else
+// #include <stdlib.h>
+#endif
 #endif
 
 namespace WebCore {

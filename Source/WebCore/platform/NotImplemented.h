@@ -35,7 +35,7 @@
 #endif
 
 #if LOG_DISABLED
-	#if OS(MORPHOS) || OS(AMIGAOS)
+	#if OS(MORPHOS)
 	extern "C" { void dprintf(const char *fmt, ...); };
 	#if 1
 		#define notImplemented() ((void)0)
@@ -48,6 +48,21 @@
 				} \
 			} while (0)
 	#endif
+
+	#elif OS(AMIGAOS)
+	extern "C" { int dprintf(int, const char *format, ...); };
+	#if 1
+		#define notImplemented() ((void)0)
+	#else
+		#define notImplemented() do { \
+				static bool havePrinted = false; \
+				if (!havePrinted) { \
+					dprintf(__FILE__, "<<< notImplemented: %s/%d - %s\n", __LINE__, WTF_PRETTY_FUNCTION); \
+					havePrinted = true; \
+				} \
+			} while (0)
+	#endif
+
 	#else
 		#define notImplemented() ((void)0)
 	#endif
@@ -57,7 +72,7 @@ namespace WebCore {
 WEBCORE_EXPORT WTFLogChannel* notImplementedLoggingChannel();
 }
 
-#if OS(MORPHOS) || OS(AMIGAOS)
+#if OS(MORPHOS)
 extern "C" { void dprintf(const char *fmt, ...); };
 #define notImplemented() do { \
         static bool havePrinted = false; \
@@ -66,6 +81,17 @@ extern "C" { void dprintf(const char *fmt, ...); };
             havePrinted = true; \
         } \
     } while (0)
+
+#elif OS(AMIGAOS)
+extern "C" { void dprintf(int fd, const char *format, ...); };
+#define notImplemented() do { \
+        static bool havePrinted = false; \
+        if (!havePrinted) { \
+            dprintf(__FILE__, "<<< notImplemented: %s/%d - %s\n", __LINE__, WTF_PRETTY_FUNCTION); \
+            havePrinted = true; \
+        } \
+    } while (0)
+
 #else
 #define notImplemented() do { \
         static bool havePrinted = false; \

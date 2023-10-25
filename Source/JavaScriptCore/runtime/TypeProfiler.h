@@ -33,7 +33,7 @@
 #include <wtf/Vector.h>
 #include <wtf/text/WTFString.h>
 
-#if OS(MORPHOS) || OS(AMIGAOS)
+#if OS(MORPHOS)
 #define INTPTR_MAX 0x7fffffff
 #endif
 

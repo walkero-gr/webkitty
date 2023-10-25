@@ -14,9 +14,10 @@ list(APPEND WebCore_PRIVATE_INCLUDE_DIRECTORIES
 list(APPEND WebCore_PRIVATE_INCLUDE_DIRECTORIES
     ${WEBCORE_DIR}/platform
     ${WEBCORE_DIR}/platform/adwaita
-    ${WEBCORE_DIR}/platform/morphos
     ${WEBCORE_DIR}/platform/amigaos
+    ${WEBCORE_DIR}/platform/morphos
     ${WEBCORE_DIR}/platform/generic
+    ${WEBCORE_DIR}/platform/graphics/amigaos
     ${WEBCORE_DIR}/platform/graphics/morphos
     ${WEBCORE_DIR}/platform/mediacapabilities
 )
@@ -29,7 +30,7 @@ list(APPEND WebCore_SYSTEM_INCLUDE_DIRECTORIES
     ${WPE_INCLUDE_DIRS}
     ${HYPHEN_INCLUDE_DIRS}
     ${AVCODEC_INCLUDE_DIR}
-    "${ROOTPATH}/morphoswb/development/tools/eventprofiler/"
+    # "${ROOTPATH}/morphoswb/development/tools/eventprofiler/"
 )
 
 list(APPEND WebCore_LIBRARIES
@@ -42,13 +43,13 @@ list(APPEND WebCore_LIBRARIES
 )
 
 list(APPEND WebCore_SOURCES
-    editing/morphos/EditorMorphOS.cpp
+    editing/amigaos/EditorAmigaOS.cpp
     editing/morphos/AutofillElements.cpp
     platform/morphos/Altivec.cpp
-    platform/morphos/PasteboardMorphOS.cpp
-    platform/morphos/CursorMorphOS.cpp
-    platform/morphos/PlatformKeyboardEvent.cpp
-    platform/morphos/PlatformScreenMorphOS.cpp
+    platform/amigaos/PasteboardAmigaOS.cpp
+    platform/amigaos/CursorAmigaOS.cpp
+    platform/amigaos/PlatformKeyboardEvent.cpp
+    platform/amigaos/PlatformScreenAmigaOS.cpp
     platform/morphos/MIMETypeRegistryMorphOS.cpp
     platform/morphos/DragDataMorphOS.cpp
     platform/morphos/DragImageMorphOS.cpp
@@ -58,7 +59,7 @@ list(APPEND WebCore_SOURCES
     platform/generic/KeyedEncoderGeneric.cpp
     platform/graphics/morphos/GraphicsLayerMorphOS.cpp
     platform/graphics/morphos/ImageMorphOS.cpp
-    platform/graphics/morphos/DisplayRefreshMonitorMorphOS.cpp
+    platform/graphics/amigaos/DisplayRefreshMonitorAmigaOS.cpp
     platform/network/morphos/CurlSSLHandleMorphOS.cpp
     platform/network/morphos/NetworkStateNotifierMorphOS.cpp
     #platform/posix/SharedBufferPOSIX.cpp
@@ -77,7 +78,7 @@ list(APPEND WebCore_PRIVATE_FRAMEWORK_HEADERS
     platform/morphos/SelectionData.h
 )
 
-if (NOT MORPHOS_MINIMAL)
+if (NOT AMIGAOS_MINIMAL)
 	list(APPEND WebCore_SOURCES
 		platform/audio/morphos/AudioDestinationMorphOS.cpp
 		platform/audio/morphos/AudioBusMorphOS.cpp

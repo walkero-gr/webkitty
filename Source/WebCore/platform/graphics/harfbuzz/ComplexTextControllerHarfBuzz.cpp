@@ -32,7 +32,7 @@
 #include "HbUniquePtr.h"
 #include "SurrogatePairAwareTextIterator.h"
 
-#if OS(MORPHOS) || OS(AMIGAOS)
+#if OS(MORPHOS)
 #define _NO_PPCINLINE
 #include <proto/harfbuzz.h>
 #include <libraries/harfbuzz.h>
@@ -42,6 +42,15 @@
 #include <unicode/utf16.h>
 #include <unicode/uversion.h>
 #undef _NO_PPCINLINE
+#elif OS(AMIGAOS) && USE(HARFBUZZ)
+#include <hb-ft.h>
+// #include <hb-icu.h>
+#include <hb-ot.h>
+#include <unicode/uchar.h>
+#include <unicode/unorm2.h>
+#include <unicode/ustring.h>
+#include <unicode/utf16.h>
+#include <unicode/uversion.h>
 #else
 #include <hb-ft.h>
 #include <hb-icu.h>
