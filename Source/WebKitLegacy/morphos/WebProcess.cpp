@@ -69,11 +69,21 @@ extern "C" {
 LONG WaitSelect(LONG nfds, fd_set *readfds, fd_set *writefds, fd_set *exeptfds,
                 struct timeval *timeout, ULONG *maskp);
 }
+#if !OS(AMIGAOS)
 typedef uint32_t socklen_t;
+#endif
 #if (!MORPHOS_MINIMAL) && !AMIGAOS_MINIMAL
 #include <pal/crypto/gcrypt/Initialization.h>
 #endif
+#if OS(MORPHOS)
 #include <proto/dos.h>
+#elif OS(AMIGAOS)
+#define DOS_DOSEXTENS_H
+#define __USE_INLINE__
+#include <proto/dos.h>
+#undef __USE_INLINE__
+#undef DOS_DOSEXTENS_H
+#endif
 
 #if (MORPHOS_MINIMAL) || AMIGAOS_MINIMAL
 #define USE_ADFILTER 0
@@ -81,9 +91,11 @@ typedef uint32_t socklen_t;
 #define USE_ADFILTER 1
 #endif
 
+#if !OS(AMIGAOS)
 extern "C" {
 	void dprintf(const char *, ...);
 };
+#endif
 
 #define D(x) 
 
@@ -229,9 +241,11 @@ void WebProcess::initialize(int sigbit)
 	RuntimeEnabledFeatures::sharedFeatures().setAccessibilityObjectModelEnabled(false);
 //	RuntimeEnabledFeatures::sharedFeatures().setKeygenElementEnabled(true);
 	
+#if ENABLE(OFFSCREEN_CANVAS)
     RuntimeEnabledFeatures::sharedFeatures().setOffscreenCanvasEnabled(true);
     RuntimeEnabledFeatures::sharedFeatures().setOffscreenCanvasInWorkersEnabled(true);
-    
+#endif
+
 // This doesn't work yet in WebKitLegacy so it will potentially break pages if enabled
     RuntimeEnabledFeatures::sharedFeatures().setCacheAPIEnabled(true);
     
@@ -744,7 +758,11 @@ void WebProcess::dumpWebCoreStatistics()
     // Get WebCore memory cache statistics
     getWebCoreMemoryCacheStatistics(ss);
 	
+	#if OS(AMIGAOS)
+	dprintf(0, ss.release().utf8().data());
+	#else
     dprintf(ss.release().utf8().data());
+	#endif
 }
 
 void reactOnMemoryPressureInWebKit()

@@ -160,26 +160,62 @@
 #include <utility>
 #include <cstdio>
 
-#include <proto/graphics.h>
 #include <proto/exec.h>
-#include <proto/cybergraphics.h>
 #include <proto/intuition.h>
 #include <proto/layers.h>
+#if OS(MORPHOS)
+#include <proto/cybergraphics.h>
 #include <cybergraphx/cybergraphics.h>
+#endif
+#if OS(AMIGAOS)
+#define DOS_DOSEXTENS_H
+#define __USE_INLINE__
+#endif
 #include <proto/graphics.h>
 #include <proto/dos.h>
+#if OS(AMIGAOS)
+#undef PAL
+#undef __USE_INLINE__
+#undef DOS_DOSEXTENS_H
+#endif
 #include <dos/dos.h>
 #include <graphics/rpattr.h>
 #include <intuition/intuition.h>
 #include <intuition/pointerclass.h>
+#if OS(MORPHOS)
 #include <intuition/intuimessageclass.h>
+#endif
 #include <intuition/classusr.h>
 #include <clib/alib_protos.h>
 #include <devices/rawkeycodes.h>
+#if OS(AMIGAOS)
+#define __USE_INLINE__
+#endif
 #include <proto/openurl.h>
 #include <libraries/openurl.h>
+#if OS(AMIGAOS)
+#undef __USE_INLINE__
+#endif
 
+#if OS(MORPHOS)
 #include <libeventprofiler.h>
+#endif
+
+#if OS(AMIGAOS)
+#define EP_SCOPE(x)
+#define EP_BEGIN(x)
+#define EP_END(x)
+#define RPTAG_PenMode 0x80000080
+#define RPTAG_FgColor 0x80000081
+#define RECTFMT_ARGB  (2UL)
+#define NM_WHEEL_UP     RAWKEY_NM_WHEEL_UP
+#define NM_WHEEL_DOWN   RAWKEY_NM_WHEEL_DOWN
+#define NM_WHEEL_LEFT   RAWKEY_NM_WHEEL_LEFT
+#define NM_WHEEL_RIGHT  RAWKEY_NM_WHEEL_RIGHT
+#define POINTERTYPE_VERTICALRESIZE POINTERTYPE_COLUMNRESIZE
+#define POINTERTYPE_ALTERNATIVECHOICE POINTERTYPE_CONTEXTMENU
+#define IDCMP_MOUSEHOVER IDCMP_EXTENDEDMOUSE
+#endif
 
 // we cannot include libraries/mui.h here...
 enum
@@ -218,9 +254,11 @@ enum
 	MUIKEY_ICONIFY,
 };
 
+#if !OS(AMIGAOS)
 extern "C" {
 	void dprintf(const char *, ...);
 };
+#endif
 
 #define D(x) 
 
@@ -1218,7 +1256,9 @@ WebPage::WebPage(WebCore::PageIdentifier pageID, WebPageCreationParameters&& par
 	settings.setTextAreasAreResizable(true);
 	settings.setIntersectionObserverEnabled(true);
 	settings.setDataTransferItemsEnabled(true);
+	#if !OS(AMIGAOS)
 	settings.setDownloadAttributeEnabled(true);
+	#endif
 
 #if 1
 	settings.setForceCompositingMode(false);
@@ -1271,8 +1311,10 @@ WebPage::WebPage(WebCore::PageIdentifier pageID, WebPageCreationParameters&& par
        settings.setFullScreenEnabled(true);
 #endif
 
+#if ENABLE(TOUCH_EVENTS)
 	// the default
 	settings.setTouchEventEmulationEnabled(false);
+#endif
 
 // crashy
 //    settings.setDiagnosticLoggingEnabled(true);
@@ -1574,12 +1616,17 @@ void WebPage::setAdBlockingEnabled(bool enabled)
 
 bool WebPage::touchEventsEnabled() const
 {
+	#if ENABLE(TOUCH_EVENTS)
 	return m_page->settings().isTouchEventEmulationEnabled();
+	#endif
+	return FALSE
 }
 
 void WebPage::setTouchEventsEnabled(bool enabled)
 {
+	#if ENABLE(TOUCH_EVENTS)
 	m_page->settings().setTouchEventEmulationEnabled(enabled);
+	#endif
 }
 
 bool WebPage::thirdPartyCookiesAllowed() const

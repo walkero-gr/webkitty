@@ -42,29 +42,29 @@ list(APPEND WebKitLegacy_SOURCES_Classes
     morphos/NetworkSession.cpp
 )
 
-list(APPEND WebKitLegacy_SOURCES_Classes
-    morphos/WkWebView.mm
-    morphos/WkNetworkRequestMutable.mm
-    morphos/WkHistory.mm
-    morphos/WkSettings.mm
-    morphos/WkCertificate.mm
-    morphos/WkCertificateViewer.mm
-    morphos/WkError.mm
-    morphos/WkDownload.mm
-    morphos/WkFileDialog.mm
-    morphos/WkHitTest.mm
-    morphos/WkFavIcon.mm
-    morphos/WkPrinting.mm
-    morphos/WkUserScript.mm
-    morphos/WkMedia.mm
-    morphos/WkNotification.mm
-    morphos/WkResourceResponse.mm
-    morphos/WkCache.mm
-)
+# list(APPEND WebKitLegacy_SOURCES_Classes
+#     morphos/WkWebView.mm
+#     morphos/WkNetworkRequestMutable.mm
+#     morphos/WkHistory.mm
+#     morphos/WkSettings.mm
+#     morphos/WkCertificate.mm
+#     morphos/WkCertificateViewer.mm
+#     morphos/WkError.mm
+#     morphos/WkDownload.mm
+#     morphos/WkFileDialog.mm
+#     morphos/WkHitTest.mm
+#     morphos/WkFavIcon.mm
+#     morphos/WkPrinting.mm
+#     morphos/WkUserScript.mm
+#     morphos/WkMedia.mm
+#     morphos/WkNotification.mm
+#     morphos/WkResourceResponse.mm
+#     morphos/WkCache.mm
+# )
 
 list(APPEND WebKitLegacy_SOURCES_WebCoreSupport
     morphos/WebCoreSupport/WebVisitedLinkStore.cpp
-    morphos/WebCoreSupport/WebEditorClient.cpp
+    # morphos/WebCoreSupport/WebEditorClient.cpp
     morphos/WebCoreSupport/WebChromeClient.cpp
     morphos/WebCoreSupport/WebPluginInfoProvider.cpp
     morphos/WebCoreSupport/WebPlatformStrategies.cpp
@@ -77,26 +77,26 @@ list(APPEND WebKitLegacy_SOURCES_WebCoreSupport
     morphos/WebCoreSupport/WebNotificationClient.cpp
 )
 
-list(APPEND WebKitLegacy_SOURCES_WebCoreSupport
-    morphos/cache/CacheStorageEngine.cpp
-    morphos/cache/CacheStorageEngineCache.cpp
-    morphos/cache/CacheStorageEngineCaches.cpp
-    morphos/cache/NetworkCacheCoders.cpp
-    morphos/cache/NetworkCacheDataCurl.cpp
-    morphos/cache/NetworkCacheIOChannelCurl.cpp
-    morphos/cache/NetworkCacheSubresourcesEntry.cpp
-    morphos/cache/NetworkCacheBlobStorage.cpp
-    morphos/cache/NetworkCacheEntry.cpp
-    morphos/cache/NetworkCacheKey.cpp
-    morphos/cache/PrefetchCache.cpp
-    morphos/cache/NetworkCacheData.cpp
-    morphos/cache/NetworkCacheFileSystem.cpp
-    morphos/cache/NetworkCacheStorage.cpp
-    morphos/cache/NetworkCache.cpp
-    morphos/cache/CacheStorageEngineConnection.cpp
-    morphos/cache/WebCacheStorageProvider.cpp
-    morphos/cache/WebCacheStorageConnection.cpp
-    )
+# list(APPEND WebKitLegacy_SOURCES_WebCoreSupport
+#     morphos/cache/CacheStorageEngine.cpp
+#     morphos/cache/CacheStorageEngineCache.cpp
+#     morphos/cache/CacheStorageEngineCaches.cpp
+#     morphos/cache/NetworkCacheCoders.cpp
+#     morphos/cache/NetworkCacheDataCurl.cpp
+#     morphos/cache/NetworkCacheIOChannelCurl.cpp
+#     morphos/cache/NetworkCacheSubresourcesEntry.cpp
+#     morphos/cache/NetworkCacheBlobStorage.cpp
+#     morphos/cache/NetworkCacheEntry.cpp
+#     morphos/cache/NetworkCacheKey.cpp
+#     morphos/cache/PrefetchCache.cpp
+#     morphos/cache/NetworkCacheData.cpp
+#     morphos/cache/NetworkCacheFileSystem.cpp
+#     morphos/cache/NetworkCacheStorage.cpp
+#     morphos/cache/NetworkCache.cpp
+#     morphos/cache/CacheStorageEngineConnection.cpp
+#     morphos/cache/WebCacheStorageProvider.cpp
+#     morphos/cache/WebCacheStorageConnection.cpp
+#     )
 
 if (NOT AMIGAOS_MINIMAL)
 	list(APPEND WebKitLegacy_ABP
@@ -127,25 +127,25 @@ endif()
 
 list(APPEND WebKitLegacy_SOURCES ${WebKitLegacy_INCLUDES} ${WebKitLegacy_SOURCES_Classes} ${WebKitLegacy_SOURCES_WebCoreSupport} ${WebKitLegacy_ABP})
 
-set(MM_FLAGS "-Wno-ignored-attributes -Wno-protocol -Wundeclared-selector -fobjc-call-cxx-cdtors -fobjc-exceptions -fconstant-string-class=OBConstantString -DDEBUG=0")
+# set(MM_FLAGS "-Wno-ignored-attributes -Wno-protocol -Wundeclared-selector -fobjc-call-cxx-cdtors -fobjc-exceptions -fconstant-string-class=OBConstantString -DDEBUG=0")
 
-set_source_files_properties(morphos/WkWebView.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
-set_source_files_properties(morphos/WkNetworkRequestMutable.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
-set_source_files_properties(morphos/WkHistory.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
-set_source_files_properties(morphos/WkSettings.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
-set_source_files_properties(morphos/WkCertificate.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
-set_source_files_properties(morphos/WkCertificateViewer.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
-set_source_files_properties(morphos/WkError.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
-set_source_files_properties(morphos/WkDownload.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
-set_source_files_properties(morphos/WkFileDialog.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
-set_source_files_properties(morphos/WkHitTest.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
-set_source_files_properties(morphos/WkFavIcon.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
-set_source_files_properties(morphos/WkPrinting.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
-set_source_files_properties(morphos/WkUserScript.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
-set_source_files_properties(morphos/WkMedia.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
-set_source_files_properties(morphos/WkNotification.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
-set_source_files_properties(morphos/WkResourceResponse.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
-set_source_files_properties(morphos/WkCache.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
+# set_source_files_properties(morphos/WkWebView.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
+# set_source_files_properties(morphos/WkNetworkRequestMutable.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
+# set_source_files_properties(morphos/WkHistory.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
+# set_source_files_properties(morphos/WkSettings.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
+# set_source_files_properties(morphos/WkCertificate.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
+# set_source_files_properties(morphos/WkCertificateViewer.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
+# set_source_files_properties(morphos/WkError.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
+# set_source_files_properties(morphos/WkDownload.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
+# set_source_files_properties(morphos/WkFileDialog.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
+# set_source_files_properties(morphos/WkHitTest.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
+# set_source_files_properties(morphos/WkFavIcon.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
+# set_source_files_properties(morphos/WkPrinting.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
+# set_source_files_properties(morphos/WkUserScript.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
+# set_source_files_properties(morphos/WkMedia.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
+# set_source_files_properties(morphos/WkNotification.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
+# set_source_files_properties(morphos/WkResourceResponse.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
+# set_source_files_properties(morphos/WkCache.mm PROPERTIES COMPILE_FLAGS ${MM_FLAGS})
 
 set(WebKitLegacy_OUTPUT_NAME
     WebKit${DEBUG_SUFFIX}

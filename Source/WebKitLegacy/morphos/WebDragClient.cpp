@@ -1,7 +1,9 @@
 #include "WebDragClient.h"
 #include "WebPage.h"
 
+#if !OS(AMIGAOS)
 extern "C" { void dprintf(const char *,...); }
+#endif
 
 namespace WebKit {
 using namespace WebCore;

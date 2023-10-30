@@ -8,8 +8,10 @@
 #include <WebCore/MediaPlayerMorphOS.h>
 #include <WebCore/NotificationClient.h>
 
+#if OS(MORPHOS)
 #define EP_PROFILING 0
 #include <libeventprofiler.h>
+#endif
 
 namespace WebCore {
 	class Page;

@@ -137,7 +137,7 @@ configure-mini: amigaos.cmake link.sh CMakeLists.txt Dummy/libdummy.a ffmpeg/.bu
 		$(realpath ./))
 
 build:
-	(cd cross-build && make -j1)
+	(cd cross-build && make -j$(shell nproc))
 	echo "Link done"
 	$(STRIP) cross-build/Tools/morphos/MiniBrowser.db -o cross-build/Tools/morphos/MiniBrowser
 	echo "Stripped binary in cross-build/Tools/morphos/MiniBrowser"
@@ -145,7 +145,7 @@ build:
 #		-Wdev --debug-output --trace --trace-expand \
 
 build-mini:
-	(cd cross-build-mini && make -j1)
+	(cd cross-build-mini && make -j$(shell nproc))
 
 cross-build:
 	make configure
@@ -182,7 +182,7 @@ $(CMAKE):
 	rm -rf cmake-3.16.2
 	tar xf cmake-3.16.2.tar.gz
 	(cd cmake-3.16.2 && ./bootstrap -- -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_USE_OPENSSL=OFF )
-	(cd cmake-3.16.2 && make -j1)
+	(cd cmake-3.16.2 && make -j$(shell nproc))
 
 Dummy/libdummy.a:
 	ppc-amigaos-gcc -c -o Dummy/dummy.o Dummy/dummy.c

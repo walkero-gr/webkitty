@@ -4,7 +4,9 @@
 #include <WebCore/FrameView.h>
 #include <wtf/text/AtomString.h>
 
+#if !OS(AMIGAOS)
 extern "C" { void dprintf(const char *,...); }
+#endif
 
 using namespace WebCore;
 using namespace WTF;

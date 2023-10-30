@@ -32,7 +32,6 @@
 #include "ImageBufferUtilitiesCairo.h"
 
 #if USE(CAIRO)
-#error "USING CAIRO... GREAT"
 
 #include "CairoUtilities.h"
 #include "MIMETypeRegistry.h"
@@ -58,7 +57,6 @@
 // #undef __USE_INLINE__
 #include <string.h>
 #if OS(MORPHOS)
-#error "IS MORPHOS SET?"
 #include <proto/random.h>
 // TODO: Decide if this is needed
 // #else
