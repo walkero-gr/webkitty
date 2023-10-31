@@ -1,4 +1,4 @@
-[![Build Status](https://drone-gh.intercube.gr/api/badges/walkero-gr/webkitty/status.svg)](https://drone-gh.intercube.gr/walkero-gr/webkitty)
+[![Build Status](https://drone-gh.intercube.gr/api/badges/AmigaLabs/webkitty/status.svg)](https://drone-gh.intercube.gr/AmigaLabs/webkitty)
 
 # webkitty for AmigaOS 4
 
