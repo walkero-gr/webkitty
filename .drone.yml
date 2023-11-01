@@ -40,14 +40,14 @@ workspace:
   path: /opt/code/webkitty
 
 steps:
-- name: JSC-with-clib2
+- name: JSC-with-clib4
   pull: always
   image: walkero/webkitondocker
   commands:
   - make Dummy/libdummy.a
-  - cp Dummy/libdl.a /opt/sdk/ppc-amigaos/local/clib2/lib/
+  - cp Dummy/libdl.a /opt/sdk/ppc-amigaos/local/clib4/lib/
   - make jscore-amigaos
-- name: ffmpeg-with-clib2
+- name: ffmpeg-with-clib4
   pull: always
   image: walkero/webkitondocker
   commands:

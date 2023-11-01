@@ -11,10 +11,10 @@ OBJC:=$(ROOTPATH)/morphoswb/classes/frameworks/includes/
 CMAKE = cmake
 STRIP = ppc-amigaos-strip
 
-USE_CLIB2=YES
-ifeq ($(USE_CLIB2), YES)
-ROOTPATH=$(SDK_PATH)/local/clib2
-LIBC=clib2
+USE_CLIB4=YES
+ifeq ($(USE_CLIB4), YES)
+ROOTPATH=$(SDK_PATH)/local/clib4
+LIBC=clib4
 else
 ROOTPATH=$(SDK_PATH)/local/newlib
 LIBC=newlib
@@ -53,7 +53,7 @@ jscore-amigaos: amigaos.cmake
 		$(realpath Tools/Scripts/run-javascriptcore-tests) --jsc-only \
 		--no-testmasm --no-testair --no-testb3 --no-testdfg --no-testapi \
 		--no-jsc-stress --no-mozilla-tests --no-jit-stress-tests --no-quick \
-		--cmakeargs='-DUSE_CLIB2=$(USE_CLIB2) \
+		--cmakeargs='-DUSE_CLIB4=$(USE_CLIB4) \
 		-DCMAKE_CROSSCOMPILING=ON -DCMAKE_TOOLCHAIN_FILE=$(realpath amigaos.cmake) -DCMAKE_MODULE_PATH=$(realpath Source/cmake) \
 		-DJAVASCRIPTCORE_DIR=$(realpath Source/JavaScriptCore) -DBUILD_SHARED_LIBS=NO \
 		-DCMAKE_BUILD_TYPE=Release -DPORT=JSCOnly -DUSE_SYSTEM_MALLOC=YES \
@@ -82,7 +82,7 @@ configure: amigaos.cmake link.sh CMakeLists.txt Dummy/libdummy.a ffmpeg/.buildst
 	rm -rf cross-build
 	mkdir cross-build
 	(cd cross-build \
-		cmake -DUSE_CLIB2=$(USE_CLIB2) \
+		cmake -DUSE_CLIB4=$(USE_CLIB4) \
 		-DCMAKE_CROSSCOMPILING=ON -DCMAKE_BUILD_TYPE=RelWithDebugInfo -DCMAKE_TOOLCHAIN_FILE=$(realpath amigaos.cmake) -DCMAKE_DL_LIBS="syscall" \
 		-DBUILD_SHARED_LIBS=NO -DPORT=AmigaOS -DENABLE_WEBCORE=1 -DENABLE_WEBKIT_LEGACY=1 -DLOG_DISABLED=0 -DAMIGAOS_MINIMAL=0 -DROOTPATH="$(ROOTPATH)" \
 		-DJPEG_LIBRARY=$(LIB)/libjpeg/libjpeg.a \
@@ -127,7 +127,7 @@ configure-mini: amigaos.cmake link.sh CMakeLists.txt Dummy/libdummy.a ffmpeg/.bu
 	rm -rf cross-build-mini
 	mkdir cross-build-mini
 	(cd cross-build-mini && \
-		cmake -DUSE_CLIB2=$(USE_CLIB2) \
+		cmake -DUSE_CLIB4=$(USE_CLIB4) \
 		-DCMAKE_CROSSCOMPILING=ON -DCMAKE_BUILD_TYPE=RelWithDebugInfo \
 		-DCMAKE_TOOLCHAIN_FILE=$(realpath amigaos.cmake) -DCMAKE_DL_LIBS="syscall" \
 		-DCMAKE_MODULE_PATH=$(realpath Source/cmake) \
