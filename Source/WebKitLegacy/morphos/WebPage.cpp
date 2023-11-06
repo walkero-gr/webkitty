@@ -207,7 +207,7 @@
 #define EP_END(x)
 #define RPTAG_PenMode 0x80000080
 #define RPTAG_FgColor 0x80000081
-#define RECTFMT_ARGB  (2UL)
+#define RECTFMT_ARGB  PIXF_A8R8G8B8
 #define NM_WHEEL_UP     RAWKEY_NM_WHEEL_UP
 #define NM_WHEEL_DOWN   RAWKEY_NM_WHEEL_DOWN
 #define NM_WHEEL_LEFT   RAWKEY_NM_WHEEL_LEFT
@@ -637,7 +637,7 @@ public:
 
 		m_damage.visitDamagedTiles([&](const int x, const int y, const int width, const int height) {
 			EP_SCOPE(wpa);
-			WritePixelArray(src, x, y, stride, rp, outX + x, outY + y, width, height, RECTFMT_ARGB);
+			WritePixelArray(src, x, y, stride, RECTFMT_ARGB, rp, outX + x, outY + y, width, height);
 		});
 	}
 	
@@ -648,7 +648,7 @@ public:
 		const unsigned int stride = cairo_image_surface_get_stride(m_surface);
 		unsigned char *src = cairo_image_surface_get_data(m_surface);
 		EP_SCOPE(wpa);
-		WritePixelArray(src, 0, 0, stride, rp, outX, outY, m_width, m_height, RECTFMT_ARGB);
+		WritePixelArray(src, 0, 0, stride, RECTFMT_ARGB, rp, outX, outY, m_width, m_height);
 	}
 
 	void draw(WebCore::FrameView *frameView, RastPort *rp, const int x, const int y, const int width, const int height,
@@ -1282,7 +1282,7 @@ WebPage::WebPage(WebCore::PageIdentifier pageID, WebPageCreationParameters&& par
 
 //     settings.setStorageBlockingPolicy(SecurityOrigin::StorageBlockingPolicy::BlockAllStorage);
 	settings.setLocalStorageDatabasePath(String("PROGDIR:Cache/LocalStorage"));
-#if (!MORPHOS_MINIMAL) && !AMIGAOS_MINIMAL
+#if !defined(MORPHOS_MINIMAL) && !defined(AMIGAOS_MINIMAL)
 	settings.setWebAudioEnabled(true);
 //	settings.setAudioWorkletEnabled(true);
 //	settings.setModernUnprefixedWebAudioEnabled(true);
@@ -1619,7 +1619,7 @@ bool WebPage::touchEventsEnabled() const
 	#if ENABLE(TOUCH_EVENTS)
 	return m_page->settings().isTouchEventEmulationEnabled();
 	#endif
-	return FALSE
+	return FALSE;
 }
 
 void WebPage::setTouchEventsEnabled(bool enabled)
@@ -2554,8 +2554,8 @@ void WebPage::printPreview(struct RastPort *rp, const int x, const int y, const 
 	RectFill(rp, paintX - 1, paintY - 1, paintX - 1, paintY + scaledSize.height() - 1);
 	RectFill(rp, paintX + scaledSize.width(), paintY - 1, paintX + scaledSize.width(), paintY + scaledSize.height() - 1);
 
-	WritePixelArray(src, 0, 0, stride, rp, paintX, paintY,
-		scaledSize.width(), scaledSize.height(), RECTFMT_ARGB);
+	WritePixelArray(src, 0, 0, stride, RECTFMT_ARGB, rp, paintX, paintY,
+		scaledSize.width(), scaledSize.height());
 
 }
 
@@ -2824,7 +2824,7 @@ bool WebPage::drawRect(const int x, const int y, const int width, const int heig
 		const unsigned int stride = cairo_image_surface_get_stride(surface);
 		unsigned char *src = cairo_image_surface_get_data(surface);
 
-		WritePixelArray(src, 0, 0, stride, rp, 0, 0, width, height, RECTFMT_ARGB);
+		WritePixelArray(src, 0, 0, stride, RECTFMT_ARGB, rp, 0, 0, width, height);
 	}
 
 	cairo_destroy(cairo);
@@ -3964,7 +3964,7 @@ void WebPage::drawDragImage(struct RastPort *rp, const int x, const int y, const
 	{
 		const unsigned int stride = cairo_image_surface_get_stride(imageRef.get());
 		unsigned char *src = cairo_image_surface_get_data(imageRef.get());
-		WritePixelArray(src, 0, 0, stride, rp, x, y, width, height, RECTFMT_ARGB);
+		WritePixelArray(src, 0, 0, stride, RECTFMT_ARGB, rp, x, y, width, height);
 	}
 }
 

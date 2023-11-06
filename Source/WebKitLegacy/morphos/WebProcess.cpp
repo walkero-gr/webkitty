@@ -60,7 +60,7 @@
 #include <WebCore/PageConsoleClient.h>
 #include <WebCore/RuntimeEnabledFeatures.h>
 #include "Gamepad.h"
-#if !MORPHOS_MINIMAL && !AMIGAOS_MINIMAL
+#if !defined(MORPHOS_MINIMAL) && !defined(AMIGAOS_MINIMAL)
 #include "WebDatabaseManager.h"
 #endif
 
@@ -72,7 +72,7 @@ LONG WaitSelect(LONG nfds, fd_set *readfds, fd_set *writefds, fd_set *exeptfds,
 #if !OS(AMIGAOS)
 typedef uint32_t socklen_t;
 #endif
-#if (!MORPHOS_MINIMAL) && !AMIGAOS_MINIMAL
+#if !defined(MORPHOS_MINIMAL) && !defined(AMIGAOS_MINIMAL)
 #include <pal/crypto/gcrypt/Initialization.h>
 #endif
 #if OS(MORPHOS)
@@ -85,7 +85,7 @@ typedef uint32_t socklen_t;
 #undef DOS_DOSEXTENS_H
 #endif
 
-#if (MORPHOS_MINIMAL) || AMIGAOS_MINIMAL
+#if defined(MORPHOS_MINIMAL) || defined(AMIGAOS_MINIMAL)
 #define USE_ADFILTER 0
 #else
 #define USE_ADFILTER 1
@@ -215,7 +215,7 @@ void WebProcess::initialize(int sigbit)
 
 	GCController::singleton().setJavaScriptGarbageCollectorTimerEnabled(true);
 
-#if (!MORPHOS_MINIMAL) && !AMIGAOS_MINIMAL
+#if !defined(MORPHOS_MINIMAL) && !defined(AMIGAOS_MINIMAL)
 	PAL::GCrypt::initialize();
 #endif
 
@@ -227,7 +227,7 @@ void WebProcess::initialize(int sigbit)
 #endif
 
 	WebPlatformStrategies::initialize();
-#if !MORPHOS_MINIMAL && !AMIGAOS_MINIMAL
+#if !defined(MORPHOS_MINIMAL) && !defined(AMIGAOS_MINIMAL)
 	WebKitInitializeWebDatabasesIfNecessary();
 #endif
 
@@ -759,7 +759,7 @@ void WebProcess::dumpWebCoreStatistics()
     getWebCoreMemoryCacheStatistics(ss);
 	
 	#if OS(AMIGAOS)
-	dprintf(0, ss.release().utf8().data());
+	dprintf(1, ss.release().utf8().data());
 	#else
     dprintf(ss.release().utf8().data());
 	#endif

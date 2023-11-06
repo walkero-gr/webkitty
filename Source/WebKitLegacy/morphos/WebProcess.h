@@ -11,7 +11,7 @@
 #include "NetworkSession.h"
 #include <wtf/HashCountedSet.h>
 
-#if !MORPHOS_MINIMAL && !AMIGAOS_MINIMAL
+#if !defined(MORPHOS_MINIMAL) && !defined(AMIGAOS_MINIMAL)
 #include "ABPFilterParser/ABPFilterParser.h"
 #endif
 
@@ -145,7 +145,7 @@ protected:
     CacheModel m_cacheModel { CacheModel::DocumentViewer };
     static const QUAD ms_diskCacheSizeUninitialized = 0x7FFFFFFFFFFFFFFFll;
     QUAD m_diskCacheSize { ms_diskCacheSizeUninitialized };
-#if !MORPHOS_MINIMAL && !AMIGAOS_MINIMAL
+#if !defined(MORPHOS_MINIMAL) && !defined(AMIGAOS_MINIMAL)
     ABP::ABPFilterParser m_urlFilter;
     std::vector<char>    m_urlFilterData;
 #endif
