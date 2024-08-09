@@ -1,4 +1,4 @@
-[![Build Status](https://drone-gh.intercube.gr/api/badges/AmigaLabs/webkitty/status.svg)](https://drone-gh.intercube.gr/AmigaLabs/webkitty)
+[![status-badge](https://cigh.walkero.gr/api/badges/4/status.svg)](https://cigh.walkero.gr/repos/4)
 
 # webkitty for AmigaOS 4
 
@@ -8,5 +8,5 @@ This is necessary for building a new up-to-date browser.
 
 You can follow our work at
 - https://github.com/users/walkero-gr/projects/1/views/1
-- https://github.com/walkero-gr/webkitty/issues
+- https://github.com/AmigaLabs/webkitty/issues
 - https://www.amigans.net/modules/newbb/viewtopic.php?topic_id=8986

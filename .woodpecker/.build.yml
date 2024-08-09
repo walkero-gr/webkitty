@@ -1,0 +1,18 @@
+labels:
+  role: awsbuilder
+  platform: linux/amd64
+
+steps:
+  - name: build-minibrowser
+    image: walkero/webkitondocker
+    commands:
+    - make Dummy/libdummy.a
+    - cp Dummy/libdl.a /opt/sdk/ppc-amigaos/local/clib4/lib/
+    - make .build-mini USE_CLIB4=YES
+
+when:
+  - branch: amigaos_2.36.8
+    event: [push]
+
+depends_on:
+  - aws-poweron
