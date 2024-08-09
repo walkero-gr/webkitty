@@ -1,6 +1,13 @@
 labels:
   role: generic
 
+clone:
+  - name: git
+    image: woodpeckerci/plugin-git
+    settings:
+      partial: false
+      depth: 1
+
 steps:
   - name: aws-poweron
     image: amazon/aws-cli
