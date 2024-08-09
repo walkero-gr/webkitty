@@ -1,9 +1,6 @@
 labels:
   role: generic
 
-workspace:
-  path: /opt/code/webkitty
-
 steps:
   - name: aws-poweron
     image: amazon/aws-cli

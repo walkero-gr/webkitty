@@ -2,6 +2,9 @@ labels:
   role: awsbuilder
   platform: linux/amd64
 
+workspace:
+  path: /opt/code/webkitty
+
 steps:
   - name: build-minibrowser
     image: walkero/webkitondocker
