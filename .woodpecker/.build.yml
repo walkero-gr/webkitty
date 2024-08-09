@@ -10,7 +10,7 @@ steps:
     image: walkero/webkitondocker
     commands:
     - make Dummy/libdummy.a
-    - cp Dummy/libdl.a /opt/sdk/ppc-amigaos/local/clib4/lib/
+    - cp Dummy/libdl.a /opt/ppc-amigaos/ppc-amigaos/SDK/local/clib4/lib/
     - make .build-mini USE_CLIB4=YES
 
 when:
