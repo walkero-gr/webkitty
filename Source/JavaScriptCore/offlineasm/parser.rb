@@ -838,10 +838,10 @@ class Parser
                     additionsDirectoryName = "#{@buildProductsDirectory}/usr/local/include/WebKitAdditions/"
                 end
                 fileName = IncludeFile.new(moduleName, additionsDirectoryName).fileName
-                if not File.exists?(fileName)
+                if not File.exist?(fileName)
                     fileName = IncludeFile.new(moduleName, @tokens[@idx].codeOrigin.fileName.dirname).fileName
                 end
-                fileExists = File.exists?(fileName)
+                fileExists = File.exist?(fileName)
                 raise "File not found: #{fileName}" if not fileExists and not isOptional
                 list << parse(fileName, @options) if fileExists
             else
@@ -874,10 +874,10 @@ class Parser
                     additionsDirectoryName = "#{@buildProductsDirectory}/usr/local/include/WebKitAdditions/"
                 end
                 fileName = IncludeFile.new(moduleName, additionsDirectoryName).fileName
-                if not File.exists?(fileName)
+                if not File.exist?(fileName)
                     fileName = IncludeFile.new(moduleName, @tokens[@idx].codeOrigin.fileName.dirname).fileName
                 end
-                fileExists = File.exists?(fileName)
+                fileExists = File.exist?(fileName)
                 raise "File not found: #{fileName}" if not fileExists and not isOptional
                 fileList << fileName if fileExists
             else
