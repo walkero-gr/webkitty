@@ -46,9 +46,12 @@
 #include <WebCore/UndoStep.h>
 #include <wtf/text/StringView.h>
 #include <proto/exec.h>
+#if !OS(AMIGAOS)
 #include <proto/spellchecker.h>
 #include <libraries/spellchecker.h>
+#endif
 #include <unicode/ubrk.h>
+
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wmisleading-indentation"

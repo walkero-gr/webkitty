@@ -116,8 +116,8 @@ elseif (CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
 else ()
     list(APPEND WTF_SOURCES
         generic/MemoryFootprintGeneric.cpp
-        morphos/MemoryPressureHandlerMorphOS.cpp
-        # generic/MemoryPressureHandlerGeneric.cpp
+        # amigaos/MemoryPressureHandlerAmigaOS.cpp
+        generic/MemoryPressureHandlerGeneric.cpp
     )
 endif ()
 

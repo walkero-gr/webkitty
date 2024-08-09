@@ -50,8 +50,12 @@
 #include <wtf/NeverDestroyed.h>
 #include <wtf/text/CString.h>
 
-#if OS(MORPHOS) || OS(AMIGAOS)
+#if OS(MORPHOS)
 extern "C" { void dprintf(const char *,...); }
+bool shouldLoadResource(const WebCore::ContentExtensions::ResourceLoadInfo& info, WebCore::DocumentLoader& loader);
+#endif
+
+#if OS(AMIGAOS)
 bool shouldLoadResource(const WebCore::ContentExtensions::ResourceLoadInfo& info, WebCore::DocumentLoader& loader);
 #endif
 

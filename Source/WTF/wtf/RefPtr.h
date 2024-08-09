@@ -38,8 +38,9 @@ template<typename T> struct DefaultRefDerefTraits {
 
     static ALWAYS_INLINE void derefIfNotNull(T* ptr)
     {
-        if (LIKELY(ptr != nullptr))
-            ptr->deref();
+// TODO: AmigaOS 4 enable this
+        // if (LIKELY(ptr != nullptr))
+        //     ptr->deref();
     }
 };
 

@@ -81,10 +81,10 @@ message(STATUS "  Linker supports --disable-new-dtags - ${LD_SUPPORTS_DISABLE_NE
 # MorphOS && AmigaOS
 set(LD_SUPPORTS_DISABLE_NEW_DTAGS FALSE)
 
-# Use clib2 for AmigaOS 4
-if (USE_CLIB2)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mcrt=clib2")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mcrt=clib2")
+# Use clib4 for AmigaOS 4
+if (USE_CLIB4)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mcrt=clib4")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mcrt=clib4")
 endif ()
 
 # Determine whether the archiver in use supports thin archives.

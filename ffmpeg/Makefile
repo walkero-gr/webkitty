@@ -1,9 +1,9 @@
 FFMPEG_VERSION=4.4
 OPUS_VERSION=1.3.1
 
-USE_CLIB2=YES
-ifeq ($(USE_CLIB2), YES)
-LIBC=clib2
+USE_CLIB4=YES
+ifeq ($(USE_CLIB4), YES)
+LIBC=clib4
 else
 LIBC=newlib
 endif

@@ -404,3 +404,5 @@ Ref<Image> Image::loadPlatformResource(const char* resource)
 }
 
 #endif // !PLATFORM(COCOA) && !PLATFORM(GTK) && !PLATFORM(WIN) && !OS(MORPHOS) && !OS(AMIGAOS)
+
+} // namespace WebCore

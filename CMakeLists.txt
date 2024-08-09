@@ -5,6 +5,6 @@ set(COMPILER_IS_GCC_OR_CLANG ON)
 set(WTF_CPU_PPC 1)
 include(WebKitCommon)
 add_subdirectory(Source)
-add_subdirectory(Tools/morphos)
+add_subdirectory(Tools/amigaos)
 PRINT_WEBKIT_OPTIONS()
 

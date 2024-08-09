@@ -1,30 +1,27 @@
-ROOTPATH:=$(abspath ../../sdk/)
-# LIB:=$(ROOTPATH)/lib
 GEN:=$(ROOTPATH)/gen/host/libnix
-
-# PKG_ICU:=$(LIB)/libicu67/instdir/lib/pkgconfig/
-# PKG_SQLITE:=$(LIB)/sqlite/instdir/lib/pkgconfig/
-PKG_FONTCONFIG:=$(ROOTPATH)/morphoswb/libs/fontconfig/MorphOS/
-PKG:=$(PKG_ICU):$(PKG_SQLITE)
 
 DEBIAN_PKG:=libicu-dev ruby-dev clang-7
 NATIVE_GCC:=/usr/bin/
+
+CROSS_CC:=/opt/ppc-amigaos/bin/ppc-amigaos-gcc
+CROSS_CXX:=/opt/ppc-amigaos/bin/ppc-amigaos-g++
 
 OBJC:=$(ROOTPATH)/morphoswb/classes/frameworks/includes/
 
 CMAKE = cmake
 STRIP = ppc-amigaos-strip
 
-USE_CLIB2=YES
-ifeq ($(USE_CLIB2), YES)
-LIBC_PATH=$(SDK_PATH)/local/clib2
-LIBC=clib2
+USE_CLIB4=YES
+ifeq ($(USE_CLIB4), YES)
+ROOTPATH=$(SDK_PATH)/local/clib4
+LIBC=clib4
 else
-LIBC_PATH=$(SDK_PATH)/local/newlib
+ROOTPATH=$(SDK_PATH)/local/newlib
 LIBC=newlib
 endif
 	
-LIB:=$(LIBC_PATH)/lib
+LIB:=$(ROOTPATH)/lib
+CMN_INC:=$(SDK_PATH)/local/common/include
 
 all:
 
@@ -56,7 +53,7 @@ jscore-amigaos: amigaos.cmake
 		$(realpath Tools/Scripts/run-javascriptcore-tests) --jsc-only \
 		--no-testmasm --no-testair --no-testb3 --no-testdfg --no-testapi \
 		--no-jsc-stress --no-mozilla-tests --no-jit-stress-tests --no-quick \
-		--cmakeargs='-DUSE_CLIB2=$(USE_CLIB2) \
+		--cmakeargs='-DUSE_CLIB4=$(USE_CLIB4) \
 		-DCMAKE_CROSSCOMPILING=ON -DCMAKE_TOOLCHAIN_FILE=$(realpath amigaos.cmake) -DCMAKE_MODULE_PATH=$(realpath Source/cmake) \
 		-DJAVASCRIPTCORE_DIR=$(realpath Source/JavaScriptCore) -DBUILD_SHARED_LIBS=NO \
 		-DCMAKE_BUILD_TYPE=Release -DPORT=JSCOnly -DUSE_SYSTEM_MALLOC=YES \
@@ -84,9 +81,10 @@ jscore-pack:
 configure: amigaos.cmake link.sh CMakeLists.txt Dummy/libdummy.a ffmpeg/.buildstamp
 	rm -rf cross-build
 	mkdir cross-build
-	(cd cross-build && PKG_CONFIG_PATH=$(PKG) PATH=$(CMAKE):${PATH} \
-		cmake -DCMAKE_CROSSCOMPILING=ON -DCMAKE_BUILD_TYPE=RelWithDebugInfo -DCMAKE_TOOLCHAIN_FILE=$(realpath amigaos.cmake) -DCMAKE_DL_LIBS="syscall" \
-		-DBUILD_SHARED_LIBS=NO -DPORT=AMIGAOS -DENABLE_WEBCORE=1 -DENABLE_WEBKIT_LEGACY=1 -DLOG_DISABLED=0 -DAMIGAOS_MINIMAL=0 -DROOTPATH="$(ROOTPATH)" \
+	(cd cross-build \
+		cmake -DUSE_CLIB4=$(USE_CLIB4) \
+		-DCMAKE_CROSSCOMPILING=ON -DCMAKE_BUILD_TYPE=RelWithDebugInfo -DCMAKE_TOOLCHAIN_FILE=$(realpath amigaos.cmake) -DCMAKE_DL_LIBS="syscall" \
+		-DBUILD_SHARED_LIBS=NO -DPORT=AmigaOS -DENABLE_WEBCORE=1 -DENABLE_WEBKIT_LEGACY=1 -DLOG_DISABLED=0 -DAMIGAOS_MINIMAL=0 -DROOTPATH="$(ROOTPATH)" \
 		-DJPEG_LIBRARY=$(LIB)/libjpeg/libjpeg.a \
 		-DJPEG_INCLUDE_DIR=$(LIB)/libjpeg \
 		-DLIBXML2_LIBRARY=$(LIB)/libxml2/instdir/lib/libxml2.a \
@@ -125,48 +123,18 @@ configure: amigaos.cmake link.sh CMakeLists.txt Dummy/libdummy.a ffmpeg/.buildst
 		-DOBJC_INCLUDE="$(OBJC)" \
 		-DCMAKE_MODULE_PATH=$(realpath Source/cmake) $(realpath ./))
 
-configure-mini: morphos.cmake link.sh CMakeLists.txt Dummy/libdummy.a ffmpeg/.buildstamp
+configure-mini: amigaos.cmake link.sh CMakeLists.txt Dummy/libdummy.a ffmpeg/.buildstamp
 	rm -rf cross-build-mini
 	mkdir cross-build-mini
-	(cd cross-build-mini && PKG_CONFIG_PATH=$(PKG) PATH=$(CMAKE):${PATH} \
-		cmake -DCMAKE_CROSSCOMPILING=ON -DCMAKE_BUILD_TYPE=RelWithDebugInfo -DCMAKE_TOOLCHAIN_FILE=$(realpath morphos.cmake) -DCMAKE_DL_LIBS="syscall" \
-		-DBUILD_SHARED_LIBS=NO -DPORT=MorphOS -DENABLE_WEBCORE=1 -DENABLE_WEBKIT_LEGACY=1 -DLOG_DISABLED=0 -DMORPHOS_MINIMAL=1 -DROOTPATH="$(ROOTPATH)" \
-		-DJPEG_LIBRARY=$(LIB)/libjpeg/libjpeg.a \
-		-DJPEG_INCLUDE_DIR=$(LIB)/libjpeg \
-		-DLIBXML2_LIBRARY=$(LIB)/libxml2/instdir/lib/libxml2.a \
-		-DLIBXML2_INCLUDE_DIR="$(LIB)/libxml2/instdir/include/libxml2/" \
-		-DPNG_LIBRARIES=$(GEN)/libpng16/lib/libpng16.a \
-		-DPNG_PNG_INCLUDE_DIR=$(GEN)/libpng16/include/libpng16/ \
-		-DPNG_INCLUDE_DIRS=$(GEN)/libpng16/include/libpng16/ \
-		-DLIBXSLT_LIBRARIES=$(LIB)/libxslt/instdir/lib/libxslt.a \
-		-DLIBXSLT_INCLUDE_DIR=$(LIB)/libxslt/instdir/include \
-		-DSQLITE_LIBRARIES=$(LIB)/sqlite/instdir/lib/libsqlite3.a \
-		-DSQLITE_INCLUDE_DIR=$(LIB)/sqlite/instdir/include \
-		-DSQLite3_LIBRARY=$(LIB)/sqlite/instdir/include \
-		-DSQLite3_INCLUDE_DIR=$(LIB)/sqlite/instdir/include \
-		-DCAIRO_INCLUDE_DIRS=$(ROOTPATH)/morphoswb/libs/cairo/MorphOS/os-include/cairo \
-		-DCAIRO_LIBRARIES="$(ROOTPATH)/morphoswb/libs/cairo/MorphOS/lib/libnix/libcairo.a" \
-		-DCairo_INCLUDE_DIR=$(ROOTPATH)/morphoswb/libs/cairo/MorphOS/os-include/cairo \
-		-DCairo_LIBRARY="$(ROOTPATH)/morphoswb/libs/cairo/MorphOS/lib/libnix/libcairo.a" \
-		-DHarfBuzz_INCLUDE_DIR="$(realpath Dummy)"\
-		-DHarfBuzz_LIBRARY=$(GEN)/lib/libnghttp2.a \
-		-DICU_ROOT="$(LIB)/libicu67/instdir/" \
-		-DICU_UC_LIBRARY_RELEASE="$(LIB)/libicu67/instdir/lib/libicuuc.a" \
-		-DICU_DATA_LIBRARY_RELEASE="$(LIB)/libicu67/instdir/lib/libicudata.a" \
-		-DICU_I18N_LIBRARY_RELEASE="$(LIB)/libicu67/instdir/lib/libicui18n.a" \
-		-DHarfBuzz_ICU_LIBRARY="$(realpath Dummy)/libdummy.a" \
-		-DFREETYPE_INCLUDE_DIRS="$(ROOTPATH)/morphoswb/libs/freetype/include" \
-		-DFREETYPE_LIBRARY="$(ROOTPATH)/morphoswb/libs/freetype/library/lib/libfreetype.a" \
-		-DFontconfig_LIBRARY="$(ROOTPATH)/morphoswb/libs/fontconfig/MorphOS/libfontconfig-glue.a" \
-		-DFontconfig_INCLUDE_DIR="$(ROOTPATH)/morphoswb/libs/fontconfig" \
-		-DOpenJPEG_INCLUDE_DIR="$(GEN)/include/openjpeg-2.5" \
-		-DWebP_INCLUDE_DIR="$(GEN)/include" -DWebP_LIBRARY="$(GEN)/lib/libwebp.a" -DWebP_DEMUX_LIBRARY="$(GEN)/lib/libwebpdemux.a"\
-		-DAVFORMAT_LIBRARY="ffmpeg/instdir/lib/libavformat.a" -DAVFORMAT_INCLUDE_DIR="$(realpath ffmpeg/instdir/include)" \
-		-DAVCODEC_LIBRARY="ffmpeg/instdir/lib/libavcodec.a" -DAVCODEC_INCLUDE_DIR="$(realpath ffmpeg/instdir/include)" \
-		-DAVUTIL_LIBRARY="ffmpeg/instdir/lib/libavutil.a" -DAVUTIL_INCLUDE_DIR="$(realpath ffmpeg/instdir/include)" \
-		-DSWSCALE_LIBRARY="ffmpeg/instdir/lib/libswscale.a" -DSWSCALE_INCLUDE_DIR="$(realpath ffmpeg/instdir/include)" \
-		-DOBJC_INCLUDE="$(OBJC)" \
-		-DCMAKE_MODULE_PATH=$(realpath Source/cmake) $(realpath ./))
+	(cd cross-build-mini && \
+		cmake -DUSE_CLIB4=$(USE_CLIB4) \
+		-DCMAKE_CROSSCOMPILING=ON -DCMAKE_BUILD_TYPE=RelWithDebugInfo \
+		-DCMAKE_TOOLCHAIN_FILE=$(realpath amigaos.cmake) -DCMAKE_DL_LIBS="syscall" \
+		-DCMAKE_MODULE_PATH=$(realpath Source/cmake) \
+		-DBUILD_SHARED_LIBS=NO -DPORT=AmigaOS -DENABLE_WEBCORE=1 -DENABLE_WEBKIT_LEGACY=1 -DLOG_DISABLED=0 \
+		-DENABLE_OPENTYPE_MATH=0 \
+		-DAMIGAOS_MINIMAL=1 -DROOTPATH="$(ROOTPATH)" \
+		$(realpath ./))
 
 build:
 	(cd cross-build && make -j$(shell nproc))
@@ -190,10 +158,10 @@ cross-build-mini:
 .build-mini: cross-build-mini build-mini
 
 amigaos.cmake: amigaos.cmake.in
-	gcc -xc -E -P -C -o$@ -nostdinc $@.in -D_IN_ROOTPATH=$(ROOTPATH) -D_IN_DUMMYPATH=$(realpath Dummy) -D_LIBC=$(LIBC)
+	gcc -xc -E -P -C -o$@ -nostdinc $@.in -D_IN_ROOTPATH=$(ROOTPATH) -D_IN_DUMMYPATH=$(realpath Dummy) -D_LIBC=$(LIBC) -D_CMN_INC=$(CMN_INC)
 
 link.sh: link.sh.in
-	gcc -xc -E -P -C -o$@ -nostdinc $@.in -D_IN_ROOTPATH=$(ROOTPATH)
+	gcc -xc -E -P -C -o$@ -nostdinc $@.in -D_IN_ROOTPATH=$(ROOTPATH) -D_LIBC=$(LIBC)
 	chmod u+x $@
 
 libwebkit.a:

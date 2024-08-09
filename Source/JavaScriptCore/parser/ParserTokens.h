@@ -39,6 +39,11 @@ class Identifier;
 #define BINARY_OP_PRECEDENCE(prec) (((prec) << BinaryOpTokenPrecedenceShift) | ((prec) << (BinaryOpTokenPrecedenceShift + BinaryOpTokenAllowsInPrecedenceAdditionalShift)))
 #define IN_OP_PRECEDENCE(prec) ((prec) << (BinaryOpTokenPrecedenceShift + BinaryOpTokenAllowsInPrecedenceAdditionalShift))
 
+// On AmigaOS 4 IMPORT is reserved
+#if defined(IMPORT)
+#undef IMPORT
+#endif
+
 enum JSTokenType {
     // Token Bitfield: 0b000000000RTE00IIIIPPPPKUXXXXXXXX
     // R = right-associative bit

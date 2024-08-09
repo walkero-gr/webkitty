@@ -29,6 +29,7 @@
 #if USE(CURL)
 
 #if OS(MORPHOS) || OS(AMIGAOS)
+#include <exec/types.h>
 extern "C" {
 LONG WaitSelect(LONG nfds, fd_set *readfds, fd_set *writefds, fd_set *exeptfds,
                 struct timeval *timeout, ULONG *maskp);
@@ -190,9 +191,12 @@ void CurlStreamScheduler::workerThread()
 
             if (maxfd >= 0)
             {
-#if OS(MORPHOS) || OS(AMIGAOS)
+#if OS(MORPHOS)
                 ULONG maskp = 0;
                 WaitSelect(maxfd + 1, &readfds, &writefds, &exceptfds, &timeout, &maskp);
+#elif OS(AMIGAOS)
+                ULONG maskp = 0;
+                waitselect(maxfd + 1, &readfds, &writefds, &exceptfds, &timeout, &maskp);
 #else
                 rc = ::select(maxfd + 1, &readfds, &writefds, &exceptfds, &timeout);
 #endif

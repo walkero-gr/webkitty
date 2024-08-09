@@ -34,6 +34,10 @@
 #include <arpa/inet.h>
 #endif
 
+#if OS(AMIGAOS)
+#include <netinet/in.h>
+#endif
+
 #if OS(WINDOWS)
 
 namespace WTF {
