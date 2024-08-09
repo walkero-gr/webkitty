@@ -50,19 +50,8 @@
 	#endif
 
 	#elif OS(AMIGAOS)
-	extern "C" { int dprintf(int, const char *format, ...); };
-	#if 1
+	extern "C" { int dprintf(int fd, const char *format, ...); };
 		#define notImplemented() ((void)0)
-	#else
-		#define notImplemented() do { \
-				static bool havePrinted = false; \
-				if (!havePrinted) { \
-					dprintf(__FILE__, "<<< notImplemented: %s/%d - %s\n", __LINE__, WTF_PRETTY_FUNCTION); \
-					havePrinted = true; \
-				} \
-			} while (0)
-	#endif
-
 	#else
 		#define notImplemented() ((void)0)
 	#endif

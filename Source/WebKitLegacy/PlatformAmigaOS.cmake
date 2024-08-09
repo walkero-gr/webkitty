@@ -15,9 +15,9 @@ list(APPEND WebKitLegacy_PRIVATE_INCLUDE_DIRECTORIES
     "${CMAKE_BINARY_DIR}/../include/private"
     "${CMAKE_BINARY_DIR}/../include/private/JavaScriptCore"
     "${CMAKE_BINARY_DIR}/../include/private/WebCore"
-    "${WEBKITLEGACY_DIR}/morphos"
-    "${WEBKITLEGACY_DIR}/morphos/WebCoreSupport"
-    "${WEBKITLEGACY_DIR}/morphos/ServiceWorker"
+    "${WEBKITLEGACY_DIR}/amigaos"
+    "${WEBKITLEGACY_DIR}/amigaos/WebCoreSupport"
+    "${WEBKITLEGACY_DIR}/amigaos/ServiceWorker"
     "${WebKitLegacy_DERIVED_SOURCES_DIR}/include"
     "${WebKitLegacy_DERIVED_SOURCES_DIR}/Interfaces"
     ${SQLITE_INCLUDE_DIR}
@@ -27,19 +27,19 @@ list(APPEND WebKitLegacy_PRIVATE_INCLUDE_DIRECTORIES
 )
 
 list(APPEND WebKitLegacy_SOURCES_Classes
-    morphos/WebFrame.cpp
-    morphos/WebPage.cpp
-    morphos/WebProcess.cpp
-    morphos/BackForwardClient.cpp
-    morphos/WebApplicationCache.cpp
-    morphos/storage/WebDatabaseProvider.cpp
-    morphos/storage/WebStorageTrackerClient.cpp
-    morphos/WebDocumentLoader.cpp
-    morphos/CacheModel.cpp
-    morphos/WebDragClient.cpp
-    morphos/PopupMenu.cpp
-    morphos/Gamepad.cpp
-    morphos/NetworkSession.cpp
+    amigaos/WebFrame.cpp
+    amigaos/WebPage.cpp
+    amigaos/WebProcess.cpp
+    amigaos/BackForwardClient.cpp
+    amigaos/WebApplicationCache.cpp
+    amigaos/storage/WebDatabaseProvider.cpp
+    amigaos/storage/WebStorageTrackerClient.cpp
+    amigaos/WebDocumentLoader.cpp
+    amigaos/CacheModel.cpp
+    amigaos/WebDragClient.cpp
+    amigaos/PopupMenu.cpp
+    amigaos/Gamepad.cpp
+    amigaos/NetworkSession.cpp
 )
 
 # list(APPEND WebKitLegacy_SOURCES_Classes
@@ -63,66 +63,66 @@ list(APPEND WebKitLegacy_SOURCES_Classes
 # )
 
 list(APPEND WebKitLegacy_SOURCES_WebCoreSupport
-    morphos/WebCoreSupport/WebVisitedLinkStore.cpp
-    # morphos/WebCoreSupport/WebEditorClient.cpp
-    morphos/WebCoreSupport/WebChromeClient.cpp
-    morphos/WebCoreSupport/WebPluginInfoProvider.cpp
-    morphos/WebCoreSupport/WebPlatformStrategies.cpp
-    morphos/WebCoreSupport/WebInspectorClient.cpp
-    morphos/WebCoreSupport/WebFrameLoaderClient.cpp
-    morphos/WebCoreSupport/WebFrameNetworkingContext.cpp
-    morphos/WebCoreSupport/WebContextMenuClient.cpp
-    morphos/WebCoreSupport/WebPageGroup.cpp
-    morphos/WebCoreSupport/WebProgressTrackerClient.cpp
-    morphos/WebCoreSupport/WebNotificationClient.cpp
+    amigaos/WebCoreSupport/WebVisitedLinkStore.cpp
+    amigaos/WebCoreSupport/WebEditorClient.cpp
+    amigaos/WebCoreSupport/WebChromeClient.cpp
+    amigaos/WebCoreSupport/WebPluginInfoProvider.cpp
+    amigaos/WebCoreSupport/WebPlatformStrategies.cpp
+    amigaos/WebCoreSupport/WebInspectorClient.cpp
+    amigaos/WebCoreSupport/WebFrameLoaderClient.cpp
+    amigaos/WebCoreSupport/WebFrameNetworkingContext.cpp
+    amigaos/WebCoreSupport/WebContextMenuClient.cpp
+    amigaos/WebCoreSupport/WebPageGroup.cpp
+    amigaos/WebCoreSupport/WebProgressTrackerClient.cpp
+    amigaos/WebCoreSupport/WebNotificationClient.cpp
 )
 
-# list(APPEND WebKitLegacy_SOURCES_WebCoreSupport
-#     morphos/cache/CacheStorageEngine.cpp
-#     morphos/cache/CacheStorageEngineCache.cpp
-#     morphos/cache/CacheStorageEngineCaches.cpp
-#     morphos/cache/NetworkCacheCoders.cpp
-#     morphos/cache/NetworkCacheDataCurl.cpp
-#     morphos/cache/NetworkCacheIOChannelCurl.cpp
-#     morphos/cache/NetworkCacheSubresourcesEntry.cpp
-#     morphos/cache/NetworkCacheBlobStorage.cpp
-#     morphos/cache/NetworkCacheEntry.cpp
-#     morphos/cache/NetworkCacheKey.cpp
-#     morphos/cache/PrefetchCache.cpp
-#     morphos/cache/NetworkCacheData.cpp
-#     morphos/cache/NetworkCacheFileSystem.cpp
-#     morphos/cache/NetworkCacheStorage.cpp
-#     morphos/cache/NetworkCache.cpp
-#     morphos/cache/CacheStorageEngineConnection.cpp
-#     morphos/cache/WebCacheStorageProvider.cpp
-#     morphos/cache/WebCacheStorageConnection.cpp
-#     )
+list(APPEND WebKitLegacy_SOURCES_WebCoreSupport
+    amigaos/cache/CacheStorageEngine.cpp
+    amigaos/cache/CacheStorageEngineCache.cpp
+    amigaos/cache/CacheStorageEngineCaches.cpp
+    amigaos/cache/NetworkCacheCoders.cpp
+    amigaos/cache/NetworkCacheDataCurl.cpp
+    amigaos/cache/NetworkCacheIOChannelCurl.cpp
+    amigaos/cache/NetworkCacheSubresourcesEntry.cpp
+    amigaos/cache/NetworkCacheBlobStorage.cpp
+    amigaos/cache/NetworkCacheEntry.cpp
+    amigaos/cache/NetworkCacheKey.cpp
+    amigaos/cache/PrefetchCache.cpp
+    amigaos/cache/NetworkCacheData.cpp
+    amigaos/cache/NetworkCacheFileSystem.cpp
+    amigaos/cache/NetworkCacheStorage.cpp
+    amigaos/cache/NetworkCache.cpp
+    amigaos/cache/CacheStorageEngineConnection.cpp
+    amigaos/cache/WebCacheStorageProvider.cpp
+    amigaos/cache/WebCacheStorageConnection.cpp
+)
 
 if (NOT AMIGAOS_MINIMAL)
-	list(APPEND WebKitLegacy_ABP
-		morphos/ABPFilterParser/ABPFilterParser.cpp
-		morphos/ABPFilterParser/BloomFilter.cpp
-		morphos/ABPFilterParser/cosmeticFilter.cpp
-		morphos/ABPFilterParser/filter.cpp
-		morphos/ABPFilterParser/hashFn.cpp
-	)
-	add_definitions(-DENABLE_WEB_AUDIO=1)
-	list(APPEND WebKitLegacy_SOURCES_Classes
-		morphos/WebDatabaseManager.cpp
-		morphos/WebCoreSupport/WebUserMediaClient.cpp
+    list(APPEND WebKitLegacy_ABP
+        amigaos/ABPFilterParser/ABPFilterParser.cpp
+        amigaos/ABPFilterParser/BloomFilter.cpp
+        amigaos/ABPFilterParser/cosmeticFilter.cpp
+        amigaos/ABPFilterParser/filter.cpp
+        amigaos/ABPFilterParser/hashFn.cpp
+    )
+    add_definitions(-DENABLE_WEB_AUDIO=1)
+    list(APPEND WebKitLegacy_SOURCES_Classes
+        amigaos/WebDatabaseManager.cpp
+        amigaos/WebCoreSupport/WebUserMediaClient.cpp
 
-		morphos/ServiceWorker/WebServiceWorkerProvider.cpp
-        morphos/ServiceWorker/SharedMemory.cpp
-        morphos/ServiceWorker/SharedStringHashTable.cpp
-        morphos/ServiceWorker/SharedStringHashTableReadOnly.cpp
-        morphos/ServiceWorker/SharedStringHashStore.cpp
-        morphos/ServiceWorker/WebSWOriginTable.cpp
-        morphos/ServiceWorker/WebSWOriginStore.cpp
-        morphos/ServiceWorker/WebSWServerConnection.cpp
-        morphos/ServiceWorker/WebSWServerToContextConnection.cpp
-        morphos/ServiceWorker/WebSWContextManagerConnection.cpp
-        morphos/ServiceWorker/ServiceWorkerSoftUpdateLoader.cpp
-	)
+        amigaos/ServiceWorker/WebServiceWorkerProvider.cpp
+        amigaos/ServiceWorker/SharedMemory.cpp
+        amigaos/ServiceWorker/SharedStringHashTable.cpp
+        amigaos/ServiceWorker/SharedStringHashTableReadOnly.cpp
+        amigaos/ServiceWorker/SharedStringHashStore.cpp
+        amigaos/ServiceWorker/WebSWOriginTable.cpp
+        amigaos/ServiceWorker/WebSWOriginStore.cpp
+        amigaos/ServiceWorker/WebSWServerConnection.cpp
+        amigaos/ServiceWorker/WebSWServerToContextConnection.cpp
+        amigaos/ServiceWorker/WebSWContextManagerConnection.cpp
+        amigaos/ServiceWorker/ServiceWorkerSoftUpdateLoader.cpp
+    )
 endif()
 
 list(APPEND WebKitLegacy_SOURCES ${WebKitLegacy_INCLUDES} ${WebKitLegacy_SOURCES_Classes} ${WebKitLegacy_SOURCES_WebCoreSupport} ${WebKitLegacy_ABP})

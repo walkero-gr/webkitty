@@ -1,6 +1,8 @@
 /opt/ppc-amigaos/bin/ppc-amigaos-g++ -mcrt=_LIBC -Wl,--relax -g1 \
-	-feliminate-unused-debug-symbols -Wl,--compress-debug-sections=zlib -mlongcall 
-	-Wno-ignored-attributes -O3 -DNDEBUG -o MiniBrowser.db -Wl,--whole-archive \
+	-feliminate-unused-debug-symbols -mlongcall \
+	-Wno-ignored-attributes -O3 -DNDEBUG -o MiniBrowser.db \
+	-Wl,--whole-archive \
+	../../lib/libMiniBrowserlib.a \
 	../../lib/libWebKit.a \
 	../../lib/libWebCore.a \
 	../../lib/libPAL.a \
@@ -15,14 +17,13 @@
 	../../../ffmpeg/instdir/lib/libswresample.a \
 	_IN_ROOTPATH/lib/libxml2.a \
 	_IN_ROOTPATH/lib/libxslt.a \
-	_IN_ROOTPATH/lib/sqlite/instdir/lib/libsqlite3.a \
+	_IN_ROOTPATH/lib/libsqlite3.a \
 	_IN_ROOTPATH/lib/libz.a \
 	-Wl,--whole-archive \
-	_IN_ROOTPATH/libcairo.a \
+	_IN_ROOTPATH/lib/libcairo.a \
 	-Wl,--no-whole-archive \
 	_IN_ROOTPATH/lib/libcurl.a \
 	_IN_ROOTPATH/lib/libssl.a \
-	_IN_ROOTPATH/lib/libfreetype.a \
 	_IN_ROOTPATH/lib/libnghttp2.a \
 	_IN_ROOTPATH/lib/libjpeg.a \
 	_IN_ROOTPATH/lib/libpsl.a \
@@ -35,11 +36,10 @@
 	_IN_ROOTPATH/lib/libwebp.a \
 	_IN_ROOTPATH/lib/libwebpdemux.a \
 	_IN_ROOTPATH/lib/libopenjp2.a \
+	_IN_ROOTPATH/lib/libfontconfig.a \
+	_IN_ROOTPATH/lib/libfreetype.a \
 	_IN_ROOTPATH/lib/libbrotlidec.a _IN_ROOTPATH/lib/libbrotlicommon.a \
-	_IN_ROOTPATH/lib/libgcrypt.a \
-	_IN_ROOTPATH/lib/libgpg-error.a \
-	_IN_ROOTPATH/lib/libtasn1.a \
-	_IN_ROOTPATH/lib/libwoff2dec.a _IN_ROOTPATH/lib/libwoff2common.a \
-	-lsyscall -lpthread -athread=native \
-	CMakeFiles/MiniBrowserlib.dir/minibrowser.mm.obj \
-	-lobjc -lc -lgcc -lauto
+	-lrtmp -lexpat -lpixman-1 -lharfbuzz \
+	-lpthread -athread=native \
+	-lc -lgcc -lbz2 -lz -latomic \
+	-lidn2 -lunistring -lauto 

@@ -40,8 +40,10 @@
 #include "DisplayRefreshMonitorGtk.h"
 #elif PLATFORM(WIN)
 #include "DisplayRefreshMonitorWin.h"
-#elif OS(MORPHOS) || OS(AMIGAOS)
+#elif OS(MORPHOS)
 #include "DisplayRefreshMonitorMorphOS.h"
+#elif OS(AMIGAOS)
+#include "DisplayRefreshMonitorAmigaOS.h"
 #endif
 
 namespace WebCore {
@@ -62,8 +64,11 @@ RefPtr<DisplayRefreshMonitor> DisplayRefreshMonitor::createDefaultDisplayRefresh
 #if PLATFORM(WIN)
     return DisplayRefreshMonitorWin::create(displayID);
 #endif
-#if OS(MORPHOS) || OS(AMIGAOS)
+#if OS(MORPHOS)
     return DisplayRefreshMonitorMorphOS::create(displayID);
+#endif
+#if OS(AMIGAOS)
+    return DisplayRefreshMonitorAmigaOS::create(displayID);
 #endif
     UNUSED_PARAM(displayID);
     return nullptr;

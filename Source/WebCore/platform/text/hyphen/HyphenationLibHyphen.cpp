@@ -28,7 +28,6 @@
 #include "Hyphenation.h"
 
 #if USE(LIBHYPHEN)
-
 #include <hyphen.h>
 #include <limits>
 #include <stdlib.h>
@@ -42,6 +41,10 @@
 
 #if PLATFORM(GTK)
 #include <wtf/glib/GUniquePtr.h>
+#endif
+
+#if OS(AMIGAOS)
+#include <unistd.h>
 #endif
 
 namespace WebCore {

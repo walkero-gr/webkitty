@@ -1,7 +1,7 @@
 #include "WebKit.h"
 #include "WebProcess.h"
-#include "WebPage.h"
-#include "WebFrame.h"
+// #include "WebPage.h"
+// #include "WebFrame.h"
 
 // todo: check why it isn't enabled inside WebKitLegacy
 #ifdef ENABLE_CONTENT_EXTENSIONS
@@ -998,7 +998,7 @@ RefPtr<WebCore::SharedBuffer> loadResourceIntoBuffer(const char* name)
 	return nullptr;
 }
 
-bool shouldLoadResource(const WebCore::ContentExtensions::ResourceLoadInfo& info, WebCore::DocumentLoader& loader)
+bool @(const WebCore::ContentExtensions::ResourceLoadInfo& info, WebCore::DocumentLoader& loader)
 {
 #if USE_ADFILTER
 	static WebKit::WebProcess &instance = WebKit::WebProcess::singleton();

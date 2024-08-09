@@ -13,21 +13,21 @@ extern "C" void Fail(unsigned char *)
 	// TODO
 }
 
-extern "C" char *realpath(const char *file_name, char *resolved_name)
-{
-	BPTR l = IDOS->Lock(file_name, SHARED_LOCK);
-	if (l)
-	{
-		if (IDOS->NameFromLock(l, resolved_name, PATH_MAX))
-		{
-			IDOS->UnLock(l);
-			return resolved_name;
-		}
-		IDOS->UnLock(l);
-	}
+// extern "C" char *realpath(const char *file_name, char *resolved_name)
+// {
+// 	BPTR l = IDOS->Lock(file_name, SHARED_LOCK);
+// 	if (l)
+// 	{
+// 		if (IDOS->NameFromLock(l, resolved_name, PATH_MAX))
+// 		{
+// 			IDOS->UnLock(l);
+// 			return resolved_name;
+// 		}
+// 		IDOS->UnLock(l);
+// 	}
 
-	return nullptr;
-}
+// 	return nullptr;
+// }
 
 namespace WTF {
 

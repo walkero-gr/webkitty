@@ -934,6 +934,11 @@ static inline float hyphenWidth(RenderText& renderer, const FontCascade& font)
 
 float RenderText::maxWordFragmentWidth(const RenderStyle& style, const FontCascade& font, StringView word, unsigned minimumPrefixLength, unsigned minimumSuffixLength, bool currentCharacterIsSpace, unsigned characterIndex, float xPos, float entireWordWidth, WordTrailingSpace& wordTrailingSpace, HashSet<const Font*>& fallbackFonts, GlyphOverflow& glyphOverflow)
 {
+// TODO: Remove this when LIBHYPHEN is enabled
+#if !USE(LIBHYPHEN)
+    return 0;
+#endif
+
     unsigned suffixStart = 0;
     if (word.length() <= minimumSuffixLength)
         return 0;
@@ -1022,7 +1027,13 @@ void RenderText::computePreferredLogicalWidths(float leadWidth, HashSet<const Fo
     float maxWordWidth = std::numeric_limits<float>::max();
     unsigned minimumPrefixLength = 0;
     unsigned minimumSuffixLength = 0;
+
+// TODO: Remove this when LIBHYPHEN is enabled
+#if USE(LIBHYPHEN)
     if (style.hyphens() == Hyphens::Auto && canHyphenate(style.computedLocale())) {
+#else
+    if (style.hyphens() == Hyphens::Auto) {
+#endif
         maxWordWidth = 0;
 
         // Map 'hyphenate-limit-{before,after}: auto;' to 2.

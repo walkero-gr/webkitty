@@ -38,6 +38,10 @@
 #include <gtk/gtk.h>
 #endif
 
+#if OS(AMIGAOS)
+#include <exec/types.h>
+#endif
+
 namespace WebCore {
 
 static const unsigned scrollbarSize = 15;
