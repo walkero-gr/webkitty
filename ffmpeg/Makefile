@@ -36,7 +36,7 @@ all: .buildstamp
 		--enable-demuxer=matroska --enable-libopus --enable-decoder=opus --enable-demuxer=mpegts --enable-demuxer=mpegtsraw --enable-parser=h264 \
 		--enable-demuxer=hevc --enable-decoder=hevc \
 		--enable-decoder=pcm_s16le --enable-demuxer=wav \
-		--disable-ffmpeg --disable-ffplay --pkg-config-flags="--static" --pkg-config=pkg-config)
+		--disable-doc --disable-ffmpeg --disable-ffplay --pkg-config-flags="--static" --pkg-config=pkg-config)
 #--enable-libaom --enable-decoder=libaom_av1 \
 	# remove "-maltivec -mabi=altivec" from generic CFLAGS
 	perl -pi -e 's/-maltivec -mabi=altivec//' ffmpeg-$(FFMPEG_VERSION)/ffbuild/config.mak
